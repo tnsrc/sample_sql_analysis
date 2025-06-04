@@ -37,18 +37,47 @@ python sql_analyzer.py your_procedure.sql
 python sql_analyzer.py your_procedure.sql -o analysis_report.md --format json
 ```
 
-### 2. Universal Chunked Analyzer (`chunked_analyzer.py`) 
-**Generic chunking** that works for any stored procedure:
-- **SQL-Structure Based Chunking**: Logical boundaries based on SQL patterns
-- **12 Universal Chunk Types**: Declaration, validation, conditional, loop, etc.
-- **Complexity-Aware Sizing**: Adaptive chunk sizes based on SQL complexity
-- **Dependency Tracking**: Variable and table usage relationships
-- **AI-Ready Output**: Structured chunks with analysis questions
+### 2. Universal Chunked Analyzer (`chunked_analyzer.py`)
+Intelligent chunking system for processing large procedures in manageable segments with **complete code block boundaries**.
+
+**Command**: `python chunked_analyzer.py <sql_file> [--max-chunk-size N] [--min-chunk-size N]`
+
+**Features**:
+- **Complete Code Blocks**: Chunks start with control flow conditions (IF, WHILE, TRY) followed by BEGIN and end with corresponding END keywords
+- **12 Universal Chunk Types**: Based on SQL structure rather than business logic
+- **Intelligent Boundary Detection**: Identifies IF blocks, WHILE loops, TRY-CATCH blocks, SQL statements, and declaration blocks
+- **Context-Aware Chunking**: Maintains logical coherence within each chunk
+- **Complexity-Aware Adaptive Sizing**: 3-50 lines per chunk with meaningful boundaries
+- **Dependency Tracking**: Via variable/table usage analysis
+- **Universal Analysis Questions**: Work for any domain
+
+**Chunk Boundary Rules**:
+- **IF Blocks**: From IF condition through matching END, including ELSE branches
+- **WHILE Loops**: From WHILE condition through matching END
+- **TRY-CATCH Blocks**: Complete exception handling units
+- **SQL Statements**: Individual INSERT, UPDATE, DELETE operations
+- **Declaration Blocks**: Related variable declarations grouped together
+- **Never Split Logic**: Ensures each chunk is a complete, analyzable unit
+
+**Example Output**:
+```
+## Procedure Statistics
+- Total Chunks: 7
+- Average Complexity per Chunk: 17.7
+- Chunk Type Distribution: Variable Declaration, Error Handling, Transaction Control, Conditional Logic
+
+### Chunk 5: Conditional Logic & Branching (IF)
+**Type**: conditional_logic
+**Lines**: 333-336
+**Complete Code Block**: IF @IsValid = 0 BEGIN ... END
+```
+
+### 3. Decision Points Analyzer (`decision_points_analyzer.py`) ⭐ NEW
+Specialized tool for analyzing branching logic and control flow complexity.
 
 **Usage:**
 ```bash
-python chunked_analyzer.py your_procedure.sql --max-chunk-size 30
-python chunked_analyzer.py your_procedure.sql --min-chunk-size 5 --max-chunk-size 50 -o guide.md
+python decision_points_analyzer.py your_procedure.sql --details
 ```
 
 ## Universal Methodology

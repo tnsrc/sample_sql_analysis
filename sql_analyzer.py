@@ -48,6 +48,8 @@ class DecisionPoint:
     business_logic: str
     category: str  # 'validation', 'pricing', 'inventory', etc.
     complexity_level: str  # 'high', 'medium', 'low'
+    source_code: str  # The actual source line
+    code_block: List[str]  # The code block associated with this decision point
 
 class UniversalSQLAnalyzer:
     def __init__(self):
@@ -526,6 +528,7 @@ class UniversalSQLAnalyzer:
             ]
         }
         
+        # First pass: identify all decision points
         for i, line in enumerate(lines, 1):
             original_line = line.strip()
             line_upper = line.strip().upper()
@@ -546,7 +549,9 @@ class UniversalSQLAnalyzer:
                     'condition': condition,
                     'business_logic': self._extract_business_logic(condition, business_logic_patterns),
                     'category': self._categorize_decision_point(condition, business_logic_patterns),
-                    'complexity_level': self._assess_decision_complexity(condition)
+                    'complexity_level': self._assess_decision_complexity(condition),
+                    'source_code': original_line,
+                    'code_block': []
                 }
                 decision_stats['if_statements'] += 1
             
@@ -560,7 +565,9 @@ class UniversalSQLAnalyzer:
                     'condition': condition,
                     'business_logic': self._extract_business_logic(condition, business_logic_patterns),
                     'category': self._categorize_decision_point(condition, business_logic_patterns),
-                    'complexity_level': self._assess_decision_complexity(condition)
+                    'complexity_level': self._assess_decision_complexity(condition),
+                    'source_code': original_line,
+                    'code_block': []
                 }
                 decision_stats['else_if_statements'] += 1
             
@@ -574,7 +581,9 @@ class UniversalSQLAnalyzer:
                     'condition': condition,
                     'business_logic': self._extract_business_logic(condition, business_logic_patterns),
                     'category': self._categorize_decision_point(condition, business_logic_patterns),
-                    'complexity_level': self._assess_decision_complexity(condition)
+                    'complexity_level': self._assess_decision_complexity(condition),
+                    'source_code': original_line,
+                    'code_block': []
                 }
                 decision_stats['case_expressions'] += 1
             
@@ -588,7 +597,9 @@ class UniversalSQLAnalyzer:
                     'condition': condition,
                     'business_logic': self._extract_business_logic(condition, business_logic_patterns),
                     'category': self._categorize_decision_point(condition, business_logic_patterns),
-                    'complexity_level': 'high'  # Loops are inherently complex
+                    'complexity_level': 'high',  # Loops are inherently complex
+                    'source_code': original_line,
+                    'code_block': []
                 }
                 decision_stats['while_loops'] += 1
             
@@ -602,13 +613,18 @@ class UniversalSQLAnalyzer:
                     'condition': condition,
                     'business_logic': self._extract_business_logic(condition, business_logic_patterns),
                     'category': self._categorize_decision_point(condition, business_logic_patterns),
-                    'complexity_level': self._assess_decision_complexity(condition)
+                    'complexity_level': self._assess_decision_complexity(condition),
+                    'source_code': original_line,
+                    'code_block': []
                 }
                 decision_stats['exists_checks'] += 1
             
             if decision_point:
                 decision_points.append(decision_point)
                 decision_stats['total_decision_points'] += 1
+        
+        # Second pass: capture code blocks for each decision point
+        decision_points = self._capture_code_blocks(lines, decision_points)
         
         # Categorize decision points by business logic
         categories = {}
@@ -632,6 +648,97 @@ class UniversalSQLAnalyzer:
                 'complexity_distribution': self._get_complexity_distribution(decision_points)
             }
         }
+    
+    def _capture_code_blocks(self, lines: List[str], decision_points: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Capture the code blocks associated with each decision point"""
+        for dp in decision_points:
+            start_line = dp['line_number']
+            code_block = []
+            
+            # Find the code block for this decision point
+            nesting_level = 0
+            in_block = False
+            begin_found = False
+            
+            for i in range(start_line - 1, min(start_line + 50, len(lines))):  # Increased limit to 50 lines
+                line = lines[i].strip()
+                line_upper = line.upper()
+                
+                # Add the decision point line itself
+                if i == start_line - 1:
+                    code_block.append(line)
+                    # Check if BEGIN is on the same line
+                    if 'BEGIN' in line_upper:
+                        in_block = True
+                        begin_found = True
+                        nesting_level = 1
+                    continue
+                
+                # Skip empty lines and comments unless we're already in a block
+                if not line or line.startswith('--') or line.startswith('/*'):
+                    if in_block:
+                        code_block.append(line)
+                    continue
+                
+                # Look for BEGIN if we haven't found it yet
+                if not begin_found and line_upper.strip() == 'BEGIN':
+                    in_block = True
+                    begin_found = True
+                    nesting_level = 1
+                    code_block.append(line)
+                    continue
+                
+                # If we're in a block, capture everything
+                if in_block:
+                    # Track nesting for BEGIN/END blocks
+                    if re.search(r'\bBEGIN\b', line_upper):
+                        nesting_level += 1
+                    elif re.search(r'\bEND\b', line_upper):
+                        nesting_level -= 1
+                    
+                    # Always add the line first (including END statements)
+                    code_block.append(line)
+                    
+                    # Then check if we should break after adding the END
+                    if re.search(r'\bEND\b', line_upper) and nesting_level <= 0:
+                        break
+                
+                # For single-line statements (IF without BEGIN)
+                elif (dp['decision_type'] in ['IF', 'ELSE_IF'] and 
+                      not begin_found and 
+                      not re.search(r'^\s*(?:IF|ELSE|WHILE|END|CASE)\b', line_upper)):
+                    code_block.append(line)
+                    break
+                
+                # For CASE expressions, capture until END
+                elif dp['decision_type'] == 'CASE':
+                    code_block.append(line)
+                    if re.search(r'\bEND\b', line_upper):
+                        break
+                
+                # For WHILE loops, capture until we find the loop body
+                elif dp['decision_type'] == 'WHILE':
+                    if 'BEGIN' in line_upper:
+                        in_block = True
+                        begin_found = True
+                        nesting_level = 1
+                        code_block.append(line)
+                    elif not begin_found:
+                        # Single statement loop
+                        code_block.append(line)
+                        break
+                
+                # Stop at next decision point at same level
+                elif re.search(r'^\s*(?:IF|ELSE|WHILE|END)\b', line_upper) and not in_block:
+                    break
+            
+            # Ensure we have at least the decision point line
+            if not code_block:
+                code_block = [lines[start_line - 1].strip()]
+            
+            dp['code_block'] = code_block
+        
+        return decision_points
     
     def _extract_business_logic(self, condition: str, patterns: Dict[str, List[str]]) -> str:
         """Extract business logic description from condition"""
@@ -845,12 +952,28 @@ def generate_universal_analysis_report(analysis_result: Dict[str, Any]) -> str:
                     complexity_icon = "🔴" if dp['complexity_level'] == 'high' else "🟡" if dp['complexity_level'] == 'medium' else "🟢"
                     type_display = dp['decision_type'].replace('_', ' ')
                     report.append(f"- {complexity_icon} **Line {dp['line_number']}** ({type_display}): {dp['business_logic']}")
-                    if len(dp['condition']) <= 80:
+                    
+                    # Show the source code and code block
+                    report.append(f"  **Source:** `{dp['source_code']}`")
+                    if dp['code_block'] and len(dp['code_block']) > 1:
+                        report.append(f"  **Code Block:**")
                         report.append(f"  ```sql")
-                        report.append(f"  {dp['condition']}")
+                        for block_line in dp['code_block']:
+                            report.append(f"  {block_line}")
                         report.append(f"  ```")
+                    elif dp['code_block'] and len(dp['code_block']) == 1:
+                        report.append(f"  **Single Statement:** `{dp['code_block'][0]}`")
                     else:
-                        report.append(f"  Condition: {dp['condition'][:80]}...")
+                        # Fallback to condition if no code block captured
+                        if len(dp['condition']) <= 80:
+                            report.append(f"  **Condition:**")
+                            report.append(f"  ```sql")
+                            report.append(f"  {dp['condition']}")
+                            report.append(f"  ```")
+                        else:
+                            report.append(f"  **Condition:** {dp['condition'][:80]}...")
+                    
+                    report.append("")  # Add spacing between decision points
                 
                 if len(decision_points) > 5:
                     report.append(f"  *... and {len(decision_points) - 5} more decision points*")

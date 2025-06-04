@@ -122,6 +122,21 @@ class UniversalSQLAnalyzer:
                         elif keyword in ['END', 'END IF', 'END WHILE']:
                             analysis['nesting_change'] -= 1
                 
+                # Additional control flow pattern detection for chunking
+                control_flow_starts = [
+                    r'\bIF\s+.*\s+BEGIN\b',           # IF condition BEGIN
+                    r'\bELSE\s+BEGIN\b',              # ELSE BEGIN  
+                    r'\bELSE\s+IF\s+.*\s+BEGIN\b',    # ELSE IF condition BEGIN
+                    r'\bWHILE\s+.*\s+BEGIN\b',        # WHILE condition BEGIN
+                    r'\bBEGIN\s+TRY\b',               # BEGIN TRY
+                    r'\bBEGIN\s+CATCH\b',             # BEGIN CATCH
+                ]
+                
+                for pattern in control_flow_starts:
+                    if re.search(pattern, line_upper):
+                        analysis['control_structures'].append('CONTROL_FLOW_START')
+                        break
+                
                 # Identify transaction operations
                 for keyword in self.transaction_keywords:
                     if keyword in line_upper:
@@ -147,57 +162,220 @@ class UniversalSQLAnalyzer:
         return analyzed
     
     def _identify_logical_boundaries(self, analyzed_lines: List[Dict]) -> List[int]:
-        """Identify where logical chunks should begin/end"""
+        """Identify where logical chunks should begin/end based on complete code blocks"""
         boundaries = [0]  # Always start with first line
-        current_nesting = 0
-        current_chunk_size = 0
-        last_boundary = 0
         
-        for i, line_analysis in enumerate(analyzed_lines):
-            current_chunk_size = i - last_boundary
-            current_nesting += line_analysis['nesting_change']
+        # First, find all meaningful control structures and their boundaries
+        block_stack = []  # Track nested blocks
+        i = 0
+        
+        while i < len(analyzed_lines):
+            line_analysis = analyzed_lines[i]
+            line_upper = line_analysis['upper']
             
-            # Force boundary conditions
-            force_boundary = False
+            # Skip empty lines and comments when looking for boundaries
+            if line_analysis['is_empty'] or line_analysis['is_comment']:
+                i += 1
+                continue
             
-            # 1. Chunk is getting too large
-            if current_chunk_size >= self.max_chunk_size:
-                force_boundary = True
+            # Look for IF statements
+            if re.search(r'\bIF\s+.*(?:BEGIN|$)', line_upper):
+                # Find where this IF block ends
+                end_line = self._find_if_block_end(analyzed_lines, i)
+                if end_line is not None and end_line - i >= self.min_chunk_size:
+                    # Create a chunk for this IF block
+                    if i > 0 and boundaries[-1] != i:
+                        boundaries.append(i)
+                    if end_line + 1 < len(analyzed_lines) and boundaries[-1] != end_line + 1:
+                        boundaries.append(end_line + 1)
+                    i = end_line + 1
+                    continue
             
-            # 2. Major structural changes at reasonable size
-            elif current_chunk_size >= self.min_chunk_size:
-                # New major SQL operation after decent chunk size
-                if line_analysis['sql_operations'] and any(op in ['INSERT', 'UPDATE', 'DELETE', 'SELECT'] for op in line_analysis['sql_operations']):
-                    force_boundary = True
+            # Look for WHILE loops
+            elif re.search(r'\bWHILE\s+.*(?:BEGIN|$)', line_upper):
+                end_line = self._find_while_block_end(analyzed_lines, i)
+                if end_line is not None and end_line - i >= self.min_chunk_size:
+                    if i > 0 and boundaries[-1] != i:
+                        boundaries.append(i)
+                    if end_line + 1 < len(analyzed_lines) and boundaries[-1] != end_line + 1:
+                        boundaries.append(end_line + 1)
+                    i = end_line + 1
+                    continue
+            
+            # Look for TRY-CATCH blocks
+            elif re.search(r'\bBEGIN\s+TRY\b', line_upper):
+                end_line = self._find_try_catch_block_end(analyzed_lines, i)
+                if end_line is not None and end_line - i >= self.min_chunk_size:
+                    if i > 0 and boundaries[-1] != i:
+                        boundaries.append(i)
+                    if end_line + 1 < len(analyzed_lines) and boundaries[-1] != end_line + 1:
+                        boundaries.append(end_line + 1)
+                    i = end_line + 1
+                    continue
+            
+            # Look for major SQL statement blocks
+            elif (line_analysis['sql_operations'] and 
+                  any(op in ['INSERT', 'UPDATE', 'DELETE'] for op in line_analysis['sql_operations'])):
                 
-                # Major control structure changes
-                elif line_analysis['control_structures'] and any(ctrl in ['BEGIN TRY', 'BEGIN CATCH', 'IF', 'WHILE'] for ctrl in line_analysis['control_structures']):
-                    force_boundary = True
-                
-                # Transaction boundaries
-                elif line_analysis['transaction_operations']:
-                    force_boundary = True
-                
-                # Return to base nesting level
-                elif current_nesting == 0 and i > last_boundary + self.min_chunk_size:
-                    force_boundary = True
+                # Find the end of this SQL statement
+                stmt_end = self._find_sql_statement_end(analyzed_lines, i)
+                if stmt_end is not None and stmt_end > i:
+                    if i > 0 and boundaries[-1] != i:
+                        boundaries.append(i)
+                    if stmt_end + 1 < len(analyzed_lines) and boundaries[-1] != stmt_end + 1:
+                        boundaries.append(stmt_end + 1)
+                    i = stmt_end + 1
+                    continue
             
-            # 3. Logical section markers (comments)
-            if (line_analysis['is_comment'] and 
-                current_chunk_size >= self.min_chunk_size and
-                len(line_analysis['clean']) > 10):  # Substantial comment
-                force_boundary = True
+            # Look for variable declaration blocks
+            elif line_analysis['declarations']:
+                # Find the end of the declaration block
+                decl_end = self._find_declaration_block_end(analyzed_lines, i)
+                if decl_end is not None and decl_end > i:
+                    if i > 0 and boundaries[-1] != i:
+                        boundaries.append(i)
+                    if decl_end + 1 < len(analyzed_lines) and boundaries[-1] != decl_end + 1:
+                        boundaries.append(decl_end + 1)
+                    i = decl_end + 1
+                    continue
             
-            if force_boundary:
+            # Handle section comments as boundaries
+            elif (line_analysis['is_comment'] and 
+                  len(line_analysis['clean']) > 20 and
+                  i - boundaries[-1] >= self.min_chunk_size):
                 boundaries.append(i)
-                last_boundary = i
-                current_chunk_size = 0
+            
+            i += 1
         
         # Ensure we end with the last line
-        if boundaries[-1] != len(analyzed_lines) - 1:
-            boundaries.append(len(analyzed_lines) - 1)
+        if boundaries[-1] != len(analyzed_lines):
+            boundaries.append(len(analyzed_lines))
         
-        return boundaries
+        # Clean up boundaries
+        cleaned_boundaries = self._clean_boundaries(boundaries, analyzed_lines)
+        
+        return cleaned_boundaries
+    
+    def _find_if_block_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
+        """Find the end of an IF block"""
+        nesting_level = 0
+        found_begin = False
+        
+        for i in range(start_line, len(analyzed_lines)):
+            line_upper = analyzed_lines[i]['upper']
+            
+            # Look for BEGIN
+            if 'BEGIN' in line_upper:
+                found_begin = True
+                nesting_level += 1
+            
+            # Look for END
+            elif re.search(r'\bEND\b', line_upper) and found_begin:
+                nesting_level -= 1
+                if nesting_level == 0:
+                    return i
+            
+            # Look for ELSE at the same level
+            elif (re.search(r'\bELSE\b', line_upper) and nesting_level == 1 and found_begin):
+                # Continue to find the end of the ELSE block
+                continue
+        
+        return None
+    
+    def _find_while_block_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
+        """Find the end of a WHILE block"""
+        nesting_level = 0
+        found_begin = False
+        
+        for i in range(start_line, len(analyzed_lines)):
+            line_upper = analyzed_lines[i]['upper']
+            
+            if 'BEGIN' in line_upper:
+                found_begin = True
+                nesting_level += 1
+            elif re.search(r'\bEND\b', line_upper) and found_begin:
+                nesting_level -= 1
+                if nesting_level == 0:
+                    return i
+        
+        return None
+    
+    def _find_try_catch_block_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
+        """Find the end of a TRY-CATCH block"""
+        nesting_level = 1  # Start with TRY
+        found_catch = False
+        
+        for i in range(start_line + 1, len(analyzed_lines)):
+            line_upper = analyzed_lines[i]['upper']
+            
+            if re.search(r'\bBEGIN\s+CATCH\b', line_upper):
+                found_catch = True
+                continue
+            elif 'BEGIN' in line_upper:
+                nesting_level += 1
+            elif re.search(r'\bEND\s+CATCH\b', line_upper):
+                return i
+            elif re.search(r'\bEND\b', line_upper):
+                nesting_level -= 1
+                if nesting_level == 0 and found_catch:
+                    return i
+        
+        return None
+    
+    def _find_sql_statement_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
+        """Find the end of a SQL statement"""
+        for i in range(start_line, min(start_line + 30, len(analyzed_lines))):
+            line = analyzed_lines[i]['clean']
+            
+            # End on semicolon
+            if line.endswith(';'):
+                return i
+            
+            # Stop at control flow or other major operations
+            if (i > start_line and 
+                (analyzed_lines[i]['control_structures'] or
+                 (analyzed_lines[i]['sql_operations'] and 
+                  any(op in ['INSERT', 'UPDATE', 'DELETE', 'SELECT'] for op in analyzed_lines[i]['sql_operations'])))):
+                return i - 1
+        
+        return start_line + 10  # Default reasonable size
+    
+    def _find_declaration_block_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
+        """Find the end of a variable declaration block"""
+        for i in range(start_line, min(start_line + 50, len(analyzed_lines))):
+            line_analysis = analyzed_lines[i]
+            
+            # Stop when we hit non-declaration code
+            if (not line_analysis['is_empty'] and 
+                not line_analysis['is_comment'] and
+                not line_analysis['declarations'] and
+                not re.search(r'^\s*\)', line_analysis['clean']) and  # Table definition closing
+                not re.search(r'^\s*[,;]', line_analysis['clean'])):  # Continuation
+                return i - 1
+        
+        return start_line + 20  # Default reasonable size
+    
+    def _clean_boundaries(self, boundaries: List[int], analyzed_lines: List[Dict]) -> List[int]:
+        """Clean up boundaries to ensure reasonable chunk sizes"""
+        cleaned = [0]  # Always start with 0
+        
+        for i in range(1, len(boundaries)):
+            prev_boundary = cleaned[-1]
+            current_boundary = boundaries[i]
+            chunk_size = current_boundary - prev_boundary
+            
+            # If chunk is too small, try to merge with next chunk
+            if chunk_size < self.min_chunk_size and i < len(boundaries) - 1:
+                next_boundary = boundaries[i + 1]
+                combined_size = next_boundary - prev_boundary
+                
+                # Only merge if combined size isn't too large
+                if combined_size <= self.max_chunk_size:
+                    continue  # Skip this boundary to merge chunks
+            
+            cleaned.append(current_boundary)
+        
+        return cleaned
     
     def _create_chunks_from_boundaries(self, analyzed_lines: List[Dict], boundaries: List[int]) -> List[CodeChunk]:
         """Create chunks based on identified boundaries"""
