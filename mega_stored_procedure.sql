@@ -1069,11 +1069,15 @@ BEGIN
         END;
         
         -- =====================================================================================
-        -- REPORTING AND ANALYTICS UPDATES
+        -- EXPANDED REPORTING AND ANALYTICS UPDATES (4X LARGER)
         -- =====================================================================================
         
         IF @ProcessReports = 1
         BEGIN
+            -- =====================================================================================
+            -- SECTION 1: BASIC SALES AND CUSTOMER ANALYTICS
+            -- =====================================================================================
+            
             -- Update daily sales summary
             IF EXISTS (SELECT 1 FROM DailySalesSummary WHERE SalesDate = CAST(@OrderDate AS DATE))
             BEGIN
@@ -1100,6 +1104,30 @@ BEGIN
                 );
             END;
             
+            -- Update hourly sales tracking
+            DECLARE @CurrentHour INT = DATEPART(HOUR, @OrderDate);
+            IF EXISTS (SELECT 1 FROM HourlySalesSummary WHERE SalesDate = CAST(@OrderDate AS DATE) AND HourOfDay = @CurrentHour)
+            BEGIN
+                UPDATE HourlySalesSummary
+                SET 
+                    TotalOrders = TotalOrders + 1,
+                    TotalRevenue = TotalRevenue + @FinalAmount,
+                    PeakHourMultiplier = CASE WHEN @CurrentHour BETWEEN 9 AND 17 THEN 1.2 ELSE 1.0 END,
+                    LastUpdated = GETDATE()
+                WHERE SalesDate = CAST(@OrderDate AS DATE) AND HourOfDay = @CurrentHour;
+            END
+            ELSE
+            BEGIN
+                INSERT INTO HourlySalesSummary (
+                    SalesDate, HourOfDay, TotalOrders, TotalRevenue, 
+                    PeakHourMultiplier, LastUpdated
+                )
+                VALUES (
+                    CAST(@OrderDate AS DATE), @CurrentHour, 1, @FinalAmount,
+                    CASE WHEN @CurrentHour BETWEEN 9 AND 17 THEN 1.2 ELSE 1.0 END, GETDATE()
+                );
+            END;
+            
             -- Update customer analytics
             UPDATE CustomerAnalytics
             SET 
@@ -1122,6 +1150,472 @@ BEGIN
                     @OrderDate, @OrderDate, GETDATE()
                 );
             END;
+            
+            -- =====================================================================================
+            -- SECTION 2: DETAILED PRODUCT AND CATEGORY ANALYTICS
+            -- =====================================================================================
+            
+            -- Update product performance metrics for each item in cart
+            DECLARE @ProductAnalyticsCursor CURSOR;
+            DECLARE @CurrProductID INT, @CurrQuantity INT, @CurrLineTotal DECIMAL(18,2);
+            
+            SET @ProductAnalyticsCursor = CURSOR FOR
+            SELECT ProductID, Quantity, LineTotal FROM @Cart;
+            
+            OPEN @ProductAnalyticsCursor;
+            FETCH NEXT FROM @ProductAnalyticsCursor INTO @CurrProductID, @CurrQuantity, @CurrLineTotal;
+            
+            WHILE @@FETCH_STATUS = 0
+            BEGIN
+                -- Update product sales statistics
+                IF EXISTS (SELECT 1 FROM ProductSalesStats WHERE ProductID = @CurrProductID AND SalesDate = CAST(@OrderDate AS DATE))
+                BEGIN
+                    UPDATE ProductSalesStats
+                    SET 
+                        UnitsSold = UnitsSold + @CurrQuantity,
+                        TotalRevenue = TotalRevenue + @CurrLineTotal,
+                        OrderCount = OrderCount + 1,
+                        AverageSellingPrice = TotalRevenue / UnitsSold,
+                        LastSoldDate = @OrderDate,
+                        Velocity = CASE 
+                            WHEN DATEDIFF(DAY, FirstSoldDate, @OrderDate) > 0 
+                            THEN UnitsSold / DATEDIFF(DAY, FirstSoldDate, @OrderDate)
+                            ELSE UnitsSold 
+                        END,
+                        LastUpdated = GETDATE()
+                    WHERE ProductID = @CurrProductID AND SalesDate = CAST(@OrderDate AS DATE);
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO ProductSalesStats (
+                        ProductID, SalesDate, UnitsSold, TotalRevenue, OrderCount,
+                        AverageSellingPrice, FirstSoldDate, LastSoldDate, Velocity, LastUpdated
+                    )
+                    VALUES (
+                        @CurrProductID, CAST(@OrderDate AS DATE), @CurrQuantity, @CurrLineTotal, 1,
+                        @CurrLineTotal / @CurrQuantity, @OrderDate, @OrderDate, @CurrQuantity, GETDATE()
+                    );
+                END;
+                
+                -- Update category performance metrics
+                DECLARE @CategoryID INT;
+                SELECT @CategoryID = CategoryID FROM Products WHERE ProductID = @CurrProductID;
+                
+                IF EXISTS (SELECT 1 FROM CategorySalesStats WHERE CategoryID = @CategoryID AND SalesDate = CAST(@OrderDate AS DATE))
+                BEGIN
+                    UPDATE CategorySalesStats
+                    SET 
+                        TotalOrders = TotalOrders + 1,
+                        TotalRevenue = TotalRevenue + @CurrLineTotal,
+                        TotalUnits = TotalUnits + @CurrQuantity,
+                        AverageOrderValue = TotalRevenue / TotalOrders,
+                        MarketShare = (TotalRevenue * 100.0) / (SELECT SUM(TotalRevenue) FROM CategorySalesStats WHERE SalesDate = CAST(@OrderDate AS DATE)),
+                        LastUpdated = GETDATE()
+                    WHERE CategoryID = @CategoryID AND SalesDate = CAST(@OrderDate AS DATE);
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO CategorySalesStats (
+                        CategoryID, SalesDate, TotalOrders, TotalRevenue, TotalUnits,
+                        AverageOrderValue, MarketShare, LastUpdated
+                    )
+                    VALUES (
+                        @CategoryID, CAST(@OrderDate AS DATE), 1, @CurrLineTotal, @CurrQuantity,
+                        @CurrLineTotal, 100.0, GETDATE()
+                    );
+                END;
+                
+                -- Update product recommendation scores
+                UPDATE ProductRecommendationScores
+                SET 
+                    PopularityScore = PopularityScore + (@CurrQuantity * 2),
+                    RecentSalesWeight = CASE 
+                        WHEN DATEDIFF(DAY, LastUpdated, GETDATE()) <= 7 THEN PopularityScore * 1.5
+                        WHEN DATEDIFF(DAY, LastUpdated, GETDATE()) <= 30 THEN PopularityScore * 1.2
+                        ELSE PopularityScore 
+                    END,
+                    CrossSellScore = CrossSellScore + 1,
+                    LastUpdated = GETDATE()
+                WHERE ProductID = @CurrProductID;
+                
+                IF @@ROWCOUNT = 0
+                BEGIN
+                    INSERT INTO ProductRecommendationScores (
+                        ProductID, PopularityScore, RecentSalesWeight, CrossSellScore, LastUpdated
+                    )
+                    VALUES (@CurrProductID, @CurrQuantity * 2, @CurrQuantity * 2, 1, GETDATE());
+                END;
+                
+                FETCH NEXT FROM @ProductAnalyticsCursor INTO @CurrProductID, @CurrQuantity, @CurrLineTotal;
+            END;
+            
+            CLOSE @ProductAnalyticsCursor;
+            DEALLOCATE @ProductAnalyticsCursor;
+            
+            -- =====================================================================================
+            -- SECTION 3: CUSTOMER SEGMENTATION AND BEHAVIOR ANALYSIS
+            -- =====================================================================================
+            
+            -- Update customer segmentation scores
+            DECLARE @SegmentScore INT = 0;
+            DECLARE @FrequencyScore INT = 0;
+            DECLARE @MonetaryScore INT = 0;
+            DECLARE @RecencyScore INT = 0;
+            
+            -- Calculate Recency score (days since last order)
+            SET @RecencyScore = CASE 
+                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 30 THEN 5
+                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 90 THEN 4
+                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 180 THEN 3
+                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 365 THEN 2
+                ELSE 1
+            END;
+            
+            -- Calculate Frequency score (number of orders)
+            SET @FrequencyScore = CASE 
+                WHEN @CustomerOrderCount >= 50 THEN 5
+                WHEN @CustomerOrderCount >= 20 THEN 4
+                WHEN @CustomerOrderCount >= 10 THEN 3
+                WHEN @CustomerOrderCount >= 5 THEN 2
+                ELSE 1
+            END;
+            
+            -- Calculate Monetary score (lifetime value)
+            SET @MonetaryScore = CASE 
+                WHEN @CustomerLifetimeValue >= 10000 THEN 5
+                WHEN @CustomerLifetimeValue >= 5000 THEN 4
+                WHEN @CustomerLifetimeValue >= 2000 THEN 3
+                WHEN @CustomerLifetimeValue >= 500 THEN 2
+                ELSE 1
+            END;
+            
+            SET @SegmentScore = (@RecencyScore * 100) + (@FrequencyScore * 10) + @MonetaryScore;
+            
+            -- Update customer RFM analysis
+            IF EXISTS (SELECT 1 FROM CustomerRFMAnalysis WHERE CustomerID = @CustomerID)
+            BEGIN
+                UPDATE CustomerRFMAnalysis
+                SET 
+                    RecencyScore = @RecencyScore,
+                    FrequencyScore = @FrequencyScore,
+                    MonetaryScore = @MonetaryScore,
+                    RFMScore = @SegmentScore,
+                    CustomerSegment = CASE 
+                        WHEN @SegmentScore >= 555 THEN 'Champions'
+                        WHEN @SegmentScore >= 454 THEN 'Loyal Customers'
+                        WHEN @SegmentScore >= 344 THEN 'Potential Loyalists'
+                        WHEN @SegmentScore >= 234 THEN 'New Customers'
+                        WHEN @SegmentScore >= 223 THEN 'Promising'
+                        WHEN @SegmentScore >= 155 THEN 'Need Attention'
+                        WHEN @SegmentScore >= 144 THEN 'About to Sleep'
+                        WHEN @SegmentScore >= 123 THEN 'At Risk'
+                        WHEN @SegmentScore >= 122 THEN 'Cannot Lose Them'
+                        ELSE 'Hibernating'
+                    END,
+                    LastAnalysisDate = @OrderDate,
+                    NextReviewDate = DATEADD(DAY, 30, @OrderDate),
+                    LastUpdated = GETDATE()
+                WHERE CustomerID = @CustomerID;
+            END
+            ELSE
+            BEGIN
+                INSERT INTO CustomerRFMAnalysis (
+                    CustomerID, RecencyScore, FrequencyScore, MonetaryScore, RFMScore,
+                    CustomerSegment, LastAnalysisDate, NextReviewDate, LastUpdated
+                )
+                VALUES (
+                    @CustomerID, @RecencyScore, @FrequencyScore, @MonetaryScore, @SegmentScore,
+                    CASE 
+                        WHEN @SegmentScore >= 555 THEN 'Champions'
+                        WHEN @SegmentScore >= 454 THEN 'Loyal Customers'
+                        WHEN @SegmentScore >= 344 THEN 'Potential Loyalists'
+                        WHEN @SegmentScore >= 234 THEN 'New Customers'
+                        WHEN @SegmentScore >= 223 THEN 'Promising'
+                        WHEN @SegmentScore >= 155 THEN 'Need Attention'
+                        WHEN @SegmentScore >= 144 THEN 'About to Sleep'
+                        WHEN @SegmentScore >= 123 THEN 'At Risk'
+                        WHEN @SegmentScore >= 122 THEN 'Cannot Lose Them'
+                        ELSE 'Hibernating'
+                    END,
+                    @OrderDate, DATEADD(DAY, 30, @OrderDate), GETDATE()
+                );
+            END;
+            
+            -- Update customer behavior tracking
+            DECLARE @PurchasePattern NVARCHAR(100);
+            DECLARE @ShoppingTimePreference NVARCHAR(50);
+            DECLARE @SeasonalTrend NVARCHAR(50);
+            
+            SET @ShoppingTimePreference = CASE 
+                WHEN @CurrentHour BETWEEN 6 AND 12 THEN 'Morning Shopper'
+                WHEN @CurrentHour BETWEEN 12 AND 17 THEN 'Afternoon Shopper'
+                WHEN @CurrentHour BETWEEN 17 AND 22 THEN 'Evening Shopper'
+                ELSE 'Night Owl'
+            END;
+            
+            SET @SeasonalTrend = CASE 
+                WHEN MONTH(@OrderDate) IN (12, 1, 2) THEN 'Winter'
+                WHEN MONTH(@OrderDate) IN (3, 4, 5) THEN 'Spring'
+                WHEN MONTH(@OrderDate) IN (6, 7, 8) THEN 'Summer'
+                ELSE 'Fall'
+            END;
+            
+            SET @PurchasePattern = CASE 
+                WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 2 THEN 'High Value Purchase'
+                WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 1.5 THEN 'Above Average Purchase'
+                WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 0.5 THEN 'Average Purchase'
+                ELSE 'Low Value Purchase'
+            END;
+            
+            INSERT INTO CustomerBehaviorTracking (
+                CustomerID, OrderID, PurchasePattern, ShoppingTimePreference,
+                SeasonalTrend, DeviceType, PaymentPreference, ShippingPreference,
+                OrderValue, OrderDate, CreatedDate
+            )
+            VALUES (
+                @CustomerID, @OrderID, @PurchasePattern, @ShoppingTimePreference,
+                @SeasonalTrend, 'Web', 
+                (SELECT PaymentTypeName FROM PaymentTypes WHERE PaymentTypeID = @PaymentTypeID),
+                (SELECT MethodName FROM ShippingMethods WHERE MethodID = @ShippingMethodID),
+                @FinalAmount, @OrderDate, GETDATE()
+            );
+            
+            -- =====================================================================================
+            -- SECTION 4: ADVANCED INVENTORY AND SUPPLY CHAIN ANALYTICS
+            -- =====================================================================================
+            
+            -- Update inventory turnover analytics
+            DECLARE @InventoryAnalyticsCursor CURSOR;
+            DECLARE @CurrWarehouseID INT, @CurrAllocatedQty INT;
+            
+            SET @InventoryAnalyticsCursor = CURSOR FOR
+            SELECT DISTINCT WarehouseID, SUM(AllocatedQuantity) 
+            FROM @InventoryAllocations 
+            GROUP BY WarehouseID;
+            
+            OPEN @InventoryAnalyticsCursor;
+            FETCH NEXT FROM @InventoryAnalyticsCursor INTO @CurrWarehouseID, @CurrAllocatedQty;
+            
+            WHILE @@FETCH_STATUS = 0
+            BEGIN
+                -- Update warehouse performance metrics
+                IF EXISTS (SELECT 1 FROM WarehousePerformanceMetrics WHERE WarehouseID = @CurrWarehouseID AND MetricDate = CAST(@OrderDate AS DATE))
+                BEGIN
+                    UPDATE WarehousePerformanceMetrics
+                    SET 
+                        OrdersFulfilled = OrdersFulfilled + 1,
+                        UnitsShipped = UnitsShipped + @CurrAllocatedQty,
+                        FulfillmentEfficiency = (OrdersFulfilled * 100.0) / (OrdersFulfilled + BackordersCreated),
+                        CapacityUtilization = (UnitsShipped * 100.0) / MaxDailyCapacity,
+                        LastUpdated = GETDATE()
+                    WHERE WarehouseID = @CurrWarehouseID AND MetricDate = CAST(@OrderDate AS DATE);
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO WarehousePerformanceMetrics (
+                        WarehouseID, MetricDate, OrdersFulfilled, UnitsShipped,
+                        FulfillmentEfficiency, CapacityUtilization, BackordersCreated,
+                        MaxDailyCapacity, LastUpdated
+                    )
+                    VALUES (
+                        @CurrWarehouseID, CAST(@OrderDate AS DATE), 1, @CurrAllocatedQty,
+                        100.0, 50.0, 0, 1000, GETDATE()
+                    );
+                END;
+                
+                -- Update inventory velocity calculations
+                UPDATE InventoryVelocityMetrics
+                SET 
+                    DailyMovement = DailyMovement + @CurrAllocatedQty,
+                    WeeklyVelocity = DailyMovement * 7,
+                    MonthlyVelocity = DailyMovement * 30,
+                    TurnoverRate = CASE 
+                        WHEN AvailableStock > 0 THEN (DailyMovement * 365.0) / AvailableStock
+                        ELSE 0 
+                    END,
+                    ReorderPoint = (DailyMovement * LeadTimeDays) + SafetyStock,
+                    LastMovementDate = @OrderDate,
+                    LastUpdated = GETDATE()
+                WHERE WarehouseID = @CurrWarehouseID;
+                
+                FETCH NEXT FROM @InventoryAnalyticsCursor INTO @CurrWarehouseID, @CurrAllocatedQty;
+            END;
+            
+            CLOSE @InventoryAnalyticsCursor;
+            DEALLOCATE @InventoryAnalyticsCursor;
+            
+            -- Update supply chain efficiency metrics
+            INSERT INTO SupplyChainEvents (
+                EventType, EventDate, OrderID, CustomerID, WarehouseID,
+                ProductID, Quantity, ProcessingTime, EventStatus, CreatedDate
+            )
+            SELECT 
+                'ORDER_ALLOCATION',
+                @OrderDate,
+                @OrderID,
+                @CustomerID,
+                ia.WarehouseID,
+                ia.ProductID,
+                ia.AllocatedQuantity,
+                DATEDIFF(MILLISECOND, @OrderProcessingStartTime, GETDATE()),
+                'COMPLETED',
+                GETDATE()
+            FROM @InventoryAllocations ia;
+            
+            -- =====================================================================================
+            -- SECTION 5: MARKETING AND PROMOTION EFFECTIVENESS TRACKING
+            -- =====================================================================================
+            
+            -- Track promotion usage and effectiveness
+            IF EXISTS (SELECT 1 FROM @AppliedPromotions)
+            BEGIN
+                DECLARE @PromoEffectivenessCursor CURSOR;
+                DECLARE @CurrPromoID INT, @CurrDiscountAmount DECIMAL(18,2);
+                
+                SET @PromoEffectivenessCursor = CURSOR FOR
+                SELECT PromoID, DiscountAmount FROM @AppliedPromotions;
+                
+                OPEN @PromoEffectivenessCursor;
+                FETCH NEXT FROM @PromoEffectivenessCursor INTO @CurrPromoID, @CurrDiscountAmount;
+                
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+                    -- Update promotion effectiveness metrics
+                    IF EXISTS (SELECT 1 FROM PromotionEffectivenessMetrics WHERE PromoID = @CurrPromoID AND UsageDate = CAST(@OrderDate AS DATE))
+                    BEGIN
+                        UPDATE PromotionEffectivenessMetrics
+                        SET 
+                            UsageCount = UsageCount + 1,
+                            TotalDiscount = TotalDiscount + @CurrDiscountAmount,
+                            TotalOrderValue = TotalOrderValue + @FinalAmount,
+                            AverageOrderValue = TotalOrderValue / UsageCount,
+                            ConversionRate = (UsageCount * 100.0) / ViewCount,
+                            ROI = ((TotalOrderValue - TotalDiscount) / TotalDiscount) * 100,
+                            LastUsedDate = @OrderDate,
+                            LastUpdated = GETDATE()
+                        WHERE PromoID = @CurrPromoID AND UsageDate = CAST(@OrderDate AS DATE);
+                    END
+                    ELSE
+                    BEGIN
+                        INSERT INTO PromotionEffectivenessMetrics (
+                            PromoID, UsageDate, UsageCount, TotalDiscount, TotalOrderValue,
+                            AverageOrderValue, ConversionRate, ROI, ViewCount,
+                            LastUsedDate, LastUpdated
+                        )
+                        VALUES (
+                            @CurrPromoID, CAST(@OrderDate AS DATE), 1, @CurrDiscountAmount, @FinalAmount,
+                            @FinalAmount, 100.0, 
+                            ((@FinalAmount - @CurrDiscountAmount) / @CurrDiscountAmount) * 100,
+                            1, @OrderDate, GETDATE()
+                        );
+                    END;
+                    
+                    -- Update customer promotion affinity
+                    IF EXISTS (SELECT 1 FROM CustomerPromotionAffinity WHERE CustomerID = @CustomerID AND PromoID = @CurrPromoID)
+                    BEGIN
+                        UPDATE CustomerPromotionAffinity
+                        SET 
+                            UsageCount = UsageCount + 1,
+                            TotalSavings = TotalSavings + @CurrDiscountAmount,
+                            LastUsedDate = @OrderDate,
+                            AffinityScore = CASE 
+                                WHEN UsageCount >= 10 THEN 'High'
+                                WHEN UsageCount >= 5 THEN 'Medium'
+                                ELSE 'Low'
+                            END,
+                            LastUpdated = GETDATE()
+                        WHERE CustomerID = @CustomerID AND PromoID = @CurrPromoID;
+                    END
+                    ELSE
+                    BEGIN
+                        INSERT INTO CustomerPromotionAffinity (
+                            CustomerID, PromoID, UsageCount, TotalSavings,
+                            LastUsedDate, AffinityScore, LastUpdated
+                        )
+                        VALUES (
+                            @CustomerID, @CurrPromoID, 1, @CurrDiscountAmount,
+                            @OrderDate, 'Low', GETDATE()
+                        );
+                    END;
+                    
+                    FETCH NEXT FROM @PromoEffectivenessCursor INTO @CurrPromoID, @CurrDiscountAmount;
+                END;
+                
+                CLOSE @PromoEffectivenessCursor;
+                DEALLOCATE @PromoEffectivenessCursor;
+            END;
+            
+            -- =====================================================================================
+            -- SECTION 6: FINANCIAL AND REVENUE ANALYTICS
+            -- =====================================================================================
+            
+            -- Update revenue recognition and financial tracking
+            DECLARE @RevenueRecognitionDate DATE = @OrderDate;
+            DECLARE @DeferredRevenue DECIMAL(18,2) = 0;
+            DECLARE @RecognizedRevenue DECIMAL(18,2) = @FinalAmount;
+            
+            -- Check for digital vs physical products for revenue recognition
+            IF EXISTS (SELECT 1 FROM @Cart WHERE IsDigital = 1)
+            BEGIN
+                -- Immediate revenue recognition for digital products
+                SET @RecognizedRevenue = (SELECT SUM(LineTotal) FROM @Cart WHERE IsDigital = 1);
+                SET @DeferredRevenue = @FinalAmount - @RecognizedRevenue;
+            END;
+            
+            -- Update financial summary
+            IF EXISTS (SELECT 1 FROM FinancialSummary WHERE ReportDate = CAST(@OrderDate AS DATE))
+            BEGIN
+                UPDATE FinancialSummary
+                SET 
+                    GrossRevenue = GrossRevenue + @FinalAmount,
+                    NetRevenue = NetRevenue + (@FinalAmount - @DiscountAmount),
+                    TotalTax = TotalTax + @TaxAmount,
+                    ShippingRevenue = ShippingRevenue + @ShippingCost,
+                    ProcessingFees = ProcessingFees + @ProcessingFee,
+                    DiscountsGiven = DiscountsGiven + @DiscountAmount,
+                    RecognizedRevenue = RecognizedRevenue + @RecognizedRevenue,
+                    DeferredRevenue = DeferredRevenue + @DeferredRevenue,
+                    OrderCount = OrderCount + 1,
+                    AverageOrderValue = GrossRevenue / OrderCount,
+                    LastUpdated = GETDATE()
+                WHERE ReportDate = CAST(@OrderDate AS DATE);
+            END
+            ELSE
+            BEGIN
+                INSERT INTO FinancialSummary (
+                    ReportDate, GrossRevenue, NetRevenue, TotalTax, ShippingRevenue,
+                    ProcessingFees, DiscountsGiven, RecognizedRevenue, DeferredRevenue,
+                    OrderCount, AverageOrderValue, LastUpdated
+                )
+                VALUES (
+                    CAST(@OrderDate AS DATE), @FinalAmount, @FinalAmount - @DiscountAmount,
+                    @TaxAmount, @ShippingCost, @ProcessingFee, @DiscountAmount,
+                    @RecognizedRevenue, @DeferredRevenue, 1, @FinalAmount, GETDATE()
+                );
+            END;
+            
+            -- Update profit margin analysis
+            DECLARE @TotalCOGS DECIMAL(18,2) = 0;
+            SELECT @TotalCOGS = SUM(p.CostPrice * c.Quantity)
+            FROM @Cart c
+            INNER JOIN Products p ON c.ProductID = p.ProductID;
+            
+            DECLARE @GrossProfit DECIMAL(18,2) = @FinalAmount - @TotalCOGS;
+            DECLARE @GrossProfitMargin DECIMAL(8,4) = CASE WHEN @FinalAmount > 0 THEN (@GrossProfit / @FinalAmount) * 100 ELSE 0 END;
+            
+            INSERT INTO ProfitMarginAnalysis (
+                OrderID, CustomerID, OrderDate, GrossRevenue, COGS, GrossProfit,
+                GrossProfitMargin, ShippingCost, ProcessingFees, NetProfit,
+                NetProfitMargin, CreatedDate
+            )
+            VALUES (
+                @OrderID, @CustomerID, @OrderDate, @FinalAmount, @TotalCOGS, @GrossProfit,
+                @GrossProfitMargin, @ShippingCost, @ProcessingFee, 
+                @GrossProfit - @ShippingCost - @ProcessingFee,
+                CASE WHEN @FinalAmount > 0 THEN ((@GrossProfit - @ShippingCost - @ProcessingFee) / @FinalAmount) * 100 ELSE 0 END,
+                GETDATE()
+            );
+            
         END;
         
         -- =====================================================================================
