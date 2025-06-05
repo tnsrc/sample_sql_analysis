@@ -86,6 +86,67 @@ class AdaptiveSQLAnalyzer:
             'CREATE', 'ALTER', 'DROP', 'TRUNCATE', 'BULK'
         }
         
+        # Stored procedure and function call patterns
+        self.proc_function_patterns = {
+            'STORED_PROCEDURES': [
+                r'EXEC(?:UTE)?\s+([a-zA-Z_][a-zA-Z0-9_]*\.?[a-zA-Z_][a-zA-Z0-9_]*)',  # EXEC sp_name
+                r'EXEC(?:UTE)?\s+(\[?[a-zA-Z_][a-zA-Z0-9_]*\]?\.\[?[a-zA-Z_][a-zA-Z0-9_]*\]?)',  # EXEC [schema].[sp_name]
+                r'EXEC(?:UTE)?\s*\(\s*([^)]+)\s*\)',  # EXEC dynamic SQL
+                r'(sp_executesql)',  # Dynamic SQL execution
+                r'EXEC(?:UTE)?\s+(sp_[a-zA-Z_][a-zA-Z0-9_]*)',  # EXEC sp_procedurename
+                r'EXEC(?:UTE)?\s+(usp_[a-zA-Z_][a-zA-Z0-9_]*)',  # EXEC usp_procedurename
+                r'EXEC(?:UTE)?\s+(proc_[a-zA-Z_][a-zA-Z0-9_]*)',  # EXEC proc_procedurename
+                r'CALL\s+([a-zA-Z_][a-zA-Z0-9_]*\.?[a-zA-Z_][a-zA-Z0-9_]*)',  # CALL procedure (MySQL/PostgreSQL style)
+            ],
+            'SYSTEM_FUNCTIONS': [
+                r'(GETDATE|GETUTCDATE|SYSDATETIME|CURRENT_TIMESTAMP)\s*\(?',
+                r'(NEWID|NEWSEQUENTIALID)\s*\(',
+                r'(SCOPE_IDENTITY|@@IDENTITY|@@ROWCOUNT|@@ERROR|@@TRANCOUNT)\b',
+                r'(USER_NAME|SUSER_NAME|SYSTEM_USER|ORIGINAL_LOGIN)\s*\(?',
+            ],
+            'AGGREGATE_FUNCTIONS': [
+                r'(SUM|COUNT|MAX|MIN|AVG|STDEV|VAR|VARP|STDEVP)\s*\(',
+                r'(COUNT_BIG|GROUPING|GROUPING_ID)\s*\(',
+            ],
+            'STRING_FUNCTIONS': [
+                r'(LEN|DATALENGTH|SUBSTRING|LEFT|RIGHT|CHARINDEX|PATINDEX)\s*\(',
+                r'(REPLACE|STUFF|REVERSE|UPPER|LOWER|LTRIM|RTRIM|TRIM)\s*\(',
+                r'(CONCAT|FORMAT|STRING_AGG|STRING_SPLIT)\s*\(',
+            ],
+            'DATE_FUNCTIONS': [
+                r'(DATEADD|DATEDIFF|DATEDIFF_BIG|DATEPART|DATENAME)\s*\(',
+                r'(YEAR|MONTH|DAY|DATETRUNC|EOMONTH|ISDATE)\s*\(',
+            ],
+            'MATH_FUNCTIONS': [
+                r'(ABS|CEILING|FLOOR|ROUND|POWER|SQRT|LOG|LOG10|EXP)\s*\(',
+                r'(SIN|COS|TAN|ASIN|ACOS|ATAN|ATN2|DEGREES|RADIANS)\s*\(',
+                r'(RAND|SIGN|PI)\s*\(?',
+            ],
+            'CONVERSION_FUNCTIONS': [
+                r'(CAST|CONVERT|TRY_CAST|TRY_CONVERT|PARSE|TRY_PARSE)\s*\(',
+                r'(ISNULL|COALESCE|NULLIF|IIF|CHOOSE)\s*\(',
+            ],
+            'WINDOW_FUNCTIONS': [
+                r'(ROW_NUMBER|RANK|DENSE_RANK|NTILE)\s*\(',
+                r'(LAG|LEAD|FIRST_VALUE|LAST_VALUE)\s*\(',
+                r'(CUME_DIST|PERCENT_RANK|PERCENTILE_CONT|PERCENTILE_DISC)\s*\(',
+            ],
+            'LOGICAL_FUNCTIONS': [
+                r'(EXISTS|NOT\s+EXISTS)\s*\(',
+                r'(CASE\s+WHEN|IIF)\s*\(',
+            ],
+            'USER_DEFINED': [
+                r'([a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*)\s*\(',  # schema.function_name()
+                r'(dbo\.[a-zA-Z_][a-zA-Z0-9_]*)\s*\(',  # dbo.function_name()
+                r'(\[dbo\]\.\[[a-zA-Z_][a-zA-Z0-9_]*\])\s*\(',  # [dbo].[function_name]()
+                r'([a-zA-Z_][a-zA-Z0-9_]*\.\[[a-zA-Z_][a-zA-Z0-9_]*\])\s*\(',  # schema.[function_name]()
+                r'(\[[a-zA-Z_][a-zA-Z0-9_]*\]\.\[[a-zA-Z_][a-zA-Z0-9_]*\])\s*\(',  # [schema].[function_name]()
+                r'(fn_[a-zA-Z_][a-zA-Z0-9_]*)\s*\(',  # fn_function_name() - common UDF naming
+                r'(udf_[a-zA-Z_][a-zA-Z0-9_]*)\s*\(',  # udf_function_name() - common UDF naming
+                r'(func_[a-zA-Z_][a-zA-Z0-9_]*)\s*\(',  # func_function_name() - common UDF naming
+            ]
+        }
+        
         self.control_keywords = {
             'IF', 'ELSE', 'WHILE', 'FOR', 'BEGIN', 'END', 'TRY', 'CATCH',
             'GOTO', 'RETURN', 'BREAK', 'CONTINUE', 'CASE', 'WHEN'
@@ -162,6 +223,31 @@ class AdaptiveSQLAnalyzer:
                     if re.search(rf'\b{keyword}\b', line_upper):
                         analysis['sql_operations'].append(keyword)
                         analysis['complexity'] += 1
+                
+                # Analyze stored procedure and function calls
+                for category, patterns in self.proc_function_patterns.items():
+                    for pattern in patterns:
+                        matches = re.findall(pattern, line_upper)
+                        for match in matches:
+                            if isinstance(match, tuple):
+                                # For patterns with groups, take the first non-empty group
+                                proc_func_name = next((m for m in match if m), match[0] if match else '')
+                            else:
+                                proc_func_name = match
+                            
+                            if proc_func_name:
+                                # Add categorized operation
+                                if category == 'STORED_PROCEDURES':
+                                    analysis['sql_operations'].append(f'SP_CALL:{proc_func_name}')
+                                    analysis['complexity'] += 2  # SP calls are more complex
+                                elif category == 'USER_DEFINED':
+                                    analysis['sql_operations'].append(f'UDF_CALL:{proc_func_name}')
+                                    analysis['complexity'] += 2  # UDF calls are more complex
+                                else:
+                                    # System functions, aggregate functions, etc.
+                                    func_type = category.replace('_FUNCTIONS', '').replace('_', ' ').title()
+                                    analysis['sql_operations'].append(f'{func_type}:{proc_func_name}')
+                                    analysis['complexity'] += 1
                 
                 # Analyze control structures
                 for keyword in self.control_keywords:
@@ -395,8 +481,121 @@ class AdaptiveSQLAnalyzer:
             chunk = self._create_chunk(chunk_lines, i + 1, start_idx + 1)
             chunks.append(chunk)
         
+        # Merge comment-only chunks with next chunks
+        chunks = self._merge_comment_only_chunks(chunks)
+        
         return chunks
-    
+
+    def _merge_comment_only_chunks(self, chunks: List[CodeChunk]) -> List[CodeChunk]:
+        """Merge comment-only chunks with the next chunk for better context"""
+        if not chunks:
+            return chunks
+            
+        merged_chunks = []
+        i = 0
+        
+        while i < len(chunks):
+            current_chunk = chunks[i]
+            
+            # Check if current chunk is comment-only
+            if self._is_comment_only_chunk(current_chunk):
+                # Find next non-comment chunk to merge with
+                next_chunk_idx = i + 1
+                while (next_chunk_idx < len(chunks) and 
+                       self._is_comment_only_chunk(chunks[next_chunk_idx])):
+                    next_chunk_idx += 1
+                
+                if next_chunk_idx < len(chunks):
+                    # Merge comment chunk(s) with next actual code chunk
+                    comment_chunks = chunks[i:next_chunk_idx]
+                    next_chunk = chunks[next_chunk_idx]
+                    merged_chunk = self._merge_chunks(comment_chunks + [next_chunk])
+                    merged_chunks.append(merged_chunk)
+                    i = next_chunk_idx + 1
+                else:
+                    # No more non-comment chunks, keep the comment chunk
+                    merged_chunks.append(current_chunk)
+                    i += 1
+            else:
+                merged_chunks.append(current_chunk)
+                i += 1
+        
+        # Reassign sequential chunk IDs
+        for idx, chunk in enumerate(merged_chunks):
+            chunk.chunk_id = idx + 1
+            
+        return merged_chunks
+
+    def _is_comment_only_chunk(self, chunk: CodeChunk) -> bool:
+        """Check if chunk contains only comments and empty lines"""
+        for line in chunk.lines:
+            stripped = line.strip()
+            if stripped and not (stripped.startswith('--') or 
+                               stripped.startswith('/*') or 
+                               stripped.startswith('*') or 
+                               stripped.endswith('*/')):
+                return False
+        return True
+
+    def _merge_chunks(self, chunks_to_merge: List[CodeChunk]) -> CodeChunk:
+        """Merge multiple chunks into one"""
+        if len(chunks_to_merge) == 1:
+            return chunks_to_merge[0]
+            
+        # Use the last (non-comment) chunk as the base
+        base_chunk = chunks_to_merge[-1]
+        
+        # Combine all lines
+        all_lines = []
+        for chunk in chunks_to_merge:
+            all_lines.extend(chunk.lines)
+        
+        # Combine analysis data from all chunks
+        all_sql_operations = []
+        all_control_structures = []
+        all_variables_declared = []
+        all_variables_used = []
+        all_tables_accessed = []
+        all_business_functions = []
+        total_complexity = 0
+        
+        for chunk in chunks_to_merge:
+            all_sql_operations.extend(chunk.sql_operations)
+            all_control_structures.extend(chunk.control_structures)
+            all_variables_declared.extend(chunk.variables_declared)
+            all_variables_used.extend(chunk.variables_used)
+            all_tables_accessed.extend(chunk.tables_accessed)
+            all_business_functions.extend(chunk.business_functions)
+            total_complexity += chunk.complexity_score
+        
+        # Remove duplicates
+        all_sql_operations = list(set(all_sql_operations))
+        all_control_structures = list(set(all_control_structures))
+        all_variables_declared = list(set(all_variables_declared))
+        all_variables_used = list(set(all_variables_used))
+        all_tables_accessed = list(set(all_tables_accessed))
+        all_business_functions = list(set(all_business_functions))
+        
+        # Create merged chunk
+        merged_chunk = CodeChunk(
+            chunk_id=base_chunk.chunk_id,
+            title=base_chunk.title,
+            lines=all_lines,
+            start_line=chunks_to_merge[0].start_line,
+            end_line=chunks_to_merge[-1].end_line,
+            chunk_type=base_chunk.chunk_type,
+            complexity_score=total_complexity,
+            sql_operations=all_sql_operations,
+            variables_declared=all_variables_declared,
+            variables_used=all_variables_used,
+            tables_accessed=all_tables_accessed,
+            control_structures=all_control_structures,
+            dependencies=[],
+            business_functions=all_business_functions
+        )
+        
+        return merged_chunk
+
     def _create_chunk(self, chunk_lines: List[Dict], chunk_id: int, start_line: int) -> CodeChunk:
         """Create a single chunk with comprehensive analysis"""
         lines = [line['original'] for line in chunk_lines]
