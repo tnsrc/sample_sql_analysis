@@ -6,31 +6,30 @@
 **Max Chunk Size**: 120 lines
 
 ## Procedure Statistics
-- **Total Chunks**: 113
-- **Subdivided Chunks**: 108
-- **Total Complexity Score**: 722
-- **Average Complexity per Chunk**: 6.4
+- **Total Chunks**: 58
+- **Subdivided Chunks**: 53
+- **Total Complexity Score**: 435
+- **Average Complexity per Chunk**: 7.5
 - **Business Functions Identified**: 0
 
 **Chunk Type Distribution:**
-- Conditional Logic: 50
-- Cursor Operation: 1
+- Conditional Logic: 26
+- Cursor Operation: 2
 - Data Modification: 6
 - Data Retrieval: 3
-- Error Handling: 2
-- General Logic: 17
-- Loop Logic: 10
-- Transaction Control: 5
-- Variable Declaration: 19
+- General Logic: 4
+- Loop Logic: 2
+- Transaction Control: 4
+- Variable Declaration: 11
 
 ## Sequential Analysis Order
 Analyze chunks in this exact order for complete understanding:
 
-1. **Chunk 1**: General Business Logic (Math:PI/CREATE)
+1. **Chunk 1**: General Business Logic (CREATE/Math:PI)
    - Type: general_logic
    - Complexity: 3
    - Lines: 1-26
-   - Context: Performs math:pi, create operations
+   - Context: Performs create, math:pi operations
 
 2. **Chunk 2**: General Business Logic (BEGIN)
    - Type: general_logic
@@ -43,770 +42,385 @@ Analyze chunks in this exact order for complete understanding:
    - Complexity: 9
    - Lines: 36-174
    - Context: Performs math:pi, system:getdate operations. Follows general logic
-   - Subdivision: Part 1/2 of variable_declaration
+   - Subdivision: Part 1/1 of variable_declaration
 
-4. **Chunk 4**: General Business Logic (Part 2)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 175-178
-   - Context: Follows variable declaration
-   - Subdivision: Part 2/2 of variable_declaration
-
-5. **Chunk 5**: Error Handling & Exception Management (TRY/BEGIN) (Part 1)
-   - Type: error_handling
-   - Complexity: 6
-   - Lines: 179-185
-   - Context: Uses try, begin logic. Follows general logic
-   - Subdivision: Part 1/106 of variable_declaration
-
-6. **Chunk 6**: Conditional Logic & Branching (System:GETDATE) (Part 2)
-   - Type: conditional_logic
-   - Complexity: 9
-   - Lines: 186-201
-   - Context: Performs system:getdate operations. Uses goto, end, begin, if logic. Follows error handling
-   - Subdivision: Part 2/106 of variable_declaration
-
-7. **Chunk 7**: Conditional Logic & Branching (Math:PI) (Part 3)
-   - Type: conditional_logic
-   - Complexity: 11
-   - Lines: 202-217
-   - Context: Performs math:pi operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 3/106 of variable_declaration
-
-8. **Chunk 8**: Conditional Logic & Branching (String:LEN) (Part 4)
-   - Type: conditional_logic
-   - Complexity: 5
-   - Lines: 218-227
-   - Context: Performs string:len operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 4/106 of variable_declaration
-
-9. **Chunk 9**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 5)
+4. **Chunk 4**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 10)
    - Type: conditional_logic
    - Complexity: 7
-   - Lines: 228-251
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 5/106 of variable_declaration
+   - Lines: 231-251
+   - Context: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows variable declaration
+   - Subdivision: Part 10/52 of variable_declaration
 
-10. **Chunk 10**: Conditional Logic & Branching (Conversion:ISNULL/Aggregate:SUM) (Part 6)
-   - Type: conditional_logic
-   - Complexity: 6
-   - Lines: 252-267
-   - Context: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 6/106 of variable_declaration
+5. **Chunk 5**: Data Query & Retrieval (Conversion:ISNULL/Aggregate:SUM) (Part 12)
+   - Type: data_retrieval
+   - Complexity: 4
+   - Lines: 256-267
+   - Context: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, end logic. Follows conditional logic
+   - Subdivision: Part 12/52 of variable_declaration
 
-11. **Chunk 11**: Conditional Logic & Branching (END/BEGIN) (Part 7)
-   - Type: conditional_logic
-   - Complexity: 8
-   - Lines: 268-280
-   - Context: Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 7/106 of variable_declaration
-
-12. **Chunk 12**: General Business Logic (Part 8)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 281-285
-   - Context: Follows conditional logic
-   - Subdivision: Part 8/106 of variable_declaration
-
-13. **Chunk 13**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 9)
+6. **Chunk 6**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 17)
    - Type: conditional_logic
    - Complexity: 14
    - Lines: 286-307
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
-   - Subdivision: Part 9/106 of variable_declaration
+   - Context: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows data retrieval
+   - Subdivision: Part 17/52 of variable_declaration
 
-14. **Chunk 14**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 10)
+7. **Chunk 7**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 18)
    - Type: conditional_logic
    - Complexity: 9
    - Lines: 308-320
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 10/106 of variable_declaration
+   - Context: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
+   - Subdivision: Part 18/52 of variable_declaration
 
-15. **Chunk 15**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 11)
+8. **Chunk 8**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 19)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 321-334
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 11/106 of variable_declaration
+   - Context: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
+   - Subdivision: Part 19/52 of variable_declaration
 
-16. **Chunk 16**: General Business Logic (Part 12)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 335-339
-   - Context: Follows conditional logic
-   - Subdivision: Part 12/106 of variable_declaration
-
-17. **Chunk 17**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 13)
+9. **Chunk 9**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 22)
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 340-360
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
-   - Subdivision: Part 13/106 of variable_declaration
+   - Context: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
+   - Subdivision: Part 22/52 of variable_declaration
 
-18. **Chunk 18**: Loop Processing & Iteration (Math:PI/Logical:NOT EXISTS) (Part 14)
-   - Type: loop_logic
-   - Complexity: 9
-   - Lines: 361-374
-   - Context: Performs math:pi, logical:not exists, system:getdate, select operations. Uses begin, if, end, for, goto logic. Follows conditional logic
-   - Subdivision: Part 14/106 of variable_declaration
-
-19. **Chunk 19**: Data Insert/Update/Delete (INSERT/Aggregate:COUNT) (Part 15)
+10. **Chunk 10**: Data Insert/Update/Delete (Aggregate:COUNT/INSERT) (Part 26)
    - Type: data_modification
    - Complexity: 4
-   - Lines: 375-387
-   - Context: Performs insert, aggregate:count, select operations. Follows loop logic
-   - Subdivision: Part 15/106 of variable_declaration
+   - Lines: 377-387
+   - Context: Performs aggregate:count, insert, select operations. Follows conditional logic
+   - Subdivision: Part 26/52 of variable_declaration
 
-20. **Chunk 20**: Loop Processing & Iteration (BEGIN/WHILE) (Part 16)
-   - Type: loop_logic
-   - Complexity: 8
-   - Lines: 388-398
-   - Context: Uses begin, while, if, end, goto logic. Follows data modification
-   - Subdivision: Part 16/106 of variable_declaration
-
-21. **Chunk 21**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 17)
-   - Type: conditional_logic
-   - Complexity: 7
-   - Lines: 399-413
-   - Context: Performs logical:not exists, select operations. Uses begin, if logic. Follows loop logic
-   - Subdivision: Part 17/106 of variable_declaration
-
-22. **Chunk 22**: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 18)
+11. **Chunk 11**: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 31)
    - Type: data_retrieval
    - Complexity: 2
    - Lines: 414-428
-   - Context: Performs conversion:cast, select operations. Uses end, goto logic. Follows conditional logic
-   - Subdivision: Part 18/106 of variable_declaration
+   - Context: Performs conversion:cast, select operations. Uses end, goto logic. Follows data modification
+   - Subdivision: Part 31/52 of variable_declaration
 
-23. **Chunk 23**: Loop Processing & Iteration (Conversion:CAST) (Part 19)
+12. **Chunk 12**: Loop Processing & Iteration (UPDATE/Conversion:CAST) (Part 37)
    - Type: loop_logic
-   - Complexity: 5
-   - Lines: 429-437
-   - Context: Performs conversion:cast operations. Uses begin, if, end, for, goto logic. Follows data retrieval
-   - Subdivision: Part 19/106 of variable_declaration
+   - Complexity: 3
+   - Lines: 450-471
+   - Context: Performs update, conversion:cast operations. Uses for, end, goto logic. Follows data retrieval
+   - Subdivision: Part 37/52 of variable_declaration
 
-24. **Chunk 24**: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 20)
-   - Type: conditional_logic
-   - Complexity: 11
-   - Lines: 438-446
-   - Context: Performs conversion:cast, logical:exists, select operations. Uses end, begin, if logic. Follows loop logic
-   - Subdivision: Part 20/106 of variable_declaration
-
-25. **Chunk 25**: Loop Processing & Iteration (Conversion:CAST/UPDATE) (Part 21)
-   - Type: loop_logic
-   - Complexity: 5
-   - Lines: 447-471
-   - Context: Performs conversion:cast, update operations. Uses else, begin, end, for, goto logic. Follows conditional logic
-   - Subdivision: Part 21/106 of variable_declaration
-
-26. **Chunk 26**: General Business Logic (Part 22)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 472-475
-   - Context: Follows loop logic
-   - Subdivision: Part 22/106 of variable_declaration
-
-27. **Chunk 27**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 23)
+13. **Chunk 13**: Variable & Parameter Declarations (EXEC/SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES) (Part 41)
    - Type: variable_declaration
-   - Complexity: 18
-   - Lines: 476-501
-   - Context: Performs math:pi, insert, sp_call:dbo.fn_allocateinventoryacrosswarehouses, aggregate:sum, exec, select operations. Uses while, begin, if logic. Follows general logic
-   - Subdivision: Part 23/106 of variable_declaration
+   - Complexity: 14
+   - Lines: 480-501
+   - Context: Performs exec, sp_call:dbo.fn_allocateinventoryacrosswarehouses, insert, aggregate:sum, select, math:pi operations. Uses while, begin logic. Follows loop logic
+   - Subdivision: Part 41/52 of variable_declaration
 
-28. **Chunk 28**: Loop Processing & Iteration (Conversion:CAST) (Part 24)
-   - Type: loop_logic
-   - Complexity: 5
-   - Lines: 502-511
-   - Context: Performs conversion:cast operations. Uses for, end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 24/106 of variable_declaration
-
-29. **Chunk 29**: Data Query & Retrieval (Aggregate:SUM/SELECT) (Part 25)
-   - Type: data_retrieval
-   - Complexity: 2
-   - Lines: 512-519
-   - Context: Performs aggregate:sum, select operations. Follows loop logic
-   - Subdivision: Part 25/106 of variable_declaration
-
-30. **Chunk 30**: Conditional Logic & Branching (SELECT) (Part 26)
+14. **Chunk 14**: Conditional Logic & Branching (SELECT) (Part 46)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 520-534
-   - Context: Performs select operations. Uses begin, if logic. Follows data retrieval
-   - Subdivision: Part 26/106 of variable_declaration
+   - Context: Performs select operations. Uses if, begin logic. Follows variable declaration
+   - Subdivision: Part 46/52 of variable_declaration
 
-31. **Chunk 31**: Conditional Logic & Branching (GOTO/END) (Part 27)
-   - Type: conditional_logic
-   - Complexity: 8
-   - Lines: 535-546
-   - Context: Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 27/106 of variable_declaration
-
-32. **Chunk 32**: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 28)
+15. **Chunk 15**: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 49)
    - Type: loop_logic
    - Complexity: 2
    - Lines: 547-557
    - Context: Performs aggregate:count, select operations. Uses for, end, goto logic. Follows conditional logic
-   - Subdivision: Part 28/106 of variable_declaration
+   - Subdivision: Part 49/52 of variable_declaration
 
-33. **Chunk 33**: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 29)
+16. **Chunk 16**: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 50)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 558-573
-   - Context: Performs aggregate:count, select operations. Uses goto, end, begin, if logic. Follows loop logic
-   - Subdivision: Part 29/106 of variable_declaration
+   - Context: Performs aggregate:count, select operations. Uses end, if, begin, goto logic. Follows loop logic
+   - Subdivision: Part 50/52 of variable_declaration
 
-34. **Chunk 34**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 30)
+17. **Chunk 17**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 51)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 574-587
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 30/106 of variable_declaration
+   - Context: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
+   - Subdivision: Part 51/52 of variable_declaration
 
-35. **Chunk 35**: Variable & Parameter Declarations (INSERT) (Part 31)
+18. **Chunk 18**: Variable & Parameter Declarations (INSERT) (Part 55)
    - Type: variable_declaration
-   - Complexity: 7
-   - Lines: 588-599
-   - Context: Performs insert operations. Uses begin, end, if logic. Follows conditional logic
-   - Subdivision: Part 31/106 of variable_declaration
+   - Complexity: 5
+   - Lines: 604-614
+   - Context: Performs insert operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 55/52 of variable_declaration
 
-36. **Chunk 36**: Variable & Parameter Declarations (INSERT/SELECT) (Part 32)
-   - Type: variable_declaration
-   - Complexity: 6
-   - Lines: 600-614
-   - Context: Performs insert, select operations. Uses end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 32/106 of variable_declaration
-
-37. **Chunk 37**: Variable & Parameter Declarations (Conversion:ISNULL/Math:FLOOR) (Part 33)
-   - Type: variable_declaration
-   - Complexity: 11
-   - Lines: 615-624
-   - Context: Performs conversion:isnull, math:floor, select operations. Uses begin, if logic. Follows variable declaration
-   - Subdivision: Part 33/106 of variable_declaration
-
-38. **Chunk 38**: Variable & Parameter Declarations (ELSE/WHEN) (Part 34)
-   - Type: variable_declaration
-   - Complexity: 2
-   - Lines: 625-630
-   - Context: Uses else, when, case, end logic. Follows variable declaration
-   - Subdivision: Part 34/106 of variable_declaration
-
-39. **Chunk 39**: Variable & Parameter Declarations (INSERT/UPDATE) (Part 35)
+19. **Chunk 19**: Variable & Parameter Declarations (UPDATE/INSERT) (Part 60)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 631-646
-   - Context: Performs insert, update operations. Uses end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 35/106 of variable_declaration
+   - Context: Performs update, insert operations. Uses end, if, begin logic. Follows variable declaration
+   - Subdivision: Part 60/52 of variable_declaration
 
-40. **Chunk 40**: General Business Logic (Part 36)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 647-652
-   - Context: Follows variable declaration
-   - Subdivision: Part 36/106 of variable_declaration
-
-41. **Chunk 41**: Variable & Parameter Declarations (Math:PI/UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX) (Part 37)
+20. **Chunk 20**: Variable & Parameter Declarations (UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX/Math:PI) (Part 63)
    - Type: variable_declaration
    - Complexity: 9
    - Lines: 653-674
-   - Context: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses while, begin logic. Follows general logic
-   - Subdivision: Part 37/106 of variable_declaration
+   - Context: Performs udf_call:dbo.fn_calculatecomplextax, math:pi, select operations. Uses while, begin logic. Follows variable declaration
+   - Subdivision: Part 63/52 of variable_declaration
 
-42. **Chunk 42**: Conditional Logic & Branching (Math:PI/INSERT) (Part 38)
+21. **Chunk 21**: Conditional Logic & Branching (Math:PI/UPDATE) (Part 64)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 675-693
-   - Context: Performs math:pi, insert, update operations. Uses end, if logic. Follows variable declaration
-   - Subdivision: Part 38/106 of variable_declaration
+   - Context: Performs math:pi, update, insert operations. Uses if, end logic. Follows variable declaration
+   - Subdivision: Part 64/52 of variable_declaration
 
-43. **Chunk 43**: Data Query & Retrieval (Math:PI/UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING) (Part 39)
+22. **Chunk 22**: Data Query & Retrieval (Math:PI/UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING) (Part 66)
    - Type: data_retrieval
    - Complexity: 7
-   - Lines: 694-709
+   - Lines: 696-709
    - Context: Performs math:pi, udf_call:dbo.fn_calculatedynamicshipping, select operations. Follows conditional logic
-   - Subdivision: Part 39/106 of variable_declaration
+   - Subdivision: Part 66/52 of variable_declaration
 
-44. **Chunk 44**: General Business Logic (Part 40)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 710-713
-   - Context: Follows data retrieval
-   - Subdivision: Part 40/106 of variable_declaration
-
-45. **Chunk 45**: Conditional Logic & Branching (Conversion:CAST/Math:PI) (Part 41)
-   - Type: conditional_logic
-   - Complexity: 10
-   - Lines: 714-726
-   - Context: Performs conversion:cast, math:pi, string:format, system:getdate operations. Uses end, begin, if logic. Follows general logic
-   - Subdivision: Part 41/106 of variable_declaration
-
-46. **Chunk 46**: General Business Logic (Math:PI) (Part 42)
-   - Type: general_logic
-   - Complexity: 1
-   - Lines: 727-734
-   - Context: Performs math:pi operations. Follows conditional logic
-   - Subdivision: Part 42/106 of variable_declaration
-
-47. **Chunk 47**: Conditional Logic & Branching (GOTO/END) (Part 43)
-   - Type: conditional_logic
-   - Complexity: 4
-   - Lines: 735-744
-   - Context: Uses goto, end, begin, if logic. Follows general logic
-   - Subdivision: Part 43/106 of variable_declaration
-
-48. **Chunk 48**: Data Insert/Update/Delete (Math:PI/INSERT) (Part 44)
+23. **Chunk 23**: Data Insert/Update/Delete (INSERT/System:SCOPE_IDENTITY) (Part 75)
    - Type: data_modification
    - Complexity: 11
    - Lines: 745-809
-   - Context: Performs math:pi, insert, system:scope_identity, system:getdate, select operations. Follows conditional logic
-   - Subdivision: Part 44/106 of variable_declaration
+   - Context: Performs insert, system:scope_identity, select, math:pi, system:getdate operations. Follows data retrieval
+   - Subdivision: Part 75/52 of variable_declaration
 
-49. **Chunk 49**: Conditional Logic & Branching (INSERT/Conversion:ISNULL) (Part 45)
+24. **Chunk 24**: Conditional Logic & Branching (Conversion:ISNULL/INSERT) (Part 76)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 810-819
-   - Context: Performs insert, conversion:isnull, select operations. Uses if logic. Follows data modification
-   - Subdivision: Part 45/106 of variable_declaration
+   - Context: Performs conversion:isnull, insert, select operations. Uses if logic. Follows data modification
+   - Subdivision: Part 76/52 of variable_declaration
 
-50. **Chunk 50**: General Business Logic (Part 46)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 820-823
-   - Context: Follows conditional logic
-   - Subdivision: Part 46/106 of variable_declaration
-
-51. **Chunk 51**: Conditional Logic & Branching (INSERT/UPDATE) (Part 47)
+25. **Chunk 25**: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 79)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 824-838
-   - Context: Performs insert, update, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-   - Subdivision: Part 47/106 of variable_declaration
+   - Context: Performs update, system:getdate, insert, select operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 79/52 of variable_declaration
 
-52. **Chunk 52**: General Business Logic (Part 48)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 839-842
-   - Context: Follows conditional logic
-   - Subdivision: Part 48/106 of variable_declaration
-
-53. **Chunk 53**: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 49)
+26. **Chunk 26**: Conditional Logic & Branching (System:GETDATE/INSERT) (Part 82)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 843-867
-   - Context: Performs insert, system:getdate operations. Uses begin, if logic. Follows general logic
-   - Subdivision: Part 49/106 of variable_declaration
+   - Context: Performs system:getdate, insert operations. Uses if, begin logic. Follows conditional logic
+   - Subdivision: Part 82/52 of variable_declaration
 
-54. **Chunk 54**: Conditional Logic & Branching (UPDATE) (Part 50)
-   - Type: conditional_logic
-   - Complexity: 5
-   - Lines: 868-877
-   - Context: Performs update operations. Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 50/106 of variable_declaration
-
-55. **Chunk 55**: Transaction Control (UPDATE/INSERT) (Part 51)
+27. **Chunk 27**: Transaction Control (Conversion:ISNULL/UPDATE) (Part 86)
    - Type: transaction_control
    - Complexity: 10
-   - Lines: 878-902
-   - Context: Performs update, insert, conversion:isnull, math:floor, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 51/106 of variable_declaration
+   - Lines: 880-902
+   - Context: Performs conversion:isnull, update, insert, math:floor, select, system:getdate operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 86/52 of variable_declaration
 
-56. **Chunk 56**: Variable & Parameter Declarations (SELECT) (Part 52)
+28. **Chunk 28**: Variable & Parameter Declarations (SELECT) (Part 88)
    - Type: variable_declaration
    - Complexity: 1
-   - Lines: 903-921
+   - Lines: 905-921
    - Context: Performs select operations. Follows transaction control
-   - Subdivision: Part 52/106 of variable_declaration
+   - Subdivision: Part 88/52 of variable_declaration
 
-57. **Chunk 57**: Conditional Logic & Branching (Math:LOG/UPDATE) (Part 53)
+29. **Chunk 29**: Conditional Logic & Branching (UPDATE/Math:LOG) (Part 89)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 922-938
-   - Context: Performs math:log, update, insert, conversion:cast, system:getdate operations. Uses end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 53/106 of variable_declaration
+   - Context: Performs update, math:log, insert, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows variable declaration
+   - Subdivision: Part 89/52 of variable_declaration
 
-58. **Chunk 58**: General Business Logic (Part 54)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 939-942
-   - Context: Follows conditional logic
-   - Subdivision: Part 54/106 of variable_declaration
-
-59. **Chunk 59**: Conditional Logic & Branching (INSERT/Date:DATEADD) (Part 55)
+30. **Chunk 30**: Conditional Logic & Branching (Date:DATEADD/Aggregate:COUNT) (Part 92)
    - Type: conditional_logic
    - Complexity: 14
    - Lines: 943-968
-   - Context: Performs insert, date:dateadd, aggregate:count, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-   - Subdivision: Part 55/106 of variable_declaration
+   - Context: Performs date:dateadd, aggregate:count, insert, select, system:getdate operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 92/52 of variable_declaration
 
-60. **Chunk 60**: Transaction Control (Math:LOG/INSERT) (Part 56)
+31. **Chunk 31**: Transaction Control (Date:DATEDIFF/INSERT) (Part 94)
    - Type: transaction_control
    - Complexity: 13
-   - Lines: 969-1020
-   - Context: Performs math:log, insert, system:scope_identity, conversion:cast, system:getdate, date:datediff operations. Follows conditional logic
-   - Subdivision: Part 56/106 of variable_declaration
+   - Lines: 971-1020
+   - Context: Performs date:datediff, insert, system:scope_identity, math:log, conversion:cast, system:getdate operations. Follows conditional logic
+   - Subdivision: Part 94/52 of variable_declaration
 
-61. **Chunk 61**: General Business Logic (Part 57)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 1021-1024
-   - Context: Follows transaction control
-   - Subdivision: Part 57/106 of variable_declaration
-
-62. **Chunk 62**: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 58)
+32. **Chunk 32**: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 97)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 1025-1040
-   - Context: Performs conversion:cast, insert operations. Uses begin, if logic. Follows general logic
-   - Subdivision: Part 58/106 of variable_declaration
+   - Context: Performs conversion:cast, insert operations. Uses if, begin logic. Follows transaction control
+   - Subdivision: Part 97/52 of variable_declaration
 
-63. **Chunk 63**: Loop Processing & Iteration (INSERT/Conversion:CAST) (Part 59)
-   - Type: loop_logic
-   - Complexity: 12
-   - Lines: 1041-1070
-   - Context: Performs insert, conversion:cast, system:getdate operations. Uses for, end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 59/106 of variable_declaration
-
-64. **Chunk 64**: General Business Logic (Part 60)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 1071-1074
-   - Context: Follows loop logic
-   - Subdivision: Part 60/106 of variable_declaration
-
-65. **Chunk 65**: Conditional Logic & Branching (BEGIN/IF) (Part 61)
+33. **Chunk 33**: Conditional Logic & Branching (System:GETDATE/Conversion:CAST) (Part 99)
    - Type: conditional_logic
-   - Complexity: 4
-   - Lines: 1075-1078
-   - Context: Uses begin, if logic. Follows general logic
-   - Subdivision: Part 61/106 of variable_declaration
+   - Complexity: 9
+   - Lines: 1048-1070
+   - Context: Performs system:getdate, conversion:cast, insert operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 99/52 of variable_declaration
 
-66. **Chunk 66**: Conditional Logic & Branching (Math:PI/UPDATE) (Part 62)
+34. **Chunk 34**: Conditional Logic & Branching (UPDATE/SELECT) (Part 105)
    - Type: conditional_logic
    - Complexity: 13
-   - Lines: 1079-1094
-   - Context: Performs math:pi, update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 62/106 of variable_declaration
+   - Lines: 1082-1094
+   - Context: Performs update, select, logical:exists, math:pi, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 105/52 of variable_declaration
 
-67. **Chunk 67**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 63)
+35. **Chunk 35**: Variable & Parameter Declarations (INSERT/Math:PI) (Part 106)
    - Type: variable_declaration
    - Complexity: 8
    - Lines: 1095-1108
-   - Context: Performs math:pi, insert, date:datepart, conversion:cast, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-   - Subdivision: Part 63/106 of variable_declaration
+   - Context: Performs insert, math:pi, system:getdate, conversion:cast, date:datepart operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 106/52 of variable_declaration
 
-68. **Chunk 68**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 64)
+36. **Chunk 36**: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 110)
    - Type: conditional_logic
-   - Complexity: 12
-   - Lines: 1109-1118
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses else, begin, case, if, when, end logic. Follows variable declaration
-   - Subdivision: Part 64/106 of variable_declaration
+   - Complexity: 5
+   - Lines: 1127-1141
+   - Context: Performs update, system:getdate operations. Uses else, case, end, when logic. Follows variable declaration
+   - Subdivision: Part 110/52 of variable_declaration
 
-69. **Chunk 69**: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 65)
-   - Type: conditional_logic
-   - Complexity: 9
-   - Lines: 1119-1141
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, begin, case, when, end logic. Follows conditional logic
-   - Subdivision: Part 65/106 of variable_declaration
-
-70. **Chunk 70**: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 66)
+37. **Chunk 37**: Conditional Logic & Branching (System:@@ROWCOUNT/System:GETDATE) (Part 111)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1142-1153
-   - Context: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 66/106 of variable_declaration
+   - Context: Performs system:@@rowcount, system:getdate, insert operations. Uses end, if, begin logic. Follows conditional logic
+   - Subdivision: Part 111/52 of variable_declaration
 
-71. **Chunk 71**: Variable & Parameter Declarations (Part 67)
-   - Type: variable_declaration
-   - Complexity: 0
-   - Lines: 1154-1161
-   - Context: Follows conditional logic
-   - Subdivision: Part 67/106 of variable_declaration
-
-72. **Chunk 72**: Loop Processing & Iteration (SELECT) (Part 68)
-   - Type: loop_logic
-   - Complexity: 9
-   - Lines: 1162-1170
-   - Context: Performs select operations. Uses while, for, begin logic. Follows variable declaration
-   - Subdivision: Part 68/106 of variable_declaration
-
-73. **Chunk 73**: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 69)
-   - Type: conditional_logic
-   - Complexity: 8
-   - Lines: 1171-1179
-   - Context: Performs conversion:cast, logical:exists, update, select operations. Uses begin, if logic. Follows loop logic
-   - Subdivision: Part 69/106 of variable_declaration
-
-74. **Chunk 74**: Conditional Logic & Branching (Conversion:CAST/System:GETDATE) (Part 70)
-   - Type: conditional_logic
-   - Complexity: 6
-   - Lines: 1180-1187
-   - Context: Performs conversion:cast, system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 70/106 of variable_declaration
-
-75. **Chunk 75**: Variable & Parameter Declarations (Conversion:CAST/INSERT) (Part 71)
+38. **Chunk 38**: Variable & Parameter Declarations (System:GETDATE/Conversion:CAST) (Part 120)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 1188-1203
-   - Context: Performs conversion:cast, insert, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-   - Subdivision: Part 71/106 of variable_declaration
+   - Context: Performs system:getdate, conversion:cast, insert, select operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 120/52 of variable_declaration
 
-76. **Chunk 76**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 72)
+39. **Chunk 39**: Conditional Logic & Branching (UPDATE/Aggregate:SUM) (Part 121)
    - Type: conditional_logic
    - Complexity: 13
    - Lines: 1204-1215
-   - Context: Performs update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 72/106 of variable_declaration
+   - Context: Performs update, aggregate:sum, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows variable declaration
+   - Subdivision: Part 121/52 of variable_declaration
 
-77. **Chunk 77**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 73)
+40. **Chunk 40**: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 122)
    - Type: data_modification
    - Complexity: 6
    - Lines: 1216-1231
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-   - Subdivision: Part 73/106 of variable_declaration
+   - Context: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 122/52 of variable_declaration
 
-78. **Chunk 78**: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 74)
-   - Type: conditional_logic
-   - Complexity: 7
-   - Lines: 1232-1240
-   - Context: Performs system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows data modification
-   - Subdivision: Part 74/106 of variable_declaration
-
-79. **Chunk 79**: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 75)
+41. **Chunk 41**: Conditional Logic & Branching (System:@@ROWCOUNT/System:GETDATE) (Part 125)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1241-1254
-   - Context: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-   - Subdivision: Part 75/106 of variable_declaration
+   - Context: Performs system:@@rowcount, system:getdate, insert operations. Uses end, if, begin logic. Follows data modification
+   - Subdivision: Part 125/52 of variable_declaration
 
-80. **Chunk 80**: Variable & Parameter Declarations (Part 76)
-   - Type: variable_declaration
-   - Complexity: 0
-   - Lines: 1255-1265
-   - Context: Follows conditional logic
-   - Subdivision: Part 76/106 of variable_declaration
-
-81. **Chunk 81**: Conditional Logic & Branching (Date:DATEDIFF) (Part 77)
-   - Type: conditional_logic
-   - Complexity: 6
-   - Lines: 1266-1274
-   - Context: Performs date:datediff operations. Uses else, when, case, end logic. Follows variable declaration
-   - Subdivision: Part 77/106 of variable_declaration
-
-82. **Chunk 82**: Conditional Logic & Branching (ELSE/WHEN) (Part 78)
-   - Type: conditional_logic
-   - Complexity: 2
-   - Lines: 1275-1283
-   - Context: Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 78/106 of variable_declaration
-
-83. **Chunk 83**: Conditional Logic & Branching (ELSE/WHEN) (Part 79)
-   - Type: conditional_logic
-   - Complexity: 2
-   - Lines: 1284-1294
-   - Context: Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 79/106 of variable_declaration
-
-84. **Chunk 84**: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 80)
-   - Type: conditional_logic
-   - Complexity: 7
-   - Lines: 1295-1302
-   - Context: Performs logical:exists, update, select operations. Uses begin, if logic. Follows conditional logic
-   - Subdivision: Part 80/106 of variable_declaration
-
-85. **Chunk 85**: Conditional Logic & Branching (Math:PI) (Part 81)
+42. **Chunk 42**: Conditional Logic & Branching (Math:PI) (Part 136)
    - Type: conditional_logic
    - Complexity: 3
    - Lines: 1303-1312
-   - Context: Performs math:pi operations. Uses when, case logic. Follows conditional logic
-   - Subdivision: Part 81/106 of variable_declaration
+   - Context: Performs math:pi operations. Uses case, when logic. Follows conditional logic
+   - Subdivision: Part 136/52 of variable_declaration
 
-86. **Chunk 86**: Data Insert/Update/Delete (Date:DATEADD/INSERT) (Part 82)
-   - Type: data_modification
-   - Complexity: 5
-   - Lines: 1313-1327
-   - Context: Performs date:dateadd, insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-   - Subdivision: Part 82/106 of variable_declaration
-
-87. **Chunk 87**: Conditional Logic & Branching (Math:PI) (Part 83)
+43. **Chunk 43**: Conditional Logic & Branching (Math:PI) (Part 139)
    - Type: conditional_logic
    - Complexity: 3
    - Lines: 1328-1337
-   - Context: Performs math:pi operations. Uses when, case logic. Follows data modification
-   - Subdivision: Part 83/106 of variable_declaration
+   - Context: Performs math:pi operations. Uses case, when logic. Follows conditional logic
+   - Subdivision: Part 139/52 of variable_declaration
 
-88. **Chunk 88**: Variable & Parameter Declarations (Date:DATEADD/Math:PI) (Part 84)
+44. **Chunk 44**: Variable & Parameter Declarations (Date:DATEADD/System:GETDATE) (Part 140)
    - Type: variable_declaration
    - Complexity: 3
    - Lines: 1338-1348
-   - Context: Performs date:dateadd, math:pi, system:getdate operations. Uses else, end logic. Follows conditional logic
-   - Subdivision: Part 84/106 of variable_declaration
+   - Context: Performs date:dateadd, system:getdate, math:pi operations. Uses else, end logic. Follows conditional logic
+   - Subdivision: Part 140/52 of variable_declaration
 
-89. **Chunk 89**: Conditional Logic & Branching (Math:PI) (Part 85)
-   - Type: conditional_logic
-   - Complexity: 3
-   - Lines: 1349-1355
-   - Context: Performs math:pi operations. Uses else, when, case, end logic. Follows variable declaration
-   - Subdivision: Part 85/106 of variable_declaration
+45. **Chunk 45**: Data Insert/Update/Delete (Math:PI/System:GETDATE) (Part 146)
+   - Type: data_modification
+   - Complexity: 9
+   - Lines: 1367-1382
+   - Context: Performs math:pi, system:getdate, insert, select operations. Uses else, end logic. Follows variable declaration
+   - Subdivision: Part 146/52 of variable_declaration
 
-90. **Chunk 90**: Conditional Logic & Branching (Date:MONTH) (Part 86)
-   - Type: conditional_logic
-   - Complexity: 5
-   - Lines: 1356-1362
-   - Context: Performs date:month operations. Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 86/106 of variable_declaration
-
-91. **Chunk 91**: Conditional Logic & Branching (Math:PI/INSERT) (Part 87)
-   - Type: conditional_logic
-   - Complexity: 11
-   - Lines: 1363-1382
-   - Context: Performs math:pi, insert, system:getdate, select operations. Uses else, when, case, end logic. Follows conditional logic
-   - Subdivision: Part 87/106 of variable_declaration
-
-92. **Chunk 92**: Variable & Parameter Declarations (Part 88)
-   - Type: variable_declaration
-   - Complexity: 0
-   - Lines: 1383-1390
-   - Context: Follows conditional logic
-   - Subdivision: Part 88/106 of variable_declaration
-
-93. **Chunk 93**: Loop Processing & Iteration (Aggregate:SUM/SELECT) (Part 89)
-   - Type: loop_logic
-   - Complexity: 10
-   - Lines: 1391-1401
-   - Context: Performs aggregate:sum, select operations. Uses while, for, begin logic. Follows variable declaration
-   - Subdivision: Part 89/106 of variable_declaration
-
-94. **Chunk 94**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 90)
+46. **Chunk 46**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 151)
    - Type: conditional_logic
    - Complexity: 10
    - Lines: 1402-1412
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows loop logic
-   - Subdivision: Part 90/106 of variable_declaration
+   - Context: Performs update, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows data modification
+   - Subdivision: Part 151/52 of variable_declaration
 
-95. **Chunk 95**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 91)
+47. **Chunk 47**: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 152)
    - Type: data_modification
    - Complexity: 6
    - Lines: 1413-1431
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-   - Subdivision: Part 91/106 of variable_declaration
+   - Context: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 152/52 of variable_declaration
 
-96. **Chunk 96**: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 92)
+48. **Chunk 48**: Cursor Operations & Row Processing (Date:DATEDIFF/System:GETDATE) (Part 154)
+   - Type: cursor_operation
+   - Complexity: 6
+   - Lines: 1434-1464
+   - Context: Performs date:datediff, system:getdate, insert, select operations. Uses else, end logic. Follows data modification
+   - Subdivision: Part 154/52 of variable_declaration
+
+49. **Chunk 49**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 160)
    - Type: conditional_logic
-   - Complexity: 8
-   - Lines: 1432-1464
-   - Context: Performs insert, system:getdate, date:datediff, select operations. Uses else, when, case, end logic. Follows data modification
-   - Subdivision: Part 92/106 of variable_declaration
-
-97. **Chunk 97**: General Business Logic (Part 93)
-   - Type: general_logic
-   - Complexity: 0
-   - Lines: 1465-1469
-   - Context: Follows conditional logic
-   - Subdivision: Part 93/106 of variable_declaration
-
-98. **Chunk 98**: Variable & Parameter Declarations (Logical:EXISTS/SELECT) (Part 94)
-   - Type: variable_declaration
    - Complexity: 10
-   - Lines: 1470-1480
-   - Context: Performs logical:exists, select operations. Uses for, begin, if logic. Follows general logic
-   - Subdivision: Part 94/106 of variable_declaration
+   - Lines: 1484-1497
+   - Context: Performs update, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows cursor operation
+   - Subdivision: Part 160/52 of variable_declaration
 
-99. **Chunk 99**: Loop Processing & Iteration (UPDATE/Logical:EXISTS) (Part 95)
-   - Type: loop_logic
-   - Complexity: 15
-   - Lines: 1481-1497
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses while, end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 95/106 of variable_declaration
-
-100. **Chunk 100**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 96)
+50. **Chunk 50**: Data Insert/Update/Delete (System:GETDATE/Conversion:CAST) (Part 161)
    - Type: data_modification
    - Complexity: 5
    - Lines: 1498-1513
-   - Context: Performs conversion:cast, insert, system:getdate operations. Uses else, end, begin logic. Follows loop logic
-   - Subdivision: Part 96/106 of variable_declaration
+   - Context: Performs system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 161/52 of variable_declaration
 
-101. **Chunk 101**: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 97)
-   - Type: conditional_logic
-   - Complexity: 9
-   - Lines: 1514-1523
-   - Context: Performs logical:exists, update, select operations. Uses when, case, begin, if logic. Follows data modification
-   - Subdivision: Part 97/106 of variable_declaration
-
-102. **Chunk 102**: Cursor Operations & Row Processing (INSERT/System:GETDATE) (Part 98)
+51. **Chunk 51**: Cursor Operations & Row Processing (System:GETDATE/INSERT) (Part 165)
    - Type: cursor_operation
-   - Complexity: 5
-   - Lines: 1524-1547
-   - Context: Performs insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-   - Subdivision: Part 98/106 of variable_declaration
+   - Complexity: 4
+   - Lines: 1529-1547
+   - Context: Performs system:getdate, insert operations. Uses else, end, begin logic. Follows data modification
+   - Subdivision: Part 165/52 of variable_declaration
 
-103. **Chunk 103**: Variable & Parameter Declarations (Part 99)
-   - Type: variable_declaration
-   - Complexity: 0
-   - Lines: 1548-1557
-   - Context: Follows cursor operation
-   - Subdivision: Part 99/106 of variable_declaration
-
-104. **Chunk 104**: Conditional Logic & Branching (Math:PI/UPDATE) (Part 100)
+52. **Chunk 52**: Conditional Logic & Branching (UPDATE/SELECT) (Part 169)
    - Type: conditional_logic
-   - Complexity: 21
-   - Lines: 1558-1582
-   - Context: Performs math:pi, update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-   - Subdivision: Part 100/106 of variable_declaration
+   - Complexity: 13
+   - Lines: 1566-1582
+   - Context: Performs update, select, logical:exists, math:pi, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows cursor operation
+   - Subdivision: Part 169/52 of variable_declaration
 
-105. **Chunk 105**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 101)
+53. **Chunk 53**: Variable & Parameter Declarations (INSERT/Aggregate:SUM) (Part 170)
    - Type: variable_declaration
    - Complexity: 9
    - Lines: 1583-1603
-   - Context: Performs math:pi, insert, aggregate:sum, conversion:cast, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-   - Subdivision: Part 101/106 of variable_declaration
+   - Context: Performs insert, aggregate:sum, select, math:pi, system:getdate, conversion:cast operations. Uses else, end, begin logic. Follows conditional logic
+   - Subdivision: Part 170/52 of variable_declaration
 
-106. **Chunk 106**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 102)
+54. **Chunk 54**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 171)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 1604-1614
-   - Context: Performs math:pi, insert operations. Uses else, when, case, end logic. Follows variable declaration
-   - Subdivision: Part 102/106 of variable_declaration
+   - Context: Performs math:pi, insert operations. Uses else, case, end, when logic. Follows variable declaration
+   - Subdivision: Part 171/52 of variable_declaration
 
-107. **Chunk 107**: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 103)
-   - Type: conditional_logic
-   - Complexity: 4
-   - Lines: 1615-1622
-   - Context: Performs math:pi, system:getdate operations. Uses else, when, case, end logic. Follows variable declaration
-   - Subdivision: Part 103/106 of variable_declaration
-
-108. **Chunk 108**: Transaction Control (Conversion:CAST/String:LEN) (Part 104)
-   - Type: transaction_control
-   - Complexity: 6
-   - Lines: 1623-1638
-   - Context: Performs conversion:cast, string:len operations. Uses end, return, begin, if logic. Follows conditional logic
-   - Subdivision: Part 104/106 of variable_declaration
-
-109. **Chunk 109**: Error Handling & Exception Management (TRY/BEGIN) (Part 105)
-   - Type: error_handling
-   - Complexity: 4
-   - Lines: 1639-1642
-   - Context: Uses try, begin, catch, end logic. Follows transaction control
-   - Subdivision: Part 105/106 of variable_declaration
-
-110. **Chunk 110**: Transaction Control (System:@@TRANCOUNT/Math:LOG) (Part 106)
+55. **Chunk 55**: Transaction Control (System:@@TRANCOUNT/INSERT) (Part 179)
    - Type: transaction_control
    - Complexity: 9
-   - Lines: 1643-1683
-   - Context: Performs system:@@trancount, math:log, insert, conversion:cast, system:getdate operations. Uses goto, catch, end, if logic. Follows error handling
-   - Subdivision: Part 106/106 of variable_declaration
+   - Lines: 1646-1683
+   - Context: Performs system:@@trancount, insert, math:log, conversion:cast, system:getdate operations. Uses catch, end, if, goto logic. Follows variable declaration
+   - Subdivision: Part 179/52 of variable_declaration
 
-111. **Chunk 111**: General Business Logic
+56. **Chunk 56**: General Business Logic
    - Type: general_logic
    - Complexity: 0
    - Lines: 1684-1689
    - Context: Follows transaction control
 
-112. **Chunk 112**: Transaction Control (Math:PI/System:@@TRANCOUNT)
+57. **Chunk 57**: Transaction Control (Math:PI/System:@@TRANCOUNT)
    - Type: transaction_control
    - Complexity: 38
    - Lines: 1690-1731
-   - Context: Performs math:pi, system:@@trancount operations. Uses else, begin, if, end, return logic. Follows general logic
+   - Context: Performs math:pi, system:@@trancount operations. Uses if, end, return, else, begin logic. Follows general logic
 
-113. **Chunk 113**: General Business Logic (RETURN/END)
+58. **Chunk 58**: General Business Logic (RETURN/END)
    - Type: general_logic
    - Complexity: 0
    - Lines: 1732-1735
@@ -814,12 +428,12 @@ Analyze chunks in this exact order for complete understanding:
 
 ## Detailed Sequential Analysis
 
-### Chunk 1: General Business Logic (Math:PI/CREATE)
+### Chunk 1: General Business Logic (CREATE/Math:PI)
 **Type**: general_logic
 **Complexity Score**: 3
 **Lines**: 1-26
-**Context**: Performs math:pi, create operations
-**SQL Operations**: Math:PI, CREATE
+**Context**: Performs create, math:pi operations
+**SQL Operations**: CREATE, Math:PI
 
 **Code:**
 ```sql
@@ -897,9 +511,9 @@ BEGIN
 **Lines**: 36-174
 **Context**: Performs math:pi, system:getdate operations. Follows general logic
 **SQL Operations**: Math:PI, System:GETDATE
-**Variables Declared**: @UNITPRICE, @SHIPPINGCOST, @CUSTOMERLIFETIMEVALUE, @INVENTORYSHORTFALL, @STATETAXRATE, @NOTIFICATIONID, @ISPROMOSTACKABLE, @SHIPPINGDISTANCE, @WAREHOUSEID, @SUBTOTALAMOUNT
+**Variables Declared**: @PRODUCTID, @ISTAXEXEMPT, @RECOMMENDATIONSETID, @CUSTOMERCURRENTBALANCE, @SHIPPINGSTATEID, @DISCOUNTPERCENTAGE, @CUSTOMERPRIORITYLEVEL, @SHIPPINGTRACKINGNUMBER, @CALCULATEDTAXRATE, @PROMOENDDATE
    (and 67 more...)
-**Subdivision Info**: Part 1 of 2
+**Subdivision Info**: Part 1 of 1
 **Parent Block**: variable_declaration (lines 36-178)
 
 **Code:**
@@ -1055,192 +669,19 @@ BEGIN
 
 ---
 
-### Chunk 4: General Business Logic (Part 2)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 175-178
-**Context**: Follows variable declaration
-**Subdivision Info**: Part 2 of 2
-**Parent Block**: variable_declaration (lines 36-178)
-
-**Code:**
-```sql
-    -- =====================================================================================
-    -- COMPREHENSIVE INPUT VALIDATION
-    -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 5: Error Handling & Exception Management (TRY/BEGIN) (Part 1)
-**Type**: error_handling
-**Complexity Score**: 6
-**Lines**: 179-185
-**Context**: Uses try, begin logic. Follows general logic
-**Control Structures**: TRY, BEGIN
-**Subdivision Info**: Part 1 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-    BEGIN TRY
-        BEGIN TRANSACTION;
-
-            -- Initialize warning messages
-            SET @WarningMessages = '';
-
-            -- Validate customer information
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 6: Conditional Logic & Branching (System:GETDATE) (Part 2)
-**Type**: conditional_logic
-**Complexity Score**: 9
-**Lines**: 186-201
-**Context**: Performs system:getdate operations. Uses goto, end, begin, if logic. Follows error handling
-**SQL Operations**: System:GETDATE
-**Control Structures**: GOTO, END, BEGIN, IF
-**Subdivision Info**: Part 2 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-            IF @CustomerID IS NULL OR @CustomerID <= 0
-                BEGIN
-                    SET @IsValid = 0;
-                    SET @ErrorMessage = 'Invalid Customer ID provided.';
-                    SET @ErrorCode = 1001;
-                    GOTO ErrorHandler;
-                END;
-
-                IF @OrderDate IS NULL OR @OrderDate > GETDATE()
-                    BEGIN
-                        SET @IsValid = 0;
-                        SET @ErrorMessage = 'Invalid order date. Cannot be future date.';
-                        SET @ErrorCode = 1002;
-                        GOTO ErrorHandler;
-                    END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 7: Conditional Logic & Branching (Math:PI) (Part 3)
-**Type**: conditional_logic
-**Complexity Score**: 11
-**Lines**: 202-217
-**Context**: Performs math:pi operations. Uses goto, end, begin, if logic. Follows conditional logic
-**SQL Operations**: Math:PI
-**Control Structures**: GOTO, END, BEGIN, IF
-**Subdivision Info**: Part 3 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                    IF @ShippingAddressID IS NULL OR @ShippingAddressID <= 0
-                        BEGIN
-                            SET @IsValid = 0;
-                            SET @ErrorMessage = 'Invalid shipping address ID.';
-                            SET @ErrorCode = 1003;
-                            GOTO ErrorHandler;
-                        END;
-
-                        IF @PaymentMethodID IS NULL OR @PaymentMethodID <= 0
-                            BEGIN
-                                SET @IsValid = 0;
-                                SET @ErrorMessage = 'Invalid payment method ID.';
-                                SET @ErrorCode = 1004;
-                                GOTO ErrorHandler;
-                            END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 8: Conditional Logic & Branching (String:LEN) (Part 4)
-**Type**: conditional_logic
-**Complexity Score**: 5
-**Lines**: 218-227
-**Context**: Performs string:len operations. Uses goto, end, begin, if logic. Follows conditional logic
-**SQL Operations**: String:LEN
-**Control Structures**: GOTO, END, BEGIN, IF
-**Subdivision Info**: Part 4 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                            IF @CartItems IS NULL OR LEN(@CartItems) = 0
-                                BEGIN
-                                    SET @IsValid = 0;
-                                    SET @ErrorMessage = 'Cart items cannot be empty.';
-                                    SET @ErrorCode = 1005;
-                                    GOTO ErrorHandler;
-                                END;
-
-                                -- =====================================================================================
-                                -- CUSTOMER VERIFICATION AND ANALYSIS
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 9: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 5)
+### Chunk 4: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 10)
 **Type**: conditional_logic
 **Complexity Score**: 7
-**Lines**: 228-251
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Lines**: 231-251
+**Context**: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows variable declaration
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: CUSTOMERS
-**Subdivision Info**: Part 5 of 106
+**Subdivision Info**: Part 10 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                -- =====================================================================================
-
-                                -- Comprehensive customer validation
                                 IF NOT EXISTS (SELECT 1 FROM Customers WHERE CustomerID = @CustomerID AND IsActive = 1)
                                 BEGIN
                                     SET @IsValid = 0;
@@ -1274,23 +715,19 @@ BEGIN
 
 ---
 
-### Chunk 10: Conditional Logic & Branching (Conversion:ISNULL/Aggregate:SUM) (Part 6)
-**Type**: conditional_logic
-**Complexity Score**: 6
-**Lines**: 252-267
-**Context**: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, when, case, end logic. Follows conditional logic
+### Chunk 5: Data Query & Retrieval (Conversion:ISNULL/Aggregate:SUM) (Part 12)
+**Type**: data_retrieval
+**Complexity Score**: 4
+**Lines**: 256-267
+**Context**: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, end logic. Follows conditional logic
 **SQL Operations**: Conversion:ISNULL, Aggregate:SUM, Aggregate:COUNT, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: ELSE, END
 **Tables/Views**: ORDERS
-**Subdivision Info**: Part 6 of 106
+**Subdivision Info**: Part 12 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                SET @CustomerPriorityLevel = CASE
-                                WHEN @CustomerTypeID = 1 THEN 1  -- Platinum
-                                WHEN @CustomerTypeID = 2 THEN 2  -- Gold
-                                WHEN @CustomerTypeID = 3 THEN 3  -- Silver
                             ELSE 4                           -- Regular
                             END;
 
@@ -1315,78 +752,15 @@ BEGIN
 
 ---
 
-### Chunk 11: Conditional Logic & Branching (END/BEGIN) (Part 7)
-**Type**: conditional_logic
-**Complexity Score**: 8
-**Lines**: 268-280
-**Context**: Uses end, begin, if logic. Follows conditional logic
-**Control Structures**: END, BEGIN, IF
-**Subdivision Info**: Part 7 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                            IF @CustomerCurrentBalance > @CustomerCreditLimit * 0.9
-                                BEGIN
-                                    SET @WarningMessages = @WarningMessages + 'Customer near credit limit. ';
-                                    SET @WarningCode = 2001;
-                                END;
-
-                                -- Risk assessment
-                                IF @CustomerRiskScore > 700
-                                    BEGIN
-                                        SET @WarningMessages = @WarningMessages + 'High-risk customer detected. ';
-                                        SET @WarningCode = 2002;
-                                    END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 12: General Business Logic (Part 8)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 281-285
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 8 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                    -- =====================================================================================
-                                    -- ADDRESS AND SHIPPING VALIDATION
-                                    -- =====================================================================================
-
-                                    -- Validate shipping address belongs to customer
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 13: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 9)
+### Chunk 6: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 17)
 **Type**: conditional_logic
 **Complexity Score**: 14
 **Lines**: 286-307
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows data retrieval
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: ADDRESSES
-**Subdivision Info**: Part 9 of 106
+**Subdivision Info**: Part 17 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -1425,15 +799,15 @@ BEGIN
 
 ---
 
-### Chunk 14: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 10)
+### Chunk 7: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 18)
 **Type**: conditional_logic
 **Complexity Score**: 9
 **Lines**: 308-320
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: SHIPPINGMETHODS
-**Subdivision Info**: Part 10 of 106
+**Subdivision Info**: Part 18 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -1463,15 +837,15 @@ BEGIN
 
 ---
 
-### Chunk 15: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 11)
+### Chunk 8: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 19)
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 321-334
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
-**Tables/Views**: SHIPPINGMETHODS, SHIPPINGMETHODZONES
-**Subdivision Info**: Part 11 of 106
+**Control Structures**: END, IF, BEGIN, GOTO
+**Tables/Views**: SHIPPINGMETHODZONES, SHIPPINGMETHODS
+**Subdivision Info**: Part 19 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -1502,42 +876,15 @@ BEGIN
 
 ---
 
-### Chunk 16: General Business Logic (Part 12)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 335-339
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 12 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                -- =====================================================================================
-                                                -- PAYMENT METHOD VALIDATION
-                                                -- =====================================================================================
-
-                                                -- Validate payment method
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 17: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 13)
+### Chunk 9: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 22)
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 340-360
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+**Context**: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: PAYMENTMETHODS
-**Subdivision Info**: Part 13 of 106
+**Subdivision Info**: Part 22 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -1575,59 +922,18 @@ BEGIN
 
 ---
 
-### Chunk 18: Loop Processing & Iteration (Math:PI/Logical:NOT EXISTS) (Part 14)
-**Type**: loop_logic
-**Complexity Score**: 9
-**Lines**: 361-374
-**Context**: Performs math:pi, logical:not exists, system:getdate, select operations. Uses begin, if, end, for, goto logic. Follows conditional logic
-**SQL Operations**: Math:PI, Logical:NOT EXISTS, System:GETDATE, SELECT
-**Control Structures**: BEGIN, IF, END, FOR, GOTO
-**Tables/Views**: CUSTOMERPAYMENTMETHODS
-**Subdivision Info**: Part 14 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                    IF NOT EXISTS (
-                                                        SELECT 1 FROM CustomerPaymentMethods
-                                                        WHERE CustomerID = @CustomerID
-                                                        AND PaymentMethodID = @PaymentMethodID
-                                                        AND IsActive = 1
-                                                        AND ExpiryDate > GETDATE()
-                                                        )
-                                                        BEGIN
-                                                            SET @IsValid = 0;
-                                                            SET @ErrorMessage = 'Payment method not valid for customer or expired.';
-                                                                SET @ErrorCode = 4002;
-                                                                GOTO ErrorHandler;
-                                                            END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 19: Data Insert/Update/Delete (INSERT/Aggregate:COUNT) (Part 15)
+### Chunk 10: Data Insert/Update/Delete (Aggregate:COUNT/INSERT) (Part 26)
 **Type**: data_modification
 **Complexity Score**: 4
-**Lines**: 375-387
-**Context**: Performs insert, aggregate:count, select operations. Follows loop logic
-**SQL Operations**: INSERT, Aggregate:COUNT, SELECT
+**Lines**: 377-387
+**Context**: Performs aggregate:count, insert, select operations. Follows conditional logic
+**SQL Operations**: Aggregate:COUNT, INSERT, SELECT
 **Tables/Views**: OPENJSON
-**Subdivision Info**: Part 15 of 106
+**Subdivision Info**: Part 26 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                            -- =====================================================================================
-                                                            -- CART PROCESSING AND VALIDATION
                                                             -- =====================================================================================
 
                                                             -- Parse and validate cart items from JSON
@@ -1651,89 +957,15 @@ BEGIN
 
 ---
 
-### Chunk 20: Loop Processing & Iteration (BEGIN/WHILE) (Part 16)
-**Type**: loop_logic
-**Complexity Score**: 8
-**Lines**: 388-398
-**Context**: Uses begin, while, if, end, goto logic. Follows data modification
-**Control Structures**: BEGIN, WHILE, IF, END, GOTO
-**Subdivision Info**: Part 16 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                            IF @ItemCount = 0
-                                                                BEGIN
-                                                                    SET @IsValid = 0;
-                                                                    SET @ErrorMessage = 'Cart is empty after parsing JSON.';
-                                                                    SET @ErrorCode = 5001;
-                                                                    GOTO ErrorHandler;
-                                                                END;
-
-                                                                -- Process each cart item with comprehensive validation
-                                                                WHILE @CurrentItem <= @ItemCount
-                                                                    BEGIN
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 21: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 17)
-**Type**: conditional_logic
-**Complexity Score**: 7
-**Lines**: 399-413
-**Context**: Performs logical:not exists, select operations. Uses begin, if logic. Follows loop logic
-**SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: BEGIN, IF
-**Tables/Views**: PRODUCTS
-**Subdivision Info**: Part 17 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                        SELECT
-                                                                        @ProductID = ProductID,
-                                                                        @Quantity = Quantity
-                                                                        FROM @Cart
-                                                                        WHERE RowNum = @CurrentItem;
-
-                                                                        -- Validate product exists and is active
-                                                                        IF NOT EXISTS (
-                                                                            SELECT 1 FROM Products
-                                                                            WHERE ProductID = @ProductID
-                                                                            AND IsActive = 1
-                                                                            AND IsDiscontinued = 0
-                                                                            )
-                                                                            BEGIN
-                                                                                SET @IsValid = 0;
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 22: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 18)
+### Chunk 11: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 31)
 **Type**: data_retrieval
 **Complexity Score**: 2
 **Lines**: 414-428
-**Context**: Performs conversion:cast, select operations. Uses end, goto logic. Follows conditional logic
+**Context**: Performs conversion:cast, select operations. Uses end, goto logic. Follows data modification
 **SQL Operations**: Conversion:CAST, SELECT
 **Control Structures**: END, GOTO
 **Tables/Views**: PRODUCTS
-**Subdivision Info**: Part 18 of 106
+**Subdivision Info**: Part 31 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -1765,88 +997,18 @@ BEGIN
 
 ---
 
-### Chunk 23: Loop Processing & Iteration (Conversion:CAST) (Part 19)
+### Chunk 12: Loop Processing & Iteration (UPDATE/Conversion:CAST) (Part 37)
 **Type**: loop_logic
-**Complexity Score**: 5
-**Lines**: 429-437
-**Context**: Performs conversion:cast operations. Uses begin, if, end, for, goto logic. Follows data retrieval
-**SQL Operations**: Conversion:CAST
-**Control Structures**: BEGIN, IF, END, FOR, GOTO
-**Subdivision Info**: Part 19 of 106
+**Complexity Score**: 3
+**Lines**: 450-471
+**Context**: Performs update, conversion:cast operations. Uses for, end, goto logic. Follows data retrieval
+**SQL Operations**: UPDATE, Conversion:CAST
+**Control Structures**: FOR, END, GOTO
+**Subdivision Info**: Part 37 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                            IF @Quantity <= 0
-                                                                                BEGIN
-                                                                                    SET @IsValid = 0;
-                                                                                    SET @ErrorMessage = 'Invalid quantity for Product ID ' + CAST(@ProductID AS NVARCHAR(10)) + '. Must be greater than 0.';
-                                                                                        SET @ErrorCode = 5003;
-                                                                                        GOTO ErrorHandler;
-                                                                                    END;
-
-                                                                                    -- Check stock availability
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 24: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 20)
-**Type**: conditional_logic
-**Complexity Score**: 11
-**Lines**: 438-446
-**Context**: Performs conversion:cast, logical:exists, select operations. Uses end, begin, if logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, Logical:EXISTS, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: PRODUCTS
-**Subdivision Info**: Part 20 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                    IF @Quantity > @AvailableStock
-                                                                                        BEGIN
-                                                                                            -- Check if backorder is allowed
-                                                                                            IF EXISTS (SELECT 1 FROM Products WHERE ProductID = @ProductID AND AllowBackorder = 1)
-                                                                                            BEGIN
-                                                                                                SET @BackorderQuantity = @BackorderQuantity + (@Quantity - @AvailableStock);
-                                                                                                SET @WarningMessages = @WarningMessages + 'Product ' + CAST(@ProductID AS NVARCHAR(10)) + ' partially backordered. ';
-                                                                                                SET @WarningCode = 5001;
-                                                                                            END
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 25: Loop Processing & Iteration (Conversion:CAST/UPDATE) (Part 21)
-**Type**: loop_logic
-**Complexity Score**: 5
-**Lines**: 447-471
-**Context**: Performs conversion:cast, update operations. Uses else, begin, end, for, goto logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, UPDATE
-**Control Structures**: ELSE, BEGIN, END, FOR, GOTO
-**Subdivision Info**: Part 21 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                        ELSE
-                                                                                            BEGIN
-                                                                                                SET @IsValid = 0;
                                                                                                 SET @ErrorMessage = 'Insufficient stock for Product ID ' + CAST(@ProductID AS NVARCHAR(10)) + '. Available: ' + CAST(@AvailableStock AS NVARCHAR(10));
                                                                                                     SET @ErrorCode = 5004;
                                                                                                     GOTO ErrorHandler;
@@ -1881,49 +1043,19 @@ BEGIN
 
 ---
 
-### Chunk 26: General Business Logic (Part 22)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 472-475
-**Context**: Follows loop logic
-**Subdivision Info**: Part 22 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                        -- =====================================================================================
-                                                                                        -- INVENTORY ALLOCATION AND WAREHOUSE MANAGEMENT
-                                                                                        -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 27: Variable & Parameter Declarations (Math:PI/INSERT) (Part 23)
+### Chunk 13: Variable & Parameter Declarations (EXEC/SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES) (Part 41)
 **Type**: variable_declaration
-**Complexity Score**: 18
-**Lines**: 476-501
-**Context**: Performs math:pi, insert, sp_call:dbo.fn_allocateinventoryacrosswarehouses, aggregate:sum, exec, select operations. Uses while, begin, if logic. Follows general logic
-**SQL Operations**: Math:PI, INSERT, SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES, Aggregate:SUM, EXEC, SELECT
-**Control Structures**: WHILE, BEGIN, IF
+**Complexity Score**: 14
+**Lines**: 480-501
+**Context**: Performs exec, sp_call:dbo.fn_allocateinventoryacrosswarehouses, insert, aggregate:sum, select, math:pi operations. Uses while, begin logic. Follows loop logic
+**SQL Operations**: EXEC, SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES, INSERT, Aggregate:SUM, SELECT, Math:PI
+**Control Structures**: WHILE, BEGIN
 **Variables Declared**: @ALLOCATEDTOTAL
-**Subdivision Info**: Part 23 of 106
+**Subdivision Info**: Part 41 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                        IF @ProcessInventory = 1
-                                                                                            BEGIN
-                                                                                                -- Advanced inventory allocation across multiple warehouses
-                                                                                                SET @CurrentItem = 1;
                                                                                                 WHILE @CurrentItem <= @ItemCount
                                                                                                     BEGIN
                                                                                                         SELECT
@@ -1958,80 +1090,15 @@ BEGIN
 
 ---
 
-### Chunk 28: Loop Processing & Iteration (Conversion:CAST) (Part 24)
-**Type**: loop_logic
-**Complexity Score**: 5
-**Lines**: 502-511
-**Context**: Performs conversion:cast operations. Uses for, end, begin, if logic. Follows variable declaration
-**SQL Operations**: Conversion:CAST
-**Control Structures**: FOR, END, BEGIN, IF
-**Subdivision Info**: Part 24 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                        IF @AllocatedTotal < @Quantity
-                                                                                                            BEGIN
-                                                                                                                SET @InventoryShortfall = @InventoryShortfall + (@Quantity - @AllocatedTotal);
-                                                                                                                SET @WarningMessages = @WarningMessages + 'Partial inventory allocation for Product ' + CAST(@ProductID AS NVARCHAR(10)) + '. ';
-                                                                                                                END;
-
-                                                                                                                SET @CurrentItem = @CurrentItem + 1;
-                                                                                                            END;
-                                                                                                        END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 29: Data Query & Retrieval (Aggregate:SUM/SELECT) (Part 25)
-**Type**: data_retrieval
-**Complexity Score**: 2
-**Lines**: 512-519
-**Context**: Performs aggregate:sum, select operations. Follows loop logic
-**SQL Operations**: Aggregate:SUM, SELECT
-**Subdivision Info**: Part 25 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                        -- =====================================================================================
-                                                                                                        -- PROMOTION AND DISCOUNT PROCESSING
-                                                                                                        -- =====================================================================================
-
-                                                                                                        -- Calculate subtotal before promotions
-                                                                                                        SELECT @SubtotalAmount = SUM(LineTotal) FROM @Cart;
-
-                                                                                                        -- Process promotion code if provided
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 30: Conditional Logic & Branching (SELECT) (Part 26)
+### Chunk 14: Conditional Logic & Branching (SELECT) (Part 46)
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 520-534
-**Context**: Performs select operations. Uses begin, if logic. Follows data retrieval
+**Context**: Performs select operations. Uses if, begin logic. Follows variable declaration
 **SQL Operations**: SELECT
-**Control Structures**: BEGIN, IF
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PROMOTIONS
-**Subdivision Info**: Part 26 of 106
+**Subdivision Info**: Part 46 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2063,42 +1130,7 @@ BEGIN
 
 ---
 
-### Chunk 31: Conditional Logic & Branching (GOTO/END) (Part 27)
-**Type**: conditional_logic
-**Complexity Score**: 8
-**Lines**: 535-546
-**Context**: Uses goto, end, begin, if logic. Follows conditional logic
-**Control Structures**: GOTO, END, BEGIN, IF
-**Subdivision Info**: Part 27 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                IF @PromoID IS NULL
-                                                                                                                    BEGIN
-                                                                                                                        SET @IsValid = 0;
-                                                                                                                        SET @ErrorMessage = 'Invalid or inactive promotion code: ' + @PromoCode;
-                                                                                                                        SET @ErrorCode = 6001;
-                                                                                                                        GOTO ErrorHandler;
-                                                                                                                    END;
-
-                                                                                                                    -- Check promotion date validity
-                                                                                                                    IF @OrderDate < @PromoStartDate OR @OrderDate > @PromoEndDate
-                                                                                                                        BEGIN
-                                                                                                                            SET @IsValid = 0;
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 32: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 28)
+### Chunk 15: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 49)
 **Type**: loop_logic
 **Complexity Score**: 2
 **Lines**: 547-557
@@ -2106,7 +1138,7 @@ BEGIN
 **SQL Operations**: Aggregate:COUNT, SELECT
 **Control Structures**: FOR, END, GOTO
 **Tables/Views**: ORDERPROMOTIONS, ORDERS
-**Subdivision Info**: Part 28 of 106
+**Subdivision Info**: Part 49 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2134,15 +1166,15 @@ BEGIN
 
 ---
 
-### Chunk 33: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 29)
+### Chunk 16: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 50)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 558-573
-**Context**: Performs aggregate:count, select operations. Uses goto, end, begin, if logic. Follows loop logic
+**Context**: Performs aggregate:count, select operations. Uses end, if, begin, goto logic. Follows loop logic
 **SQL Operations**: Aggregate:COUNT, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: ORDERPROMOTIONS, ORDERS
-**Subdivision Info**: Part 29 of 106
+**Subdivision Info**: Part 50 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2175,15 +1207,15 @@ BEGIN
 
 ---
 
-### Chunk 34: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 30)
+### Chunk 17: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 51)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 574-587
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs logical:not exists, select operations. Uses end, if, begin, goto logic. Follows conditional logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN, GOTO
 **Tables/Views**: PROMOTIONS
-**Subdivision Info**: Part 30 of 106
+**Subdivision Info**: Part 51 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2214,61 +1246,19 @@ BEGIN
 
 ---
 
-### Chunk 35: Variable & Parameter Declarations (INSERT) (Part 31)
+### Chunk 18: Variable & Parameter Declarations (INSERT) (Part 55)
 **Type**: variable_declaration
-**Complexity Score**: 7
-**Lines**: 588-599
-**Context**: Performs insert operations. Uses begin, end, if logic. Follows conditional logic
+**Complexity Score**: 5
+**Lines**: 604-614
+**Context**: Performs insert operations. Uses end, if, begin logic. Follows conditional logic
 **SQL Operations**: INSERT
-**Control Structures**: BEGIN, END, IF
-**Variables Declared**: @TIERDISCOUNTPERCENTAGE
-**Subdivision Info**: Part 31 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                    IF @MaxDiscount IS NOT NULL AND @DiscountAmount > @MaxDiscount
-                                                                                                                                        SET @DiscountAmount = @MaxDiscount;
-
-                                                                                                                                        -- Record applied promotion
-                                                                                                                                        INSERT INTO @AppliedPromotions VALUES
-                                                                                                                                        (@PromoID, 'PROMO_CODE', @DiscountAmount, @DiscountPercentage, NULL, @IsPromoStackable);
-                                                                                                                                    END;
-
-                                                                                                                                    -- Apply automatic customer tier discounts
-                                                                                                                                    IF @CustomerTierID IS NOT NULL
-                                                                                                                                        BEGIN
-                                                                                                                                            DECLARE @TierDiscountPercentage DECIMAL(5,2) = 0;
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 36: Variable & Parameter Declarations (INSERT/SELECT) (Part 32)
-**Type**: variable_declaration
-**Complexity Score**: 6
-**Lines**: 600-614
-**Context**: Performs insert, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: INSERT, SELECT
-**Control Structures**: END, BEGIN, IF
+**Control Structures**: END, IF, BEGIN
 **Variables Declared**: @TIERDISCOUNT
-**Tables/Views**: CUSTOMERTIERS
-**Subdivision Info**: Part 32 of 106
+**Subdivision Info**: Part 55 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                            SELECT @TierDiscountPercentage = DiscountPercentage
-                                                                                                                                            FROM CustomerTiers
-                                                                                                                                            WHERE TierID = @CustomerTierID;
-
                                                                                                                                             IF @TierDiscountPercentage > 0
                                                                                                                                                 BEGIN
                                                                                                                                                     DECLARE @TierDiscount DECIMAL(18,2) = @SubtotalAmount * (@TierDiscountPercentage / 100.0);
@@ -2292,82 +1282,16 @@ BEGIN
 
 ---
 
-### Chunk 37: Variable & Parameter Declarations (Conversion:ISNULL/Math:FLOOR) (Part 33)
-**Type**: variable_declaration
-**Complexity Score**: 11
-**Lines**: 615-624
-**Context**: Performs conversion:isnull, math:floor, select operations. Uses begin, if logic. Follows variable declaration
-**SQL Operations**: Conversion:ISNULL, Math:FLOOR, SELECT
-**Control Structures**: BEGIN, IF
-**Variables Declared**: @MAXPOINTSREDEMPTION
-**Tables/Views**: CUSTOMERS
-**Subdivision Info**: Part 33 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                            IF @ProcessLoyalty = 1
-                                                                                                                                                BEGIN
-                                                                                                                                                    SELECT @LoyaltyPoints = ISNULL(LoyaltyPoints, 0)
-                                                                                                                                                    FROM Customers
-                                                                                                                                                    WHERE CustomerID = @CustomerID;
-
-                                                                                                                                                    -- Allow redemption of loyalty points (100 points = $1)
-                                                                                                                                                    IF @LoyaltyPoints >= 100
-                                                                                                                                                        BEGIN
-                                                                                                                                                            DECLARE @MaxPointsRedemption INT = FLOOR(@SubtotalAmount); -- Max $1 per $1 of order
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 38: Variable & Parameter Declarations (ELSE/WHEN) (Part 34)
-**Type**: variable_declaration
-**Complexity Score**: 2
-**Lines**: 625-630
-**Context**: Uses else, when, case, end logic. Follows variable declaration
-**Control Structures**: ELSE, WHEN, CASE, END
-**Variables Declared**: @POINTSTOREDEEM
-**Subdivision Info**: Part 34 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                            DECLARE @PointsToRedeem INT = CASE
-                                                                                                                                                            WHEN @LoyaltyPoints > @MaxPointsRedemption * 100
-                                                                                                                                                            THEN @MaxPointsRedemption * 100
-                                                                                                                                                        ELSE (@LoyaltyPoints / 100) * 100
-                                                                                                                                                        END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 39: Variable & Parameter Declarations (INSERT/UPDATE) (Part 35)
+### Chunk 19: Variable & Parameter Declarations (UPDATE/INSERT) (Part 60)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 631-646
-**Context**: Performs insert, update operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: INSERT, UPDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, insert operations. Uses end, if, begin logic. Follows variable declaration
+**SQL Operations**: UPDATE, INSERT
+**Control Structures**: END, IF, BEGIN
 **Variables Declared**: @POINTSDISCOUNT
 **Tables/Views**: CUSTOMERS
-**Subdivision Info**: Part 35 of 106
+**Subdivision Info**: Part 60 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2400,43 +1324,15 @@ BEGIN
 
 ---
 
-### Chunk 40: General Business Logic (Part 36)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 647-652
-**Context**: Follows variable declaration
-**Subdivision Info**: Part 36 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                    -- TAX CALCULATION WITH COMPLEX RULES
-                                                                                                                                                    -- =====================================================================================
-
-                                                                                                                                                    -- Calculate tax for each product using complex tax function
-                                                                                                                                                    SET @CurrentItem = 1;
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 41: Variable & Parameter Declarations (Math:PI/UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX) (Part 37)
+### Chunk 20: Variable & Parameter Declarations (UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX/Math:PI) (Part 63)
 **Type**: variable_declaration
 **Complexity Score**: 9
 **Lines**: 653-674
-**Context**: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses while, begin logic. Follows general logic
-**SQL Operations**: Math:PI, UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX, SELECT
+**Context**: Performs udf_call:dbo.fn_calculatecomplextax, math:pi, select operations. Uses while, begin logic. Follows variable declaration
+**SQL Operations**: UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX, Math:PI, SELECT
 **Control Structures**: WHILE, BEGIN
-**Variables Declared**: @PRODUCTTAXRATE, @LINETAXAMOUNT
-**Subdivision Info**: Part 37 of 106
+**Variables Declared**: @LINETAXAMOUNT, @PRODUCTTAXRATE
+**Subdivision Info**: Part 63 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2475,14 +1371,14 @@ BEGIN
 
 ---
 
-### Chunk 42: Conditional Logic & Branching (Math:PI/INSERT) (Part 38)
+### Chunk 21: Conditional Logic & Branching (Math:PI/UPDATE) (Part 64)
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 675-693
-**Context**: Performs math:pi, insert, update operations. Uses end, if logic. Follows variable declaration
-**SQL Operations**: Math:PI, INSERT, UPDATE
-**Control Structures**: END, IF
-**Subdivision Info**: Part 38 of 106
+**Context**: Performs math:pi, update, insert operations. Uses if, end logic. Follows variable declaration
+**SQL Operations**: Math:PI, UPDATE, INSERT
+**Control Structures**: IF, END
+**Subdivision Info**: Part 64 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2518,19 +1414,17 @@ BEGIN
 
 ---
 
-### Chunk 43: Data Query & Retrieval (Math:PI/UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING) (Part 39)
+### Chunk 22: Data Query & Retrieval (Math:PI/UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING) (Part 66)
 **Type**: data_retrieval
 **Complexity Score**: 7
-**Lines**: 694-709
+**Lines**: 696-709
 **Context**: Performs math:pi, udf_call:dbo.fn_calculatedynamicshipping, select operations. Follows conditional logic
 **SQL Operations**: Math:PI, UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING, SELECT
-**Subdivision Info**: Part 39 of 106
+**Subdivision Info**: Part 66 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                            -- SHIPPING COST CALCULATION
                                                                                                                                                             -- =====================================================================================
 
                                                                                                                                                             -- Use complex shipping calculation function
@@ -2557,141 +1451,14 @@ BEGIN
 
 ---
 
-### Chunk 44: General Business Logic (Part 40)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 710-713
-**Context**: Follows data retrieval
-**Subdivision Info**: Part 40 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                            -- PAYMENT PROCESSING AND FEES
-                                                                                                                                                            -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 45: Conditional Logic & Branching (Conversion:CAST/Math:PI) (Part 41)
-**Type**: conditional_logic
-**Complexity Score**: 10
-**Lines**: 714-726
-**Context**: Performs conversion:cast, math:pi, string:format, system:getdate operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: Conversion:CAST, Math:PI, String:FORMAT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
-**Subdivision Info**: Part 41 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                            IF @ProcessPayment = 1
-                                                                                                                                                                BEGIN
-                                                                                                                                                                    -- Calculate payment processing fee
-                                                                                                                                                                    SET @ProcessingFee = (@SubtotalAmount + @TaxAmount + @ShippingCost) * (@PaymentFee / 100.0);
-
-                                                                                                                                                                    -- Minimum processing fee
-                                                                                                                                                                    IF @ProcessingFee < 0.30 AND @PaymentFee > 0
-                                                                                                                                                                        SET @ProcessingFee = 0.30;
-
-                                                                                                                                                                        -- Generate payment reference
-                                                                                                                                                                        SET @PaymentReferenceNumber = 'PAY' + FORMAT(GETDATE(), 'yyyyMMddHHmmss') + CAST(@CustomerID AS NVARCHAR(10));
-                                                                                                                                                                    END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 46: General Business Logic (Math:PI) (Part 42)
-**Type**: general_logic
-**Complexity Score**: 1
-**Lines**: 727-734
-**Context**: Performs math:pi operations. Follows conditional logic
-**SQL Operations**: Math:PI
-**Subdivision Info**: Part 42 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                                    -- FINAL AMOUNT CALCULATION
-                                                                                                                                                                    -- =====================================================================================
-
-                                                                                                                                                                    SET @FinalAmount = @SubtotalAmount - @DiscountAmount + @TaxAmount + @ShippingCost + @ProcessingFee;
-                                                                                                                                                                    SET @TotalAmount = @FinalAmount;
-
-                                                                                                                                                                    -- Validate final amount is positive
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 47: Conditional Logic & Branching (GOTO/END) (Part 43)
-**Type**: conditional_logic
-**Complexity Score**: 4
-**Lines**: 735-744
-**Context**: Uses goto, end, begin, if logic. Follows general logic
-**Control Structures**: GOTO, END, BEGIN, IF
-**Subdivision Info**: Part 43 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                    IF @FinalAmount <= 0
-                                                                                                                                                                        BEGIN
-                                                                                                                                                                            SET @IsValid = 0;
-                                                                                                                                                                            SET @ErrorMessage = 'Final order amount cannot be zero or negative.';
-                                                                                                                                                                            SET @ErrorCode = 7001;
-                                                                                                                                                                            GOTO ErrorHandler;
-                                                                                                                                                                        END;
-
-                                                                                                                                                                        -- =====================================================================================
-                                                                                                                                                                        -- ORDER CREATION AND PERSISTENCE
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 48: Data Insert/Update/Delete (Math:PI/INSERT) (Part 44)
+### Chunk 23: Data Insert/Update/Delete (INSERT/System:SCOPE_IDENTITY) (Part 75)
 **Type**: data_modification
 **Complexity Score**: 11
 **Lines**: 745-809
-**Context**: Performs math:pi, insert, system:scope_identity, system:getdate, select operations. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, System:SCOPE_IDENTITY, System:GETDATE, SELECT
-**Tables/Views**: ORDERS, ORDERITEMS
-**Subdivision Info**: Part 44 of 106
+**Context**: Performs insert, system:scope_identity, select, math:pi, system:getdate operations. Follows data retrieval
+**SQL Operations**: INSERT, System:SCOPE_IDENTITY, SELECT, Math:PI, System:GETDATE
+**Tables/Views**: ORDERITEMS, ORDERS
+**Subdivision Info**: Part 75 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2773,15 +1540,15 @@ BEGIN
 
 ---
 
-### Chunk 49: Conditional Logic & Branching (INSERT/Conversion:ISNULL) (Part 45)
+### Chunk 24: Conditional Logic & Branching (Conversion:ISNULL/INSERT) (Part 76)
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 810-819
-**Context**: Performs insert, conversion:isnull, select operations. Uses if logic. Follows data modification
-**SQL Operations**: INSERT, Conversion:ISNULL, SELECT
+**Context**: Performs conversion:isnull, insert, select operations. Uses if logic. Follows data modification
+**SQL Operations**: Conversion:ISNULL, INSERT, SELECT
 **Control Structures**: IF
 **Tables/Views**: ORDERPROMOTIONS
-**Subdivision Info**: Part 45 of 106
+**Subdivision Info**: Part 76 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2808,41 +1575,15 @@ BEGIN
 
 ---
 
-### Chunk 50: General Business Logic (Part 46)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 820-823
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 46 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                                            -- INVENTORY UPDATES AND RESERVATIONS
-                                                                                                                                                                            -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 51: Conditional Logic & Branching (INSERT/UPDATE) (Part 47)
+### Chunk 25: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 79)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 824-838
-**Context**: Performs insert, update, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: INSERT, UPDATE, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: INVENTORYRESERVATIONS, P, PRODUCTS
-**Subdivision Info**: Part 47 of 106
+**Context**: Performs update, system:getdate, insert, select operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, INSERT, SELECT
+**Control Structures**: END, IF, BEGIN
+**Tables/Views**: PRODUCTS, P, INVENTORYRESERVATIONS
+**Subdivision Info**: Part 79 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2874,41 +1615,15 @@ BEGIN
 
 ---
 
-### Chunk 52: General Business Logic (Part 48)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 839-842
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 48 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                -- =====================================================================================
-                                                                                                                                                                                -- PAYMENT PROCESSING
-                                                                                                                                                                                -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 53: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 49)
+### Chunk 26: Conditional Logic & Branching (System:GETDATE/INSERT) (Part 82)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 843-867
-**Context**: Performs insert, system:getdate operations. Uses begin, if logic. Follows general logic
-**SQL Operations**: INSERT, System:GETDATE
-**Control Structures**: BEGIN, IF
+**Context**: Performs system:getdate, insert operations. Uses if, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, INSERT
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PAYMENTS
-**Subdivision Info**: Part 49 of 106
+**Subdivision Info**: Part 82 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -2950,56 +1665,19 @@ BEGIN
 
 ---
 
-### Chunk 54: Conditional Logic & Branching (UPDATE) (Part 50)
-**Type**: conditional_logic
-**Complexity Score**: 5
-**Lines**: 868-877
-**Context**: Performs update operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: UPDATE
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: CUSTOMERS
-**Subdivision Info**: Part 50 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                        IF @PaymentTypeID = 5 -- Store Credit
-                                                                                                                                                                                            BEGIN
-                                                                                                                                                                                                UPDATE Customers
-                                                                                                                                                                                                SET CurrentBalance = CurrentBalance + @FinalAmount
-                                                                                                                                                                                                WHERE CustomerID = @CustomerID;
-                                                                                                                                                                                            END;
-                                                                                                                                                                                        END;
-
-                                                                                                                                                                                        -- =====================================================================================
-                                                                                                                                                                                        -- LOYALTY POINTS CALCULATION
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 55: Transaction Control (UPDATE/INSERT) (Part 51)
+### Chunk 27: Transaction Control (Conversion:ISNULL/UPDATE) (Part 86)
 **Type**: transaction_control
 **Complexity Score**: 10
-**Lines**: 878-902
-**Context**: Performs update, insert, conversion:isnull, math:floor, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: UPDATE, INSERT, Conversion:ISNULL, Math:FLOOR, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Lines**: 880-902
+**Context**: Performs conversion:isnull, update, insert, math:floor, select, system:getdate operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: Conversion:ISNULL, UPDATE, INSERT, Math:FLOOR, SELECT, System:GETDATE
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: CUSTOMERS, CUSTOMERTIERS, LOYALTYTRANSACTIONS
-**Subdivision Info**: Part 51 of 106
+**Subdivision Info**: Part 86 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                        -- =====================================================================================
-
                                                                                                                                                                                         IF @ProcessLoyalty = 1
                                                                                                                                                                                             BEGIN
                                                                                                                                                                                                 -- Calculate loyalty points earned (1 point per dollar spent)
@@ -3035,21 +1713,19 @@ BEGIN
 
 ---
 
-### Chunk 56: Variable & Parameter Declarations (SELECT) (Part 52)
+### Chunk 28: Variable & Parameter Declarations (SELECT) (Part 88)
 **Type**: variable_declaration
 **Complexity Score**: 1
-**Lines**: 903-921
+**Lines**: 905-921
 **Context**: Performs select operations. Follows transaction control
 **SQL Operations**: SELECT
 **Variables Declared**: @NEWCUSTOMERTIERID
 **Tables/Views**: CUSTOMERTIERS
-**Subdivision Info**: Part 52 of 106
+**Subdivision Info**: Part 88 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                                                            -- CUSTOMER TIER EVALUATION AND UPGRADE
                                                                                                                                                                                             -- =====================================================================================
 
                                                                                                                                                                                             -- Check if customer qualifies for tier upgrade
@@ -3079,15 +1755,15 @@ BEGIN
 
 ---
 
-### Chunk 57: Conditional Logic & Branching (Math:LOG/UPDATE) (Part 53)
+### Chunk 29: Conditional Logic & Branching (UPDATE/Math:LOG) (Part 89)
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 922-938
-**Context**: Performs math:log, update, insert, conversion:cast, system:getdate operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: Math:LOG, UPDATE, INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, math:log, insert, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows variable declaration
+**SQL Operations**: UPDATE, Math:LOG, INSERT, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: CUSTOMERS, CUSTOMERLOG, TIER
-**Subdivision Info**: Part 53 of 106
+**Subdivision Info**: Part 89 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3121,41 +1797,15 @@ BEGIN
 
 ---
 
-### Chunk 58: General Business Logic (Part 54)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 939-942
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 54 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                -- =====================================================================================
-                                                                                                                                                                                                -- RECOMMENDATIONS AND ANALYTICS
-                                                                                                                                                                                                -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 59: Conditional Logic & Branching (INSERT/Date:DATEADD) (Part 55)
+### Chunk 30: Conditional Logic & Branching (Date:DATEADD/Aggregate:COUNT) (Part 92)
 **Type**: conditional_logic
 **Complexity Score**: 14
 **Lines**: 943-968
-**Context**: Performs insert, date:dateadd, aggregate:count, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: INSERT, Date:DATEADD, Aggregate:COUNT, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: CUSTOMERRECOMMENDATIONS, ORDERS, ORDERITEMS, PRODUCTS
-**Subdivision Info**: Part 55 of 106
+**Context**: Performs date:dateadd, aggregate:count, insert, select, system:getdate operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: Date:DATEADD, Aggregate:COUNT, INSERT, SELECT, System:GETDATE
+**Control Structures**: END, IF, BEGIN
+**Tables/Views**: PRODUCTS, ORDERITEMS, ORDERS, CUSTOMERRECOMMENDATIONS
+**Subdivision Info**: Part 92 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3198,20 +1848,18 @@ BEGIN
 
 ---
 
-### Chunk 60: Transaction Control (Math:LOG/INSERT) (Part 56)
+### Chunk 31: Transaction Control (Date:DATEDIFF/INSERT) (Part 94)
 **Type**: transaction_control
 **Complexity Score**: 13
-**Lines**: 969-1020
-**Context**: Performs math:log, insert, system:scope_identity, conversion:cast, system:getdate, date:datediff operations. Follows conditional logic
-**SQL Operations**: Math:LOG, INSERT, System:SCOPE_IDENTITY, Conversion:CAST, System:GETDATE, Date:DATEDIFF
+**Lines**: 971-1020
+**Context**: Performs date:datediff, insert, system:scope_identity, math:log, conversion:cast, system:getdate operations. Follows conditional logic
+**SQL Operations**: Date:DATEDIFF, INSERT, System:SCOPE_IDENTITY, Math:LOG, Conversion:CAST, System:GETDATE
 **Tables/Views**: TRANSACTIONLOG, AUDITLOG
-**Subdivision Info**: Part 56 of 106
+**Subdivision Info**: Part 94 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                                                                    -- TRANSACTION LOGGING AND AUDIT TRAIL
                                                                                                                                                                                                     -- =====================================================================================
 
                                                                                                                                                                                                     -- Create comprehensive transaction log
@@ -3274,41 +1922,15 @@ BEGIN
 
 ---
 
-### Chunk 61: General Business Logic (Part 57)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 1021-1024
-**Context**: Follows transaction control
-**Subdivision Info**: Part 57 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                                                                    -- NOTIFICATION PROCESSING
-                                                                                                                                                                                                    -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 62: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 58)
+### Chunk 32: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 97)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 1025-1040
-**Context**: Performs conversion:cast, insert operations. Uses begin, if logic. Follows general logic
+**Context**: Performs conversion:cast, insert operations. Uses if, begin logic. Follows transaction control
 **SQL Operations**: Conversion:CAST, INSERT
-**Control Structures**: BEGIN, IF
+**Control Structures**: IF, BEGIN
 **Tables/Views**: NOTIFICATIONQUEUE
-**Subdivision Info**: Part 58 of 106
+**Subdivision Info**: Part 97 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3341,26 +1963,19 @@ BEGIN
 
 ---
 
-### Chunk 63: Loop Processing & Iteration (INSERT/Conversion:CAST) (Part 59)
-**Type**: loop_logic
-**Complexity Score**: 12
-**Lines**: 1041-1070
-**Context**: Performs insert, conversion:cast, system:getdate operations. Uses for, end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: FOR, END, BEGIN, IF
+### Chunk 33: Conditional Logic & Branching (System:GETDATE/Conversion:CAST) (Part 99)
+**Type**: conditional_logic
+**Complexity Score**: 9
+**Lines**: 1048-1070
+**Context**: Performs system:getdate, conversion:cast, insert operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Conversion:CAST, INSERT
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: NOTIFICATIONQUEUE
-**Subdivision Info**: Part 59 of 106
+**Subdivision Info**: Part 99 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                            'Thank you for your order. Order total: $' + CAST(@FinalAmount AS NVARCHAR(20)),
-                                                                                                                                                                                                                'HIGH',
-                                                                                                                                                                                                                GETDATE(),
-                                                                                                                                                                                                                GETDATE()
-                                                                                                                                                                                                                );
-
-                                                                                                                                                                                                                -- Queue SMS notification for high-value orders
                                                                                                                                                                                                                 IF @FinalAmount >= 500.00
                                                                                                                                                                                                                     BEGIN
                                                                                                                                                                                                                         INSERT INTO NotificationQueue (
@@ -3396,75 +2011,19 @@ BEGIN
 
 ---
 
-### Chunk 64: General Business Logic (Part 60)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 1071-1074
-**Context**: Follows loop logic
-**Subdivision Info**: Part 60 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                -- =====================================================================================
-                                                                                                                                                                                                                -- EXPANDED REPORTING AND ANALYTICS UPDATES (4X LARGER)
-                                                                                                                                                                                                                -- =====================================================================================
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 65: Conditional Logic & Branching (BEGIN/IF) (Part 61)
-**Type**: conditional_logic
-**Complexity Score**: 4
-**Lines**: 1075-1078
-**Context**: Uses begin, if logic. Follows general logic
-**Control Structures**: BEGIN, IF
-**Subdivision Info**: Part 61 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                IF @ProcessReports = 1
-                                                                                                                                                                                                                    BEGIN
-                                                                                                                                                                                                                        -- =====================================================================================
-                                                                                                                                                                                                                        -- SECTION 1: BASIC SALES AND CUSTOMER ANALYTICS
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 66: Conditional Logic & Branching (Math:PI/UPDATE) (Part 62)
+### Chunk 34: Conditional Logic & Branching (UPDATE/SELECT) (Part 105)
 **Type**: conditional_logic
 **Complexity Score**: 13
-**Lines**: 1079-1094
-**Context**: Performs math:pi, update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: Math:PI, UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Lines**: 1082-1094
+**Context**: Performs update, select, logical:exists, math:pi, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, SELECT, Logical:EXISTS, Math:PI, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: DAILYSALESSUMMARY
-**Subdivision Info**: Part 62 of 106
+**Subdivision Info**: Part 105 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                                        -- =====================================================================================
-
-                                                                                                                                                                                                                        -- Update daily sales summary
                                                                                                                                                                                                                         IF EXISTS (SELECT 1 FROM DailySalesSummary WHERE SalesDate = CAST(@OrderDate AS DATE))
                                                                                                                                                                                                                         BEGIN
                                                                                                                                                                                                                             UPDATE DailySalesSummary
@@ -3490,16 +2049,16 @@ BEGIN
 
 ---
 
-### Chunk 67: Variable & Parameter Declarations (Math:PI/INSERT) (Part 63)
+### Chunk 35: Variable & Parameter Declarations (INSERT/Math:PI) (Part 106)
 **Type**: variable_declaration
 **Complexity Score**: 8
 **Lines**: 1095-1108
-**Context**: Performs math:pi, insert, date:datepart, conversion:cast, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, Date:DATEPART, Conversion:CAST, System:GETDATE
+**Context**: Performs insert, math:pi, system:getdate, conversion:cast, date:datepart operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: INSERT, Math:PI, System:GETDATE, Conversion:CAST, Date:DATEPART
 **Control Structures**: ELSE, END, BEGIN
 **Variables Declared**: @CURRENTHOUR
 **Tables/Views**: DAILYSALESSUMMARY
-**Subdivision Info**: Part 63 of 106
+**Subdivision Info**: Part 106 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3530,62 +2089,19 @@ BEGIN
 
 ---
 
-### Chunk 68: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 64)
+### Chunk 36: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 110)
 **Type**: conditional_logic
-**Complexity Score**: 12
-**Lines**: 1109-1118
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses else, begin, case, if, when, end logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: ELSE, BEGIN, CASE, IF, WHEN, END
-**Tables/Views**: HOURLYSALESSUMMARY
-**Subdivision Info**: Part 64 of 106
+**Complexity Score**: 5
+**Lines**: 1127-1141
+**Context**: Performs update, system:getdate operations. Uses else, case, end, when logic. Follows variable declaration
+**SQL Operations**: UPDATE, System:GETDATE
+**Control Structures**: ELSE, CASE, END, WHEN
+**Tables/Views**: CUSTOMERANALYTICS
+**Subdivision Info**: Part 110 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                                        IF EXISTS (SELECT 1 FROM HourlySalesSummary WHERE SalesDate = CAST(@OrderDate AS DATE) AND HourOfDay = @CurrentHour)
-                                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                                            UPDATE HourlySalesSummary
-                                                                                                                                                                                                                            SET
-                                                                                                                                                                                                                            TotalOrders = TotalOrders + 1,
-                                                                                                                                                                                                                            TotalRevenue = TotalRevenue + @FinalAmount,
-                                                                                                                                                                                                                        PeakHourMultiplier = CASE WHEN @CurrentHour BETWEEN 9 AND 17 THEN 1.2 ELSE 1.0 END,
-                                                                                                                                                                                                                            LastUpdated = GETDATE()
-                                                                                                                                                                                                                            WHERE SalesDate = CAST(@OrderDate AS DATE) AND HourOfDay = @CurrentHour;
-                                                                                                                                                                                                                        END
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 69: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 65)
-**Type**: conditional_logic
-**Complexity Score**: 9
-**Lines**: 1119-1141
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, begin, case, when, end logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
-**Control Structures**: ELSE, BEGIN, CASE, WHEN, END
-**Tables/Views**: HOURLYSALESSUMMARY, CUSTOMERANALYTICS
-**Subdivision Info**: Part 65 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                    ELSE
-                                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                                            INSERT INTO HourlySalesSummary (
-                                                                                                                                                                                                                            SalesDate, HourOfDay, TotalOrders, TotalRevenue,
-                                                                                                                                                                                                                            PeakHourMultiplier, LastUpdated
-                                                                                                                                                                                                                            )
-                                                                                                                                                                                                                            VALUES (
-                                                                                                                                                                                                                            CAST(@OrderDate AS DATE), @CurrentHour, 1, @FinalAmount,
                                                                                                                                                                                                                         CASE WHEN @CurrentHour BETWEEN 9 AND 17 THEN 1.2 ELSE 1.0 END, GETDATE()
                                                                                                                                                                                                                             );
                                                                                                                                                                                                                         END;
@@ -3613,15 +2129,15 @@ BEGIN
 
 ---
 
-### Chunk 70: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 66)
+### Chunk 37: Conditional Logic & Branching (System:@@ROWCOUNT/System:GETDATE) (Part 111)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1142-1153
-**Context**: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, System:@@ROWCOUNT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs system:@@rowcount, system:getdate, insert operations. Uses end, if, begin logic. Follows conditional logic
+**SQL Operations**: System:@@ROWCOUNT, System:GETDATE, INSERT
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: CUSTOMERANALYTICS
-**Subdivision Info**: Part 66 of 106
+**Subdivision Info**: Part 111 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3650,146 +2166,16 @@ BEGIN
 
 ---
 
-### Chunk 71: Variable & Parameter Declarations (Part 67)
-**Type**: variable_declaration
-**Complexity Score**: 0
-**Lines**: 1154-1161
-**Context**: Follows conditional logic
-**Variables Declared**: @PRODUCTANALYTICSCURSOR, @CURRPRODUCTID
-**Subdivision Info**: Part 67 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                                                                                            -- SECTION 2: DETAILED PRODUCT AND CATEGORY ANALYTICS
-                                                                                                                                                                                                                            -- =====================================================================================
-
-                                                                                                                                                                                                                            -- Update product performance metrics for each item in cart
-                                                                                                                                                                                                                            DECLARE @ProductAnalyticsCursor CURSOR;
-                                                                                                                                                                                                                            DECLARE @CurrProductID INT, @CurrQuantity INT, @CurrLineTotal DECIMAL(18,2);
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 72: Loop Processing & Iteration (SELECT) (Part 68)
-**Type**: loop_logic
-**Complexity Score**: 9
-**Lines**: 1162-1170
-**Context**: Performs select operations. Uses while, for, begin logic. Follows variable declaration
-**SQL Operations**: SELECT
-**Control Structures**: WHILE, FOR, BEGIN
-**Subdivision Info**: Part 68 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                            SET @ProductAnalyticsCursor = CURSOR FOR
-                                                                                                                                                                                                                                SELECT ProductID, Quantity, LineTotal FROM @Cart;
-
-                                                                                                                                                                                                                                OPEN @ProductAnalyticsCursor;
-                                                                                                                                                                                                                                FETCH NEXT FROM @ProductAnalyticsCursor INTO @CurrProductID, @CurrQuantity, @CurrLineTotal;
-
-                                                                                                                                                                                                                                WHILE @@FETCH_STATUS = 0
-                                                                                                                                                                                                                                    BEGIN
-                                                                                                                                                                                                                                        -- Update product sales statistics
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 73: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 69)
-**Type**: conditional_logic
-**Complexity Score**: 8
-**Lines**: 1171-1179
-**Context**: Performs conversion:cast, logical:exists, update, select operations. Uses begin, if logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: BEGIN, IF
-**Tables/Views**: PRODUCTSALESSTATS
-**Subdivision Info**: Part 69 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                                        IF EXISTS (SELECT 1 FROM ProductSalesStats WHERE ProductID = @CurrProductID AND SalesDate = CAST(@OrderDate AS DATE))
-                                                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                                                            UPDATE ProductSalesStats
-                                                                                                                                                                                                                                            SET
-                                                                                                                                                                                                                                            UnitsSold = UnitsSold + @CurrQuantity,
-                                                                                                                                                                                                                                            TotalRevenue = TotalRevenue + @CurrLineTotal,
-                                                                                                                                                                                                                                            OrderCount = OrderCount + 1,
-                                                                                                                                                                                                                                            AverageSellingPrice = TotalRevenue / UnitsSold,
-                                                                                                                                                                                                                                            LastSoldDate = @OrderDate,
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 74: Conditional Logic & Branching (Conversion:CAST/System:GETDATE) (Part 70)
-**Type**: conditional_logic
-**Complexity Score**: 6
-**Lines**: 1180-1187
-**Context**: Performs conversion:cast, system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, System:GETDATE, Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 70 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                                            Velocity = CASE
-                                                                                                                                                                                                                                            WHEN DATEDIFF(DAY, FirstSoldDate, @OrderDate) > 0
-                                                                                                                                                                                                                                            THEN UnitsSold / DATEDIFF(DAY, FirstSoldDate, @OrderDate)
-                                                                                                                                                                                                                                        ELSE UnitsSold
-                                                                                                                                                                                                                                        END,
-                                                                                                                                                                                                                                        LastUpdated = GETDATE()
-                                                                                                                                                                                                                                        WHERE ProductID = @CurrProductID AND SalesDate = CAST(@OrderDate AS DATE);
-                                                                                                                                                                                                                                    END
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 75: Variable & Parameter Declarations (Conversion:CAST/INSERT) (Part 71)
+### Chunk 38: Variable & Parameter Declarations (System:GETDATE/Conversion:CAST) (Part 120)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 1188-1203
-**Context**: Performs conversion:cast, insert, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, System:GETDATE, SELECT
+**Context**: Performs system:getdate, conversion:cast, insert, select operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Conversion:CAST, INSERT, SELECT
 **Control Structures**: ELSE, END, BEGIN
 **Variables Declared**: @CATEGORYID
-**Tables/Views**: PRODUCTSALESSTATS, PRODUCTS
-**Subdivision Info**: Part 71 of 106
+**Tables/Views**: PRODUCTS, PRODUCTSALESSTATS
+**Subdivision Info**: Part 120 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3822,15 +2208,15 @@ BEGIN
 
 ---
 
-### Chunk 76: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 72)
+### Chunk 39: Conditional Logic & Branching (UPDATE/Aggregate:SUM) (Part 121)
 **Type**: conditional_logic
 **Complexity Score**: 13
 **Lines**: 1204-1215
-**Context**: Performs update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, aggregate:sum, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows variable declaration
+**SQL Operations**: UPDATE, Aggregate:SUM, Logical:EXISTS, SELECT, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: CATEGORYSALESSTATS
-**Subdivision Info**: Part 72 of 106
+**Subdivision Info**: Part 121 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3859,15 +2245,15 @@ BEGIN
 
 ---
 
-### Chunk 77: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 73)
+### Chunk 40: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 122)
 **Type**: data_modification
 **Complexity Score**: 6
 **Lines**: 1216-1231
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
+**Context**: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: CATEGORYSALESSTATS, PRODUCTRECOMMENDATIONSCORES
-**Subdivision Info**: Part 73 of 106
+**Subdivision Info**: Part 122 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3900,48 +2286,15 @@ BEGIN
 
 ---
 
-### Chunk 78: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 74)
-**Type**: conditional_logic
-**Complexity Score**: 7
-**Lines**: 1232-1240
-**Context**: Performs system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows data modification
-**SQL Operations**: System:GETDATE, Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 74 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                                    RecentSalesWeight = CASE
-                                                                                                                                                                                                                                    WHEN DATEDIFF(DAY, LastUpdated, GETDATE()) <= 7 THEN PopularityScore * 1.5
-                                                                                                                                                                                                                                    WHEN DATEDIFF(DAY, LastUpdated, GETDATE()) <= 30 THEN PopularityScore * 1.2
-                                                                                                                                                                                                                                ELSE PopularityScore
-                                                                                                                                                                                                                                END,
-                                                                                                                                                                                                                                CrossSellScore = CrossSellScore + 1,
-                                                                                                                                                                                                                                LastUpdated = GETDATE()
-                                                                                                                                                                                                                                WHERE ProductID = @CurrProductID;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 79: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 75)
+### Chunk 41: Conditional Logic & Branching (System:@@ROWCOUNT/System:GETDATE) (Part 125)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1241-1254
-**Context**: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, System:@@ROWCOUNT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs system:@@rowcount, system:getdate, insert operations. Uses end, if, begin logic. Follows data modification
+**SQL Operations**: System:@@ROWCOUNT, System:GETDATE, INSERT
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: PRODUCTRECOMMENDATIONSCORES
-**Subdivision Info**: Part 75 of 106
+**Subdivision Info**: Part 125 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -3972,180 +2325,14 @@ BEGIN
 
 ---
 
-### Chunk 80: Variable & Parameter Declarations (Part 76)
-**Type**: variable_declaration
-**Complexity Score**: 0
-**Lines**: 1255-1265
-**Context**: Follows conditional logic
-**Variables Declared**: @MONETARYSCORE, @SEGMENTSCORE, @FREQUENCYSCORE, @RECENCYSCORE
-**Subdivision Info**: Part 76 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                                -- =====================================================================================
-                                                                                                                                                                                                                                -- SECTION 3: CUSTOMER SEGMENTATION AND BEHAVIOR ANALYSIS
-                                                                                                                                                                                                                                -- =====================================================================================
-
-                                                                                                                                                                                                                                -- Update customer segmentation scores
-                                                                                                                                                                                                                                DECLARE @SegmentScore INT = 0;
-                                                                                                                                                                                                                                DECLARE @FrequencyScore INT = 0;
-                                                                                                                                                                                                                                DECLARE @MonetaryScore INT = 0;
-                                                                                                                                                                                                                                DECLARE @RecencyScore INT = 0;
-
-                                                                                                                                                                                                                                -- Calculate Recency score (days since last order)
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 81: Conditional Logic & Branching (Date:DATEDIFF) (Part 77)
-**Type**: conditional_logic
-**Complexity Score**: 6
-**Lines**: 1266-1274
-**Context**: Performs date:datediff operations. Uses else, when, case, end logic. Follows variable declaration
-**SQL Operations**: Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 77 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                                SET @RecencyScore = CASE
-                                                                                                                                                                                                                                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 30 THEN 5
-                                                                                                                                                                                                                                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 90 THEN 4
-                                                                                                                                                                                                                                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 180 THEN 3
-                                                                                                                                                                                                                                WHEN DATEDIFF(DAY, @CustomerLastOrderDate, @OrderDate) <= 365 THEN 2
-                                                                                                                                                                                                                            ELSE 1
-                                                                                                                                                                                                                            END;
-
-                                                                                                                                                                                                                            -- Calculate Frequency score (number of orders)
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 82: Conditional Logic & Branching (ELSE/WHEN) (Part 78)
-**Type**: conditional_logic
-**Complexity Score**: 2
-**Lines**: 1275-1283
-**Context**: Uses else, when, case, end logic. Follows conditional logic
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 78 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                            SET @FrequencyScore = CASE
-                                                                                                                                                                                                                            WHEN @CustomerOrderCount >= 50 THEN 5
-                                                                                                                                                                                                                            WHEN @CustomerOrderCount >= 20 THEN 4
-                                                                                                                                                                                                                            WHEN @CustomerOrderCount >= 10 THEN 3
-                                                                                                                                                                                                                            WHEN @CustomerOrderCount >= 5 THEN 2
-                                                                                                                                                                                                                        ELSE 1
-                                                                                                                                                                                                                        END;
-
-                                                                                                                                                                                                                        -- Calculate Monetary score (lifetime value)
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 83: Conditional Logic & Branching (ELSE/WHEN) (Part 79)
-**Type**: conditional_logic
-**Complexity Score**: 2
-**Lines**: 1284-1294
-**Context**: Uses else, when, case, end logic. Follows conditional logic
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 79 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                        SET @MonetaryScore = CASE
-                                                                                                                                                                                                                        WHEN @CustomerLifetimeValue >= 10000 THEN 5
-                                                                                                                                                                                                                        WHEN @CustomerLifetimeValue >= 5000 THEN 4
-                                                                                                                                                                                                                        WHEN @CustomerLifetimeValue >= 2000 THEN 3
-                                                                                                                                                                                                                        WHEN @CustomerLifetimeValue >= 500 THEN 2
-                                                                                                                                                                                                                    ELSE 1
-                                                                                                                                                                                                                    END;
-
-                                                                                                                                                                                                                    SET @SegmentScore = (@RecencyScore * 100) + (@FrequencyScore * 10) + @MonetaryScore;
-
-                                                                                                                                                                                                                    -- Update customer RFM analysis
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 84: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 80)
-**Type**: conditional_logic
-**Complexity Score**: 7
-**Lines**: 1295-1302
-**Context**: Performs logical:exists, update, select operations. Uses begin, if logic. Follows conditional logic
-**SQL Operations**: Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: BEGIN, IF
-**Tables/Views**: CUSTOMERRFMANALYSIS
-**Subdivision Info**: Part 80 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                    IF EXISTS (SELECT 1 FROM CustomerRFMAnalysis WHERE CustomerID = @CustomerID)
-                                                                                                                                                                                                                    BEGIN
-                                                                                                                                                                                                                        UPDATE CustomerRFMAnalysis
-                                                                                                                                                                                                                        SET
-                                                                                                                                                                                                                        RecencyScore = @RecencyScore,
-                                                                                                                                                                                                                        FrequencyScore = @FrequencyScore,
-                                                                                                                                                                                                                        MonetaryScore = @MonetaryScore,
-                                                                                                                                                                                                                        RFMScore = @SegmentScore,
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 85: Conditional Logic & Branching (Math:PI) (Part 81)
+### Chunk 42: Conditional Logic & Branching (Math:PI) (Part 136)
 **Type**: conditional_logic
 **Complexity Score**: 3
 **Lines**: 1303-1312
-**Context**: Performs math:pi operations. Uses when, case logic. Follows conditional logic
+**Context**: Performs math:pi operations. Uses case, when logic. Follows conditional logic
 **SQL Operations**: Math:PI
-**Control Structures**: WHEN, CASE
-**Subdivision Info**: Part 81 of 106
+**Control Structures**: CASE, WHEN
+**Subdivision Info**: Part 136 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4172,54 +2359,14 @@ BEGIN
 
 ---
 
-### Chunk 86: Data Insert/Update/Delete (Date:DATEADD/INSERT) (Part 82)
-**Type**: data_modification
-**Complexity Score**: 5
-**Lines**: 1313-1327
-**Context**: Performs date:dateadd, insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-**SQL Operations**: Date:DATEADD, INSERT, System:GETDATE
-**Control Structures**: ELSE, BEGIN, END
-**Tables/Views**: CUSTOMERRFMANALYSIS
-**Subdivision Info**: Part 82 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                    ELSE 'Hibernating'
-                                                                                                                                                                                                                    END,
-                                                                                                                                                                                                                    LastAnalysisDate = @OrderDate,
-                                                                                                                                                                                                                    NextReviewDate = DATEADD(DAY, 30, @OrderDate),
-                                                                                                                                                                                                                    LastUpdated = GETDATE()
-                                                                                                                                                                                                                    WHERE CustomerID = @CustomerID;
-                                                                                                                                                                                                                END
-                                                                                                                                                                                                            ELSE
-                                                                                                                                                                                                                BEGIN
-                                                                                                                                                                                                                    INSERT INTO CustomerRFMAnalysis (
-                                                                                                                                                                                                                    CustomerID, RecencyScore, FrequencyScore, MonetaryScore, RFMScore,
-                                                                                                                                                                                                                    CustomerSegment, LastAnalysisDate, NextReviewDate, LastUpdated
-                                                                                                                                                                                                                    )
-                                                                                                                                                                                                                    VALUES (
-                                                                                                                                                                                                                    @CustomerID, @RecencyScore, @FrequencyScore, @MonetaryScore, @SegmentScore,
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 87: Conditional Logic & Branching (Math:PI) (Part 83)
+### Chunk 43: Conditional Logic & Branching (Math:PI) (Part 139)
 **Type**: conditional_logic
 **Complexity Score**: 3
 **Lines**: 1328-1337
-**Context**: Performs math:pi operations. Uses when, case logic. Follows data modification
+**Context**: Performs math:pi operations. Uses case, when logic. Follows conditional logic
 **SQL Operations**: Math:PI
-**Control Structures**: WHEN, CASE
-**Subdivision Info**: Part 83 of 106
+**Control Structures**: CASE, WHEN
+**Subdivision Info**: Part 139 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4246,15 +2393,15 @@ BEGIN
 
 ---
 
-### Chunk 88: Variable & Parameter Declarations (Date:DATEADD/Math:PI) (Part 84)
+### Chunk 44: Variable & Parameter Declarations (Date:DATEADD/System:GETDATE) (Part 140)
 **Type**: variable_declaration
 **Complexity Score**: 3
 **Lines**: 1338-1348
-**Context**: Performs date:dateadd, math:pi, system:getdate operations. Uses else, end logic. Follows conditional logic
-**SQL Operations**: Date:DATEADD, Math:PI, System:GETDATE
+**Context**: Performs date:dateadd, system:getdate, math:pi operations. Uses else, end logic. Follows conditional logic
+**SQL Operations**: Date:DATEADD, System:GETDATE, Math:PI
 **Control Structures**: ELSE, END
-**Variables Declared**: @SHOPPINGTIMEPREFERENCE, @PURCHASEPATTERN, @SEASONALTREND
-**Subdivision Info**: Part 84 of 106
+**Variables Declared**: @SHOPPINGTIMEPREFERENCE, @SEASONALTREND, @PURCHASEPATTERN
+**Subdivision Info**: Part 140 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4282,85 +2429,19 @@ BEGIN
 
 ---
 
-### Chunk 89: Conditional Logic & Branching (Math:PI) (Part 85)
-**Type**: conditional_logic
-**Complexity Score**: 3
-**Lines**: 1349-1355
-**Context**: Performs math:pi operations. Uses else, when, case, end logic. Follows variable declaration
-**SQL Operations**: Math:PI
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 85 of 106
+### Chunk 45: Data Insert/Update/Delete (Math:PI/System:GETDATE) (Part 146)
+**Type**: data_modification
+**Complexity Score**: 9
+**Lines**: 1367-1382
+**Context**: Performs math:pi, system:getdate, insert, select operations. Uses else, end logic. Follows variable declaration
+**SQL Operations**: Math:PI, System:GETDATE, INSERT, SELECT
+**Control Structures**: ELSE, END
+**Tables/Views**: SHIPPINGMETHODS, PAYMENTTYPES, CUSTOMERBEHAVIORTRACKING
+**Subdivision Info**: Part 146 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                            SET @ShoppingTimePreference = CASE
-                                                                                                                                                                                                            WHEN @CurrentHour BETWEEN 6 AND 12 THEN 'Morning Shopper'
-                                                                                                                                                                                                            WHEN @CurrentHour BETWEEN 12 AND 17 THEN 'Afternoon Shopper'
-                                                                                                                                                                                                            WHEN @CurrentHour BETWEEN 17 AND 22 THEN 'Evening Shopper'
-                                                                                                                                                                                                        ELSE 'Night Owl'
-                                                                                                                                                                                                        END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 90: Conditional Logic & Branching (Date:MONTH) (Part 86)
-**Type**: conditional_logic
-**Complexity Score**: 5
-**Lines**: 1356-1362
-**Context**: Performs date:month operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Date:MONTH
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 86 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                        SET @SeasonalTrend = CASE
-                                                                                                                                                                                                        WHEN MONTH(@OrderDate) IN (12, 1, 2) THEN 'Winter'
-                                                                                                                                                                                                        WHEN MONTH(@OrderDate) IN (3, 4, 5) THEN 'Spring'
-                                                                                                                                                                                                        WHEN MONTH(@OrderDate) IN (6, 7, 8) THEN 'Summer'
-                                                                                                                                                                                                    ELSE 'Fall'
-                                                                                                                                                                                                    END;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 91: Conditional Logic & Branching (Math:PI/INSERT) (Part 87)
-**Type**: conditional_logic
-**Complexity Score**: 11
-**Lines**: 1363-1382
-**Context**: Performs math:pi, insert, system:getdate, select operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, System:GETDATE, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
-**Tables/Views**: PAYMENTTYPES, SHIPPINGMETHODS, CUSTOMERBEHAVIORTRACKING
-**Subdivision Info**: Part 87 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    SET @PurchasePattern = CASE
-                                                                                                                                                                                                    WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 2 THEN 'High Value Purchase'
-                                                                                                                                                                                                    WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 1.5 THEN 'Above Average Purchase'
-                                                                                                                                                                                                    WHEN @FinalAmount > @CustomerLifetimeValue / @CustomerOrderCount * 0.5 THEN 'Average Purchase'
                                                                                                                                                                                                 ELSE 'Low Value Purchase'
                                                                                                                                                                                                 END;
 
@@ -4389,81 +2470,15 @@ BEGIN
 
 ---
 
-### Chunk 92: Variable & Parameter Declarations (Part 88)
-**Type**: variable_declaration
-**Complexity Score**: 0
-**Lines**: 1383-1390
-**Context**: Follows conditional logic
-**Variables Declared**: @INVENTORYANALYTICSCURSOR, @CURRWAREHOUSEID
-**Subdivision Info**: Part 88 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                -- =====================================================================================
-                                                                                                                                                                                                -- SECTION 4: ADVANCED INVENTORY AND SUPPLY CHAIN ANALYTICS
-                                                                                                                                                                                                -- =====================================================================================
-
-                                                                                                                                                                                                -- Update inventory turnover analytics
-                                                                                                                                                                                                DECLARE @InventoryAnalyticsCursor CURSOR;
-                                                                                                                                                                                                DECLARE @CurrWarehouseID INT, @CurrAllocatedQty INT;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 93: Loop Processing & Iteration (Aggregate:SUM/SELECT) (Part 89)
-**Type**: loop_logic
-**Complexity Score**: 10
-**Lines**: 1391-1401
-**Context**: Performs aggregate:sum, select operations. Uses while, for, begin logic. Follows variable declaration
-**SQL Operations**: Aggregate:SUM, SELECT
-**Control Structures**: WHILE, FOR, BEGIN
-**Subdivision Info**: Part 89 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                SET @InventoryAnalyticsCursor = CURSOR FOR
-                                                                                                                                                                                                    SELECT DISTINCT WarehouseID, SUM(AllocatedQuantity)
-                                                                                                                                                                                                    FROM @InventoryAllocations
-                                                                                                                                                                                                    GROUP BY WarehouseID;
-
-                                                                                                                                                                                                    OPEN @InventoryAnalyticsCursor;
-                                                                                                                                                                                                    FETCH NEXT FROM @InventoryAnalyticsCursor INTO @CurrWarehouseID, @CurrAllocatedQty;
-
-                                                                                                                                                                                                    WHILE @@FETCH_STATUS = 0
-                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                            -- Update warehouse performance metrics
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 94: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 90)
+### Chunk 46: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 151)
 **Type**: conditional_logic
 **Complexity Score**: 10
 **Lines**: 1402-1412
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows loop logic
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows data modification
+**SQL Operations**: UPDATE, Logical:EXISTS, SELECT, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: WAREHOUSEPERFORMANCEMETRICS
-**Subdivision Info**: Part 90 of 106
+**Subdivision Info**: Part 151 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4491,15 +2506,15 @@ BEGIN
 
 ---
 
-### Chunk 95: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 91)
+### Chunk 47: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 152)
 **Type**: data_modification
 **Complexity Score**: 6
 **Lines**: 1413-1431
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
+**Context**: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
-**Tables/Views**: WAREHOUSEPERFORMANCEMETRICS, INVENTORYVELOCITYMETRICS
-**Subdivision Info**: Part 91 of 106
+**Tables/Views**: INVENTORYVELOCITYMETRICS, WAREHOUSEPERFORMANCEMETRICS
+**Subdivision Info**: Part 152 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4535,21 +2550,19 @@ BEGIN
 
 ---
 
-### Chunk 96: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 92)
-**Type**: conditional_logic
-**Complexity Score**: 8
-**Lines**: 1432-1464
-**Context**: Performs insert, system:getdate, date:datediff, select operations. Uses else, when, case, end logic. Follows data modification
-**SQL Operations**: INSERT, System:GETDATE, Date:DATEDIFF, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
+### Chunk 48: Cursor Operations & Row Processing (Date:DATEDIFF/System:GETDATE) (Part 154)
+**Type**: cursor_operation
+**Complexity Score**: 6
+**Lines**: 1434-1464
+**Context**: Performs date:datediff, system:getdate, insert, select operations. Uses else, end logic. Follows data modification
+**SQL Operations**: Date:DATEDIFF, System:GETDATE, INSERT, SELECT
+**Control Structures**: ELSE, END
 **Tables/Views**: SUPPLYCHAINEVENTS
-**Subdivision Info**: Part 92 of 106
+**Subdivision Info**: Part 154 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                            TurnoverRate = CASE
-                                                                                                                                                                                                            WHEN AvailableStock > 0 THEN (DailyMovement * 365.0) / AvailableStock
                                                                                                                                                                                                         ELSE 0
                                                                                                                                                                                                         END,
                                                                                                                                                                                                         ReorderPoint = (DailyMovement * LeadTimeDays) + SafetyStock,
@@ -4593,85 +2606,19 @@ BEGIN
 
 ---
 
-### Chunk 97: General Business Logic (Part 93)
-**Type**: general_logic
-**Complexity Score**: 0
-**Lines**: 1465-1469
-**Context**: Follows conditional logic
-**Subdivision Info**: Part 93 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                                                                    -- SECTION 5: MARKETING AND PROMOTION EFFECTIVENESS TRACKING
-                                                                                                                                                                                                    -- =====================================================================================
-
-                                                                                                                                                                                                    -- Track promotion usage and effectiveness
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 98: Variable & Parameter Declarations (Logical:EXISTS/SELECT) (Part 94)
-**Type**: variable_declaration
+### Chunk 49: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 160)
+**Type**: conditional_logic
 **Complexity Score**: 10
-**Lines**: 1470-1480
-**Context**: Performs logical:exists, select operations. Uses for, begin, if logic. Follows general logic
-**SQL Operations**: Logical:EXISTS, SELECT
-**Control Structures**: FOR, BEGIN, IF
-**Variables Declared**: @CURRPROMOID, @PROMOEFFECTIVENESSCURSOR
-**Subdivision Info**: Part 94 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    IF EXISTS (SELECT 1 FROM @AppliedPromotions)
-                                                                                                                                                                                                    BEGIN
-                                                                                                                                                                                                        DECLARE @PromoEffectivenessCursor CURSOR;
-                                                                                                                                                                                                        DECLARE @CurrPromoID INT, @CurrDiscountAmount DECIMAL(18,2);
-
-                                                                                                                                                                                                        SET @PromoEffectivenessCursor = CURSOR FOR
-                                                                                                                                                                                                            SELECT PromoID, DiscountAmount FROM @AppliedPromotions;
-
-                                                                                                                                                                                                            OPEN @PromoEffectivenessCursor;
-                                                                                                                                                                                                            FETCH NEXT FROM @PromoEffectivenessCursor INTO @CurrPromoID, @CurrDiscountAmount;
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 99: Loop Processing & Iteration (UPDATE/Logical:EXISTS) (Part 95)
-**Type**: loop_logic
-**Complexity Score**: 15
-**Lines**: 1481-1497
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses while, end, begin, if logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: WHILE, END, BEGIN, IF
+**Lines**: 1484-1497
+**Context**: Performs update, logical:exists, select, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows cursor operation
+**SQL Operations**: UPDATE, Logical:EXISTS, SELECT, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: PROMOTIONEFFECTIVENESSMETRICS
-**Subdivision Info**: Part 95 of 106
+**Subdivision Info**: Part 160 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                            WHILE @@FETCH_STATUS = 0
-                                                                                                                                                                                                                BEGIN
-                                                                                                                                                                                                                    -- Update promotion effectiveness metrics
                                                                                                                                                                                                                     IF EXISTS (SELECT 1 FROM PromotionEffectivenessMetrics WHERE PromoID = @CurrPromoID AND UsageDate = CAST(@OrderDate AS DATE))
                                                                                                                                                                                                                     BEGIN
                                                                                                                                                                                                                         UPDATE PromotionEffectivenessMetrics
@@ -4698,15 +2645,15 @@ BEGIN
 
 ---
 
-### Chunk 100: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 96)
+### Chunk 50: Data Insert/Update/Delete (System:GETDATE/Conversion:CAST) (Part 161)
 **Type**: data_modification
 **Complexity Score**: 5
 **Lines**: 1498-1513
-**Context**: Performs conversion:cast, insert, system:getdate operations. Uses else, end, begin logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, INSERT, System:GETDATE
+**Context**: Performs system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: PROMOTIONEFFECTIVENESSMETRICS
-**Subdivision Info**: Part 96 of 106
+**Subdivision Info**: Part 161 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4739,59 +2686,19 @@ BEGIN
 
 ---
 
-### Chunk 101: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 97)
-**Type**: conditional_logic
-**Complexity Score**: 9
-**Lines**: 1514-1523
-**Context**: Performs logical:exists, update, select operations. Uses when, case, begin, if logic. Follows data modification
-**SQL Operations**: Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: WHEN, CASE, BEGIN, IF
-**Tables/Views**: CUSTOMERPROMOTIONAFFINITY
-**Subdivision Info**: Part 97 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                                    IF EXISTS (SELECT 1 FROM CustomerPromotionAffinity WHERE CustomerID = @CustomerID AND PromoID = @CurrPromoID)
-                                                                                                                                                                                                                    BEGIN
-                                                                                                                                                                                                                        UPDATE CustomerPromotionAffinity
-                                                                                                                                                                                                                        SET
-                                                                                                                                                                                                                        UsageCount = UsageCount + 1,
-                                                                                                                                                                                                                        TotalSavings = TotalSavings + @CurrDiscountAmount,
-                                                                                                                                                                                                                        LastUsedDate = @OrderDate,
-                                                                                                                                                                                                                        AffinityScore = CASE
-                                                                                                                                                                                                                        WHEN UsageCount >= 10 THEN 'High'
-                                                                                                                                                                                                                        WHEN UsageCount >= 5 THEN 'Medium'
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 102: Cursor Operations & Row Processing (INSERT/System:GETDATE) (Part 98)
+### Chunk 51: Cursor Operations & Row Processing (System:GETDATE/INSERT) (Part 165)
 **Type**: cursor_operation
-**Complexity Score**: 5
-**Lines**: 1524-1547
-**Context**: Performs insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-**SQL Operations**: INSERT, System:GETDATE
-**Control Structures**: ELSE, BEGIN, END
+**Complexity Score**: 4
+**Lines**: 1529-1547
+**Context**: Performs system:getdate, insert operations. Uses else, end, begin logic. Follows data modification
+**SQL Operations**: System:GETDATE, INSERT
+**Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: CUSTOMERPROMOTIONAFFINITY
-**Subdivision Info**: Part 98 of 106
+**Subdivision Info**: Part 165 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                                    ELSE 'Low'
-                                                                                                                                                                                                                    END,
-                                                                                                                                                                                                                    LastUpdated = GETDATE()
-                                                                                                                                                                                                                    WHERE CustomerID = @CustomerID AND PromoID = @CurrPromoID;
-                                                                                                                                                                                                                END
                                                                                                                                                                                                             ELSE
                                                                                                                                                                                                                 BEGIN
                                                                                                                                                                                                                     INSERT INTO CustomerPromotionAffinity (
@@ -4823,60 +2730,19 @@ BEGIN
 
 ---
 
-### Chunk 103: Variable & Parameter Declarations (Part 99)
-**Type**: variable_declaration
-**Complexity Score**: 0
-**Lines**: 1548-1557
-**Context**: Follows cursor operation
-**Variables Declared**: @REVENUERECOGNITIONDATE, @RECOGNIZEDREVENUE, @DEFERREDREVENUE
-**Subdivision Info**: Part 99 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                        -- =====================================================================================
-                                                                                                                                                                                                        -- SECTION 6: FINANCIAL AND REVENUE ANALYTICS
-                                                                                                                                                                                                        -- =====================================================================================
-
-                                                                                                                                                                                                        -- Update revenue recognition and financial tracking
-                                                                                                                                                                                                        DECLARE @RevenueRecognitionDate DATE = @OrderDate;
-                                                                                                                                                                                                        DECLARE @DeferredRevenue DECIMAL(18,2) = 0;
-                                                                                                                                                                                                        DECLARE @RecognizedRevenue DECIMAL(18,2) = @FinalAmount;
-
-                                                                                                                                                                                                        -- Check for digital vs physical products for revenue recognition
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 104: Conditional Logic & Branching (Math:PI/UPDATE) (Part 100)
+### Chunk 52: Conditional Logic & Branching (UPDATE/SELECT) (Part 169)
 **Type**: conditional_logic
-**Complexity Score**: 21
-**Lines**: 1558-1582
-**Context**: Performs math:pi, update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: Math:PI, UPDATE, Logical:EXISTS, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Complexity Score**: 13
+**Lines**: 1566-1582
+**Context**: Performs update, select, logical:exists, math:pi, system:getdate, conversion:cast operations. Uses end, if, begin logic. Follows cursor operation
+**SQL Operations**: UPDATE, SELECT, Logical:EXISTS, Math:PI, System:GETDATE, Conversion:CAST
+**Control Structures**: END, IF, BEGIN
 **Tables/Views**: FINANCIALSUMMARY
-**Subdivision Info**: Part 100 of 106
+**Subdivision Info**: Part 169 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                        IF EXISTS (SELECT 1 FROM @Cart WHERE IsDigital = 1)
-                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                            -- Immediate revenue recognition for digital products
-                                                                                                                                                                                                            SET @RecognizedRevenue = (SELECT SUM(LineTotal) FROM @Cart WHERE IsDigital = 1);
-                                                                                                                                                                                                            SET @DeferredRevenue = @FinalAmount - @RecognizedRevenue;
-                                                                                                                                                                                                        END;
-
-                                                                                                                                                                                                        -- Update financial summary
                                                                                                                                                                                                         IF EXISTS (SELECT 1 FROM FinancialSummary WHERE ReportDate = CAST(@OrderDate AS DATE))
                                                                                                                                                                                                         BEGIN
                                                                                                                                                                                                             UPDATE FinancialSummary
@@ -4906,16 +2772,16 @@ BEGIN
 
 ---
 
-### Chunk 105: Variable & Parameter Declarations (Math:PI/INSERT) (Part 101)
+### Chunk 53: Variable & Parameter Declarations (INSERT/Aggregate:SUM) (Part 170)
 **Type**: variable_declaration
 **Complexity Score**: 9
 **Lines**: 1583-1603
-**Context**: Performs math:pi, insert, aggregate:sum, conversion:cast, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
+**Context**: Performs insert, aggregate:sum, select, math:pi, system:getdate, conversion:cast operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: INSERT, Aggregate:SUM, SELECT, Math:PI, System:GETDATE, Conversion:CAST
 **Control Structures**: ELSE, END, BEGIN
-**Variables Declared**: @GROSSPROFIT, @TOTALCOGS
-**Tables/Views**: FINANCIALSUMMARY, PRODUCTS
-**Subdivision Info**: Part 101 of 106
+**Variables Declared**: @TOTALCOGS, @GROSSPROFIT
+**Tables/Views**: PRODUCTS, FINANCIALSUMMARY
+**Subdivision Info**: Part 170 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4953,16 +2819,16 @@ BEGIN
 
 ---
 
-### Chunk 106: Variable & Parameter Declarations (Math:PI/INSERT) (Part 102)
+### Chunk 54: Variable & Parameter Declarations (Math:PI/INSERT) (Part 171)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 1604-1614
-**Context**: Performs math:pi, insert operations. Uses else, when, case, end logic. Follows variable declaration
+**Context**: Performs math:pi, insert operations. Uses else, case, end, when logic. Follows variable declaration
 **SQL Operations**: Math:PI, INSERT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: ELSE, CASE, END, WHEN
 **Variables Declared**: @GROSSPROFITMARGIN
 **Tables/Views**: PROFITMARGINANALYSIS
-**Subdivision Info**: Part 102 of 106
+**Subdivision Info**: Part 171 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
@@ -4990,121 +2856,19 @@ BEGIN
 
 ---
 
-### Chunk 107: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 103)
-**Type**: conditional_logic
-**Complexity Score**: 4
-**Lines**: 1615-1622
-**Context**: Performs math:pi, system:getdate operations. Uses else, when, case, end logic. Follows variable declaration
-**SQL Operations**: Math:PI, System:GETDATE
-**Control Structures**: ELSE, WHEN, CASE, END
-**Subdivision Info**: Part 103 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    CASE WHEN @FinalAmount > 0 THEN ((@GrossProfit - @ShippingCost - @ProcessingFee) / @FinalAmount) * 100 ELSE 0 END,
-                                                                                                                                                                                                        GETDATE()
-                                                                                                                                                                                                        );
-
-                                                                                                                                                                                                    END;
-
-                                                                                                                                                                                                    -- =====================================================================================
-                                                                                                                                                                                                    -- SUCCESS COMPLETION
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 108: Transaction Control (Conversion:CAST/String:LEN) (Part 104)
-**Type**: transaction_control
-**Complexity Score**: 6
-**Lines**: 1623-1638
-**Context**: Performs conversion:cast, string:len operations. Uses end, return, begin, if logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, String:LEN
-**Control Structures**: END, RETURN, BEGIN, IF
-**Subdivision Info**: Part 104 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                    -- =====================================================================================
-
-                                                                                                                                                                                                    -- Commit the transaction
-                                                                                                                                                                                                    COMMIT TRANSACTION;
-
-                                                                                                                                                                                                    -- Set success message
-                                                                                                                                                                                                    SET @ErrorMessage = 'Order processed successfully. Order ID: ' + CAST(@OrderID AS NVARCHAR(10));
-
-                                                                                                                                                                                                    -- Final cleanup and summary
-                                                                                                                                                                                                    IF LEN(@WarningMessages) > 0
-                                                                                                                                                                                                        BEGIN
-                                                                                                                                                                                                            SET @WarningMessages = 'Warnings: ' + @WarningMessages;
-                                                                                                                                                                                                        END;
-
-                                                                                                                                                                                                        RETURN 0; -- Success
-
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 109: Error Handling & Exception Management (TRY/BEGIN) (Part 105)
-**Type**: error_handling
-**Complexity Score**: 4
-**Lines**: 1639-1642
-**Context**: Uses try, begin, catch, end logic. Follows transaction control
-**Control Structures**: TRY, BEGIN, CATCH, END
-**Subdivision Info**: Part 105 of 106
-**Parent Block**: variable_declaration (lines 179-1683)
-
-**Code:**
-```sql
-                                                                                                                                                                                                        END TRY
-                                                                                                                                                                                                        BEGIN CATCH
-                                                                                                                                                                                                            -- =====================================================================================
-                                                                                                                                                                                                            -- COMPREHENSIVE ERROR HANDLING
-```
-
-**Sequential Analysis Questions:**
-1. How does this chunk build upon the previous chunks?
-2. What specific business logic or data processing occurs here?
-3. What variables or data from previous chunks are used?
-4. What outputs or state changes prepare for subsequent chunks?
-5. What error conditions or edge cases are handled?
-6. How does this contribute to the overall procedure workflow?
-
----
-
-### Chunk 110: Transaction Control (System:@@TRANCOUNT/Math:LOG) (Part 106)
+### Chunk 55: Transaction Control (System:@@TRANCOUNT/INSERT) (Part 179)
 **Type**: transaction_control
 **Complexity Score**: 9
-**Lines**: 1643-1683
-**Context**: Performs system:@@trancount, math:log, insert, conversion:cast, system:getdate operations. Uses goto, catch, end, if logic. Follows error handling
-**SQL Operations**: System:@@TRANCOUNT, Math:LOG, INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: GOTO, CATCH, END, IF
+**Lines**: 1646-1683
+**Context**: Performs system:@@trancount, insert, math:log, conversion:cast, system:getdate operations. Uses catch, end, if, goto logic. Follows variable declaration
+**SQL Operations**: System:@@TRANCOUNT, INSERT, Math:LOG, Conversion:CAST, System:GETDATE
+**Control Structures**: CATCH, END, IF, GOTO
 **Tables/Views**: ERRORLOG
-**Subdivision Info**: Part 106 of 106
+**Subdivision Info**: Part 179 of 52
 **Parent Block**: variable_declaration (lines 179-1683)
 
 **Code:**
 ```sql
-                                                                                                                                                                                                            -- =====================================================================================
-
-                                                                                                                                                                                                            -- Rollback transaction on any error
                                                                                                                                                                                                             IF @@TRANCOUNT > 0
                                                                                                                                                                                                                 ROLLBACK TRANSACTION;
 
@@ -5155,7 +2919,7 @@ BEGIN
 
 ---
 
-### Chunk 111: General Business Logic
+### Chunk 56: General Business Logic
 **Type**: general_logic
 **Complexity Score**: 0
 **Lines**: 1684-1689
@@ -5181,13 +2945,13 @@ BEGIN
 
 ---
 
-### Chunk 112: Transaction Control (Math:PI/System:@@TRANCOUNT)
+### Chunk 57: Transaction Control (Math:PI/System:@@TRANCOUNT)
 **Type**: transaction_control
 **Complexity Score**: 38
 **Lines**: 1690-1731
-**Context**: Performs math:pi, system:@@trancount operations. Uses else, begin, if, end, return logic. Follows general logic
+**Context**: Performs math:pi, system:@@trancount operations. Uses if, end, return, else, begin logic. Follows general logic
 **SQL Operations**: Math:PI, System:@@TRANCOUNT
-**Control Structures**: ELSE, BEGIN, IF, END, RETURN
+**Control Structures**: IF, END, RETURN, ELSE, BEGIN
 
 **Code:**
 ```sql
@@ -5245,7 +3009,7 @@ BEGIN
 
 ---
 
-### Chunk 113: General Business Logic (RETURN/END)
+### Chunk 58: General Business Logic (RETURN/END)
 **Type**: general_logic
 **Complexity Score**: 0
 **Lines**: 1732-1735

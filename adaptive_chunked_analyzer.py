@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 """
-Adaptive SQL Stored Procedure Chunked Analyzer
-Implements hybrid approach: complete logical blocks when possible, intelligent subdivision when necessary.
-Ensures sequential chunking for complete start-to-finish analysis.
+Enhanced SQL stored procedure chunking analyzer with automatic formatting.
+Uses intelligent chunking to create logical, sequential analysis guides.
 """
 
 import re
-from typing import List, Dict, Any, Tuple, Optional, Set
-from dataclasses import dataclass
 import json
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass
 from enum import Enum
+
+# Import our SQL formatters
+from sql_formatter import SQLFormatter, FormatSettings
+from simple_sql_formatter import SimpleSQLFormatter
 
 class ChunkType(Enum):
     """Generic chunk types based on SQL patterns"""
@@ -172,8 +175,20 @@ class AdaptiveSQLAnalyzer:
             'REPORTING': [r'report', r'summary', r'analytics', r'statistics']
         }
     
-    def chunk_procedure(self, sql_content: str) -> List[CodeChunk]:
+    def chunk_procedure(self, sql_content: str, auto_format: bool = True) -> List[CodeChunk]:
         """Main chunking method implementing adaptive strategy"""
+        
+        # Step 0: Auto-formatting for consistent indentation (default behavior)
+        if auto_format:
+            try:
+                # Use SimpleSQLFormatter for clean, consistent indentation
+                formatter = SimpleSQLFormatter(indent_size=4)
+                sql_content = formatter.format_sql(sql_content)
+                print("✓ SQL content automatically formatted for consistent indentation")
+            except Exception as e:
+                print(f"Warning: Could not format SQL content: {e}")
+                # Continue with original content if formatting fails
+        
         lines = sql_content.split('\n')
         analyzed_lines = self._analyze_lines(lines)
         
@@ -795,20 +810,76 @@ class AdaptiveSQLAnalyzer:
         subdivision_points = sorted(list(set(subdivision_points)))
         subdivision_points = [0] + subdivision_points + [len(chunk_lines)]
         
-        # Create sub-chunks
+        # Create sub-chunks (preserving all source code)
         sub_chunks = []
+        part_index = 1  # Start counting parts from 1
+        
+        # First pass: create all chunks, including small ones
+        raw_chunks = []
         for i in range(len(subdivision_points) - 1):
             start_idx = subdivision_points[i]
             end_idx = subdivision_points[i + 1]
             
-            if end_idx - start_idx < self.min_chunk_size:
-                continue  # Skip too-small chunks
-            
             sub_chunk_lines = chunk_lines[start_idx:end_idx]
             sub_chunk = self._create_chunk(sub_chunk_lines, 0, large_chunk.start_line + start_idx)
+            raw_chunks.append((start_idx, end_idx, sub_chunk))
+        
+        # Second pass: merge small chunks with adjacent ones to preserve all code
+        i = 0
+        while i < len(raw_chunks):
+            start_idx, end_idx, sub_chunk = raw_chunks[i]
+            chunk_size = end_idx - start_idx
             
+            # If chunk is too small, try to merge with adjacent chunk
+            if chunk_size < self.min_chunk_size and len(raw_chunks) > 1:
+                merged = False
+                
+                # Try to merge with next chunk first
+                if i + 1 < len(raw_chunks):
+                    next_start, next_end, next_chunk = raw_chunks[i + 1]
+                    combined_size = next_end - start_idx
+                    
+                    # Merge if combined size is reasonable
+                    if combined_size <= self.max_chunk_size * 1.5:
+                        merged_lines = chunk_lines[start_idx:next_end]
+                        merged_chunk = self._create_chunk(merged_lines, 0, large_chunk.start_line + start_idx)
+                        sub_chunks.append(merged_chunk)
+                        i += 2  # Skip both chunks since we merged them
+                        merged = True
+                
+                # If couldn't merge with next, try merging with previous
+                if not merged and i > 0 and sub_chunks:
+                    # Merge with the last chunk we added
+                    prev_chunk = sub_chunks[-1]
+                    combined_lines = prev_chunk.lines + sub_chunk.lines
+                    
+                    # Update the previous chunk to include this small chunk
+                    prev_chunk.lines = combined_lines
+                    prev_chunk.end_line = sub_chunk.end_line
+                    prev_chunk.complexity_score += sub_chunk.complexity_score
+                    prev_chunk.sql_operations = list(set(prev_chunk.sql_operations + sub_chunk.sql_operations))
+                    prev_chunk.control_structures = list(set(prev_chunk.control_structures + sub_chunk.control_structures))
+                    prev_chunk.variables_declared = list(set(prev_chunk.variables_declared + sub_chunk.variables_declared))
+                    prev_chunk.variables_used = list(set(prev_chunk.variables_used + sub_chunk.variables_used))
+                    prev_chunk.tables_accessed = list(set(prev_chunk.tables_accessed + sub_chunk.tables_accessed))
+                    prev_chunk.business_functions = list(set(prev_chunk.business_functions + sub_chunk.business_functions))
+                    i += 1
+                    merged = True
+                
+                # If still couldn't merge, keep the small chunk (preserve all code)
+                if not merged:
+                    sub_chunks.append(sub_chunk)
+                    i += 1
+            else:
+                # Chunk is acceptable size, keep it
+                sub_chunks.append(sub_chunk)
+                i += 1
+        
+        # Now process each chunk for potential recursive subdivision
+        final_chunks = []
+        for sub_chunk in sub_chunks:
             # Check if sub-chunk still needs further subdivision
-            if sub_chunk.complexity_score > self.max_complexity_per_chunk and len(sub_chunk_lines) > self.target_chunk_size and recursion_depth < 3:
+            if sub_chunk.complexity_score > self.max_complexity_per_chunk and len(sub_chunk.lines) > self.target_chunk_size and recursion_depth < 3:
                 # Recursively subdivide if still too complex
                 further_subdivisions = self._subdivide_large_chunk(sub_chunk, analyzed_lines, recursion_depth + 1)
                 # Only use further subdivisions if we actually got multiple chunks and it's an improvement
@@ -818,42 +889,44 @@ class AdaptiveSQLAnalyzer:
                             parent_block_type=large_chunk.chunk_type.value,
                             parent_block_start=large_chunk.start_line,
                             parent_block_end=large_chunk.end_line,
-                            sub_chunk_index=len(sub_chunks) + j + 1,
+                            sub_chunk_index=part_index + j,
                             total_sub_chunks=0,  # Will be updated later
                             subdivision_reason="Recursive complexity optimization"
                         )
-                        further_chunk.title += f" (Part {len(sub_chunks) + j + 1})"
-                    sub_chunks.extend(further_subdivisions)
+                        further_chunk.title += f" (Part {part_index + j})"
+                    final_chunks.extend(further_subdivisions)
+                    part_index += len(further_subdivisions)
                     continue
             
-            # Add subdivision context
+            # Add subdivision context with correct part index
             sub_chunk.sub_chunk_info = SubChunkInfo(
                 parent_block_type=large_chunk.chunk_type.value,
                 parent_block_start=large_chunk.start_line,
                 parent_block_end=large_chunk.end_line,
-                sub_chunk_index=i + 1,
-                total_sub_chunks=len(subdivision_points) - 1,
+                sub_chunk_index=part_index,
+                total_sub_chunks=0,  # Will be updated later
                 subdivision_reason="Size optimization" if len(chunk_lines) > 200 else "Complexity optimization"
             )
             
             # Update title to reflect subdivision
-            sub_chunk.title += f" (Part {i + 1})"
+            sub_chunk.title += f" (Part {part_index})"
             
-            sub_chunks.append(sub_chunk)
+            final_chunks.append(sub_chunk)
+            part_index += 1
         
-        # Update total sub-chunks count
-        for chunk in sub_chunks:
+        # Update total sub-chunks count with actual number of chunks created
+        for chunk in final_chunks:
             if chunk.sub_chunk_info:
-                chunk.sub_chunk_info.total_sub_chunks = len(sub_chunks)
+                chunk.sub_chunk_info.total_sub_chunks = len(final_chunks)
         
         # Link subdivided chunks for continuity
-        for i in range(len(sub_chunks)):
+        for i in range(len(final_chunks)):
             if i > 0:
-                sub_chunks[i].continuation_from = sub_chunks[i-1].chunk_id
-            if i < len(sub_chunks) - 1:
-                sub_chunks[i].continuation_to = sub_chunks[i+1].chunk_id
+                final_chunks[i].continuation_from = final_chunks[i-1].chunk_id
+            if i < len(final_chunks) - 1:
+                final_chunks[i].continuation_to = final_chunks[i+1].chunk_id
         
-        return sub_chunks if sub_chunks else [large_chunk]
+        return final_chunks if final_chunks else [large_chunk]
     
     def _find_section_comment_subdivisions(self, chunk_lines: List[Dict]) -> List[int]:
         """Find subdivision points based on section comments"""
@@ -931,6 +1004,13 @@ class AdaptiveSQLAnalyzer:
         if proposed_point <= 0 or proposed_point >= len(chunk_lines):
             return proposed_point
         
+        # SPECIAL HANDLING: Control flow starts (IF, ELSE, WHILE, etc.) should always be allowed
+        if proposed_point < len(chunk_lines):
+            point_controls = chunk_lines[proposed_point].get('control_structures', [])
+            if any(ctrl in point_controls for ctrl in ['IF', 'ELSE', 'ELSEIF', 'ELSIF', 'WHILE', 'FOR', 'TRY', 'CASE']):
+                # These are always valid subdivision points - allow them to start chunks
+                return proposed_point
+        
         # First, check if we're breaking a control flow structure
         control_flow_violation = self._check_control_flow_violation(chunk_lines, proposed_point)
         if control_flow_violation:
@@ -990,39 +1070,12 @@ class AdaptiveSQLAnalyzer:
         # Check if we're breaking in the middle of a control condition (not the entire structure)
         # Look backwards to see if we're in the middle of a multi-line condition
         
-        # Check if the current line is a control flow continuation that should not be separated
+        # ELSE, ELSEIF, ELSIF should be allowed to start chunks for better readability
+        # Only prevent separation of other control continuations like CATCH, WHEN
         point_controls = chunk_lines[point].get('control_structures', [])
-        if any(ctrl in ['ELSE', 'ELSEIF', 'ELSIF', 'CATCH', 'WHEN'] for ctrl in point_controls):
-            # These keywords should stay with their parent structure
+        if any(ctrl in ['CATCH', 'WHEN'] for ctrl in point_controls):
+            # These keywords should stay with their parent structure (but not ELSE)
             return True
-        
-        # Check if previous line ends with ELSE (hanging ELSE that should be with next chunk)
-        if point > 0:
-            prev_line = chunk_lines[point - 1].get('original', '').strip()
-            prev_controls = chunk_lines[point - 1].get('control_structures', [])
-            if ('ELSE' in prev_controls and 
-                (prev_line.endswith('ELSE') or prev_line == 'ELSE')):
-                # ELSE should be with the following block, not hanging at end of previous chunk
-                return True
-        
-        # Check if we're separating END from ELSE (common pattern: END \n ELSE)
-        if point > 0 and point < len(chunk_lines):
-            prev_line = chunk_lines[point - 1].get('original', '').strip()
-            prev_controls = chunk_lines[point - 1].get('control_structures', [])
-            current_line = chunk_lines[point].get('original', '').strip()
-            current_controls = chunk_lines[point].get('control_structures', [])
-            
-            # If previous line is END and current line is ELSE, they should stay together
-            if ('END' in prev_controls and 'ELSE' in current_controls):
-                return True
-        
-        # Check for ELSE that would be hanging at the end of a chunk
-        # Look ahead to see if there's an ELSE coming soon that would be separated
-        for i in range(point, min(point + 3, len(chunk_lines))):
-            line_controls = chunk_lines[i].get('control_structures', [])
-            if 'ELSE' in line_controls:
-                # Found an ELSE that would be separated, this is a violation
-                return True
         
         # Check if we're breaking an IF statement from its immediate BEGIN or ELSE
         if self._is_breaking_if_structure(chunk_lines, point):
@@ -1036,6 +1089,12 @@ class AdaptiveSQLAnalyzer:
 
     def _is_breaking_if_structure(self, chunk_lines: List[Dict], point: int) -> bool:
         """Check if we're breaking an IF statement from its complete structure"""
+        # ALLOW ELSE to start chunks - this is what the user wants
+        if point < len(chunk_lines):
+            point_controls = chunk_lines[point].get('control_structures', [])
+            if any(ctrl in ['ELSE', 'ELSEIF', 'ELSIF'] for ctrl in point_controls):
+                return False  # Allow ELSE to start new chunks
+        
         # Look backwards to find IF statements that might be incomplete
         for i in range(point - 1, max(0, point - 5), -1):
             line = chunk_lines[i].get('original', '').strip()
@@ -1065,16 +1124,6 @@ class AdaptiveSQLAnalyzer:
                         next_controls = chunk_lines[point].get('control_structures', [])
                         if 'BEGIN' in next_controls:
                             return True  # IF separated from its BEGIN
-                
-                # Also check if ELSE comes after subdivision point (incomplete IF...ELSE structure)
-                if found_begin and not found_else:
-                    # Look ahead to see if ELSE is coming
-                    for k in range(point, min(point + 10, len(chunk_lines))):
-                        k_controls = chunk_lines[k].get('control_structures', [])
-                        if 'ELSE' in k_controls:
-                            return True  # IF...BEGIN separated from ELSE
-                        if 'END' in k_controls:
-                            break  # Found the end of the IF block, no ELSE expected
         
         return False
 
@@ -1578,23 +1627,24 @@ class AdaptiveSQLAnalyzer:
         return total_complexity
 
     def _find_if_else_subdivisions(self, chunk_lines: List[Dict]) -> List[int]:
-        """Find subdivision points at IF-ELSE block boundaries respecting logical structure"""
+        """Find subdivision points at IF-ELSE block boundaries, prioritizing control flow starts"""
         points = []
-        logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
         
-        # Find ELSE blocks and IF-PART blocks that can be separated
-        for block in logical_blocks:
-            if block['type'] in ['ELSE', 'IF_PART'] and block['level'] == 0:  # Top-level only
-                # Add subdivision point at the start of ELSE blocks
-                if block['type'] == 'ELSE':
-                    valid_point = self._validate_subdivision_point(chunk_lines, block['start'])
-                    if valid_point:
-                        points.append(valid_point)
-                # Add subdivision point after complete IF blocks
-                elif block['type'] == 'IF_PART':
-                    valid_point = self._validate_subdivision_point(chunk_lines, block['end'] + 1)
-                    if valid_point:
-                        points.append(valid_point)
+        # DIRECT APPROACH: Find all IF and ELSE statements as subdivision points
+        for i, line_data in enumerate(chunk_lines):
+            control_structures = line_data.get('control_structures', [])
+            
+            # Force subdivision at IF statements (they should start chunks)
+            if 'IF' in control_structures:
+                points.append(i)
+            
+            # Force subdivision at ELSE statements (they should start chunks)  
+            if any(ctrl in control_structures for ctrl in ['ELSE', 'ELSEIF', 'ELSIF']):
+                points.append(i)
+            
+            # Also include other control flow structures
+            if any(ctrl in control_structures for ctrl in ['WHILE', 'FOR', 'TRY', 'CASE']):
+                points.append(i)
         
         return points
 
@@ -1619,7 +1669,7 @@ class AdaptiveSQLAnalyzer:
         return points
 
     def _find_statement_break_points(self, chunk_lines: List[Dict], start: int, end: int) -> List[int]:
-        """Find break points within a sequence of SQL statements"""
+        """Find break points within a sequence of SQL statements, prioritizing control flow starts"""
         points = []
         current_complexity = 0
         last_break = start
@@ -1634,7 +1684,17 @@ class AdaptiveSQLAnalyzer:
             if (current_complexity >= target_complexity and 
                 i - last_break >= self.min_chunk_size):
                 
-                # Find the best break point nearby
+                # PRIORITY 1: Look for control flow starts first
+                control_flow_point = self._find_control_flow_before_point(chunk_lines, min(i + 10, end))
+                if control_flow_point and control_flow_point > last_break:
+                    valid_point = self._validate_subdivision_point(chunk_lines, control_flow_point)
+                    if valid_point:
+                        points.append(valid_point)
+                        current_complexity = 0
+                        last_break = valid_point
+                        continue
+                
+                # PRIORITY 2: Find the best statement boundary nearby
                 break_point = self._find_statement_boundary(chunk_lines, i, min(i + 5, end))
                 if break_point and break_point > last_break:
                     valid_point = self._validate_subdivision_point(chunk_lines, break_point)
@@ -1646,15 +1706,22 @@ class AdaptiveSQLAnalyzer:
         return points
 
     def _find_statement_boundary(self, chunk_lines: List[Dict], start_idx: int, end_idx: int) -> Optional[int]:
-        """Find a good statement boundary for subdivision"""
+        """Find a good statement boundary for subdivision, prioritizing control flow starts"""
+        
+        # PRIORITY 1: Control flow structures (including ELSE)
+        for i in range(start_idx, min(end_idx + 1, len(chunk_lines))):
+            control_structures = chunk_lines[i].get('control_structures', [])
+            if any(ctrl in control_structures for ctrl in ['IF', 'WHILE', 'FOR', 'TRY', 'CASE', 'ELSE', 'ELSEIF', 'ELSIF']):
+                return i
+        
+        # PRIORITY 2: After semicolons
         for i in range(start_idx, min(end_idx + 1, len(chunk_lines))):
             line = chunk_lines[i].get('original', '').strip()
-            
-            # Prefer breaking after semicolons
             if line.endswith(';'):
                 return i + 1
-            
-            # Break before new SQL statement types
+        
+        # PRIORITY 3: Before new SQL statement types
+        for i in range(start_idx, min(end_idx + 1, len(chunk_lines))):
             if any(op in chunk_lines[i].get('sql_operations', []) 
                    for op in ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'EXEC']):
                 return i
@@ -1662,7 +1729,7 @@ class AdaptiveSQLAnalyzer:
         return start_idx
 
     def _force_complexity_based_subdivision(self, chunk_lines: List[Dict]) -> List[int]:
-        """Force subdivision based on logical blocks when no natural points found"""
+        """Force subdivision based on logical blocks when no natural points found, prioritizing control flow starts"""
         points = []
         logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
         
@@ -1676,9 +1743,14 @@ class AdaptiveSQLAnalyzer:
             
             # If this single block is too complex, it needs to be subdivided internally
             if block_complexity > self.max_complexity_per_chunk:
-                # Add subdivision point before this block
+                # Add subdivision point before this block, preferring control flow starts
                 if current_complexity > 0:
-                    points.append(block['start'])
+                    # Look for control flow start right before this block
+                    control_flow_point = self._find_control_flow_before_point(chunk_lines, block['start'])
+                    if control_flow_point is not None:
+                        points.append(control_flow_point)
+                    else:
+                        points.append(block['start'])
                     current_complexity = 0
                 
                 # Try to subdivide the block internally if it's a STATEMENTS block
@@ -1692,8 +1764,12 @@ class AdaptiveSQLAnalyzer:
                 current_group_start = block['end'] + 1
                 current_complexity = 0
             elif current_complexity + block_complexity > target_complexity and current_complexity > 0:
-                # Start a new group
-                points.append(block['start'])
+                # Start a new group, preferring control flow starts
+                control_flow_point = self._find_control_flow_before_point(chunk_lines, block['start'])
+                if control_flow_point is not None:
+                    points.append(control_flow_point)
+                else:
+                    points.append(block['start'])
                 current_complexity = block_complexity
                 current_group_start = block['start']
             else:
@@ -1701,28 +1777,65 @@ class AdaptiveSQLAnalyzer:
         
         return points
 
+    def _find_control_flow_before_point(self, chunk_lines: List[Dict], point: int) -> Optional[int]:
+        """Find the nearest control flow start before or at the given point"""
+        # Look backwards from the point to find control flow starts
+        for i in range(point, max(0, point - 10), -1):
+            if i < len(chunk_lines):
+                line_data = chunk_lines[i]
+                control_structures = line_data.get('control_structures', [])
+                
+                # Major control flow structures that should start chunks (including ELSE)
+                if any(ctrl in control_structures for ctrl in [
+                    'IF', 'WHILE', 'FOR', 'TRY', 'CASE', 'ELSE', 'ELSEIF', 'ELSIF'
+                ]):
+                    return i
+        
+        return None
+
     def _find_good_break_point(self, chunk_lines: List[Dict], start_idx: int, end_idx: int) -> Optional[int]:
-        """Find a good break point within a range (end of statement, after semicolon, etc.)"""
+        """Find a good break point within a range, prioritizing control flow starts"""
+        
+        # PRIORITY 1: Find control flow starts (IF, WHILE, FOR, TRY, etc.)
+        control_flow_starts = self._find_control_flow_starts(chunk_lines, start_idx, end_idx)
+        if control_flow_starts:
+            return control_flow_starts[0]  # Return the first control flow start
+        
+        # PRIORITY 2: Standard good break points
         for i in range(start_idx, min(end_idx, len(chunk_lines))):
             line_data = chunk_lines[i]
             line = line_data.get('original', '').strip()
             
-            # Good break points:
-            # 1. After semicolon
+            # After semicolon
             if line.endswith(';'):
                 return i + 1
-            # 2. Before major control structures
-            if any(ctrl in line_data.get('control_structures', []) for ctrl in ['IF', 'WHILE', 'CASE']):
-                return i
-            # 3. After END statements
+            # After END statements
             if any(ctrl in line_data.get('control_structures', []) for ctrl in ['END', 'END IF']):
                 return i + 1
-            # 4. Before comments (section breaks)
+            # Before comments (section breaks)
             if line_data.get('is_comment', False) and line.startswith('--'):
                 return i
         
         # If no good break point found, return start_idx
         return start_idx if start_idx < len(chunk_lines) else None
+
+    def _find_control_flow_starts(self, chunk_lines: List[Dict], start_idx: int, end_idx: int) -> List[int]:
+        """Find all control flow starts within a range, prioritizing chunk-friendly starts"""
+        control_flow_starts = []
+        
+        for i in range(start_idx, min(end_idx, len(chunk_lines))):
+            line_data = chunk_lines[i]
+            line = line_data.get('original', '').strip()
+            control_structures = line_data.get('control_structures', [])
+            
+            # Major control flow structures that should start chunks
+            if any(ctrl in control_structures for ctrl in [
+                'IF', 'WHILE', 'FOR', 'TRY', 'CASE', 'ELSE', 'ELSEIF', 'ELSIF'
+            ]):
+                # ELSE, ELSEIF, ELSIF should also start chunks for better readability
+                control_flow_starts.append(i)
+        
+        return control_flow_starts
     
     def _add_context_and_references(self, chunks: List[CodeChunk]):
         """Add context summaries and cross-references"""
@@ -1910,7 +2023,7 @@ def main():
     """Main function for command line usage"""
     import argparse
     
-    parser = argparse.ArgumentParser(description='Adaptive SQL stored procedure chunking analyzer')
+    parser = argparse.ArgumentParser(description='Adaptive SQL stored procedure chunking analyzer with automatic formatting')
     parser.add_argument('sql_file', help='Path to SQL file to analyze')
     parser.add_argument('--strategy', choices=['strict_logical', 'size_constrained', 'functional', 'hybrid'], 
                        default='hybrid', help='Chunking strategy')
@@ -1921,6 +2034,8 @@ def main():
     parser.add_argument('--max-complexity', type=int, default=50, help='Maximum complexity per chunk before forced subdivision')
     parser.add_argument('--output', '-o', help='Output file for analysis guide')
     parser.add_argument('--format', choices=['markdown', 'json'], default='markdown', help='Output format')
+    parser.add_argument('--auto-format', type=lambda x: x.lower() != 'false', default=True, 
+                       help='Automatically format SQL before chunking for consistent indentation (default: true, use --auto-format=false to disable)')
     
     args = parser.parse_args()
     
@@ -1939,7 +2054,7 @@ def main():
         max_complexity_per_chunk=args.max_complexity
     )
     
-    chunks = analyzer.chunk_procedure(sql_content)
+    chunks = analyzer.chunk_procedure(sql_content, auto_format=args.auto_format)
     
     # Generate output
     config = {
@@ -1996,6 +2111,7 @@ def main():
             f.write(output)
         print(f"Adaptive analysis guide written to {args.output}")
         print(f"Strategy: {strategy.value}")
+        print(f"Auto-formatting: {'enabled' if args.auto_format else 'disabled'}")
         print(f"Created {len(chunks)} chunks for sequential analysis")
         print(f"Total complexity score: {sum(chunk.complexity_score for chunk in chunks)}")
         subdivided = sum(1 for chunk in chunks if chunk.sub_chunk_info)

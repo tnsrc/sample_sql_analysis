@@ -52,53 +52,53 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows variable declaration
    - Subdivision: Part 2/2 of variable_declaration
 
-5. **Chunk 5**: Error Handling & Exception Management (TRY/BEGIN) (Part 1)
+5. **Chunk 5**: Error Handling & Exception Management (BEGIN/TRY) (Part 1)
    - Type: error_handling
    - Complexity: 6
    - Lines: 179-185
-   - Context: Uses try, begin logic. Follows general logic
+   - Context: Uses begin, try logic. Follows general logic
    - Subdivision: Part 1/106 of variable_declaration
 
 6. **Chunk 6**: Conditional Logic & Branching (System:GETDATE) (Part 2)
    - Type: conditional_logic
    - Complexity: 9
    - Lines: 186-201
-   - Context: Performs system:getdate operations. Uses goto, end, begin, if logic. Follows error handling
+   - Context: Performs system:getdate operations. Uses if, end, begin, goto logic. Follows error handling
    - Subdivision: Part 2/106 of variable_declaration
 
 7. **Chunk 7**: Conditional Logic & Branching (Math:PI) (Part 3)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 202-217
-   - Context: Performs math:pi operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs math:pi operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 3/106 of variable_declaration
 
 8. **Chunk 8**: Conditional Logic & Branching (String:LEN) (Part 4)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 218-227
-   - Context: Performs string:len operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs string:len operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 4/106 of variable_declaration
 
 9. **Chunk 9**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 5)
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 228-251
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 5/106 of variable_declaration
 
 10. **Chunk 10**: Conditional Logic & Branching (Conversion:ISNULL/Aggregate:SUM) (Part 6)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 252-267
-   - Context: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, when, case, end logic. Follows conditional logic
+   - Context: Performs conversion:isnull, aggregate:sum, select, aggregate:count operations. Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 6/106 of variable_declaration
 
-11. **Chunk 11**: Conditional Logic & Branching (END/BEGIN) (Part 7)
+11. **Chunk 11**: Conditional Logic & Branching (IF/END) (Part 7)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 268-280
-   - Context: Uses end, begin, if logic. Follows conditional logic
+   - Context: Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 7/106 of variable_declaration
 
 12. **Chunk 12**: General Business Logic (Part 8)
@@ -112,21 +112,21 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 14
    - Lines: 286-307
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+   - Context: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows general logic
    - Subdivision: Part 9/106 of variable_declaration
 
 14. **Chunk 14**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 10)
    - Type: conditional_logic
    - Complexity: 9
    - Lines: 308-320
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 10/106 of variable_declaration
 
 15. **Chunk 15**: Conditional Logic & Branching (Math:PI/Logical:NOT EXISTS) (Part 11)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 321-334
-   - Context: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 11/106 of variable_declaration
 
 16. **Chunk 16**: General Business Logic (Part 12)
@@ -140,63 +140,63 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 340-360
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+   - Context: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows general logic
    - Subdivision: Part 13/106 of variable_declaration
 
-18. **Chunk 18**: Loop Processing & Iteration (Math:PI/Logical:NOT EXISTS) (Part 14)
+18. **Chunk 18**: Loop Processing & Iteration (Math:PI/System:GETDATE) (Part 14)
    - Type: loop_logic
    - Complexity: 9
    - Lines: 361-374
-   - Context: Performs math:pi, logical:not exists, system:getdate, select operations. Uses begin, if, end, for, goto logic. Follows conditional logic
+   - Context: Performs math:pi, system:getdate, logical:not exists, select operations. Uses end, for, if, begin, goto logic. Follows conditional logic
    - Subdivision: Part 14/106 of variable_declaration
 
-19. **Chunk 19**: Data Insert/Update/Delete (INSERT/Aggregate:COUNT) (Part 15)
+19. **Chunk 19**: Data Insert/Update/Delete (SELECT/Aggregate:COUNT) (Part 15)
    - Type: data_modification
    - Complexity: 4
    - Lines: 375-387
-   - Context: Performs insert, aggregate:count, select operations. Follows loop logic
+   - Context: Performs select, aggregate:count, insert operations. Follows loop logic
    - Subdivision: Part 15/106 of variable_declaration
 
-20. **Chunk 20**: Loop Processing & Iteration (BEGIN/WHILE) (Part 16)
+20. **Chunk 20**: Loop Processing & Iteration (END/WHILE) (Part 16)
    - Type: loop_logic
    - Complexity: 8
    - Lines: 388-398
-   - Context: Uses begin, while, if, end, goto logic. Follows data modification
+   - Context: Uses end, while, if, begin, goto logic. Follows data modification
    - Subdivision: Part 16/106 of variable_declaration
 
 21. **Chunk 21**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 17)
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 399-413
-   - Context: Performs logical:not exists, select operations. Uses begin, if logic. Follows loop logic
+   - Context: Performs logical:not exists, select operations. Uses if, begin logic. Follows loop logic
    - Subdivision: Part 17/106 of variable_declaration
 
-22. **Chunk 22**: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 18)
+22. **Chunk 22**: Data Query & Retrieval (SELECT/Conversion:CAST) (Part 18)
    - Type: data_retrieval
    - Complexity: 2
    - Lines: 414-428
-   - Context: Performs conversion:cast, select operations. Uses end, goto logic. Follows conditional logic
+   - Context: Performs select, conversion:cast operations. Uses end, goto logic. Follows conditional logic
    - Subdivision: Part 18/106 of variable_declaration
 
 23. **Chunk 23**: Loop Processing & Iteration (Conversion:CAST) (Part 19)
    - Type: loop_logic
    - Complexity: 5
    - Lines: 429-437
-   - Context: Performs conversion:cast operations. Uses begin, if, end, for, goto logic. Follows data retrieval
+   - Context: Performs conversion:cast operations. Uses end, for, if, begin, goto logic. Follows data retrieval
    - Subdivision: Part 19/106 of variable_declaration
 
-24. **Chunk 24**: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 20)
+24. **Chunk 24**: Conditional Logic & Branching (Conversion:CAST/SELECT) (Part 20)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 438-446
-   - Context: Performs conversion:cast, logical:exists, select operations. Uses end, begin, if logic. Follows loop logic
+   - Context: Performs conversion:cast, select, logical:exists operations. Uses if, end, begin logic. Follows loop logic
    - Subdivision: Part 20/106 of variable_declaration
 
-25. **Chunk 25**: Loop Processing & Iteration (Conversion:CAST/UPDATE) (Part 21)
+25. **Chunk 25**: Loop Processing & Iteration (UPDATE/Conversion:CAST) (Part 21)
    - Type: loop_logic
    - Complexity: 5
    - Lines: 447-471
-   - Context: Performs conversion:cast, update operations. Uses else, begin, end, for, goto logic. Follows conditional logic
+   - Context: Performs update, conversion:cast operations. Uses end, for, else, begin, goto logic. Follows conditional logic
    - Subdivision: Part 21/106 of variable_declaration
 
 26. **Chunk 26**: General Business Logic (Part 22)
@@ -206,18 +206,18 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows loop logic
    - Subdivision: Part 22/106 of variable_declaration
 
-27. **Chunk 27**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 23)
+27. **Chunk 27**: Variable & Parameter Declarations (Math:PI/Aggregate:SUM) (Part 23)
    - Type: variable_declaration
    - Complexity: 18
    - Lines: 476-501
-   - Context: Performs math:pi, insert, sp_call:dbo.fn_allocateinventoryacrosswarehouses, aggregate:sum, exec, select operations. Uses while, begin, if logic. Follows general logic
+   - Context: Performs math:pi, aggregate:sum, sp_call:dbo.fn_allocateinventoryacrosswarehouses, select, exec, insert operations. Uses if, begin, while logic. Follows general logic
    - Subdivision: Part 23/106 of variable_declaration
 
 28. **Chunk 28**: Loop Processing & Iteration (Conversion:CAST) (Part 24)
    - Type: loop_logic
    - Complexity: 5
    - Lines: 502-511
-   - Context: Performs conversion:cast operations. Uses for, end, begin, if logic. Follows variable declaration
+   - Context: Performs conversion:cast operations. Uses if, end, begin, for logic. Follows variable declaration
    - Subdivision: Part 24/106 of variable_declaration
 
 29. **Chunk 29**: Data Query & Retrieval (Aggregate:SUM/SELECT) (Part 25)
@@ -231,70 +231,70 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 520-534
-   - Context: Performs select operations. Uses begin, if logic. Follows data retrieval
+   - Context: Performs select operations. Uses if, begin logic. Follows data retrieval
    - Subdivision: Part 26/106 of variable_declaration
 
-31. **Chunk 31**: Conditional Logic & Branching (GOTO/END) (Part 27)
+31. **Chunk 31**: Conditional Logic & Branching (IF/END) (Part 27)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 535-546
-   - Context: Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 27/106 of variable_declaration
 
-32. **Chunk 32**: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 28)
+32. **Chunk 32**: Loop Processing & Iteration (SELECT/Aggregate:COUNT) (Part 28)
    - Type: loop_logic
    - Complexity: 2
    - Lines: 547-557
-   - Context: Performs aggregate:count, select operations. Uses for, end, goto logic. Follows conditional logic
+   - Context: Performs select, aggregate:count operations. Uses end, goto, for logic. Follows conditional logic
    - Subdivision: Part 28/106 of variable_declaration
 
-33. **Chunk 33**: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 29)
+33. **Chunk 33**: Conditional Logic & Branching (SELECT/Aggregate:COUNT) (Part 29)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 558-573
-   - Context: Performs aggregate:count, select operations. Uses goto, end, begin, if logic. Follows loop logic
+   - Context: Performs select, aggregate:count operations. Uses if, end, begin, goto logic. Follows loop logic
    - Subdivision: Part 29/106 of variable_declaration
 
 34. **Chunk 34**: Conditional Logic & Branching (Logical:NOT EXISTS/SELECT) (Part 30)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 574-587
-   - Context: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+   - Context: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
    - Subdivision: Part 30/106 of variable_declaration
 
 35. **Chunk 35**: Variable & Parameter Declarations (INSERT) (Part 31)
    - Type: variable_declaration
    - Complexity: 7
    - Lines: 588-599
-   - Context: Performs insert operations. Uses begin, end, if logic. Follows conditional logic
+   - Context: Performs insert operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 31/106 of variable_declaration
 
-36. **Chunk 36**: Variable & Parameter Declarations (INSERT/SELECT) (Part 32)
+36. **Chunk 36**: Variable & Parameter Declarations (SELECT/INSERT) (Part 32)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 600-614
-   - Context: Performs insert, select operations. Uses end, begin, if logic. Follows variable declaration
+   - Context: Performs select, insert operations. Uses if, end, begin logic. Follows variable declaration
    - Subdivision: Part 32/106 of variable_declaration
 
-37. **Chunk 37**: Variable & Parameter Declarations (Conversion:ISNULL/Math:FLOOR) (Part 33)
+37. **Chunk 37**: Variable & Parameter Declarations (Conversion:ISNULL/SELECT) (Part 33)
    - Type: variable_declaration
    - Complexity: 11
    - Lines: 615-624
-   - Context: Performs conversion:isnull, math:floor, select operations. Uses begin, if logic. Follows variable declaration
+   - Context: Performs conversion:isnull, select, math:floor operations. Uses if, begin logic. Follows variable declaration
    - Subdivision: Part 33/106 of variable_declaration
 
-38. **Chunk 38**: Variable & Parameter Declarations (ELSE/WHEN) (Part 34)
+38. **Chunk 38**: Variable & Parameter Declarations (CASE/ELSE) (Part 34)
    - Type: variable_declaration
    - Complexity: 2
    - Lines: 625-630
-   - Context: Uses else, when, case, end logic. Follows variable declaration
+   - Context: Uses case, else, end, when logic. Follows variable declaration
    - Subdivision: Part 34/106 of variable_declaration
 
-39. **Chunk 39**: Variable & Parameter Declarations (INSERT/UPDATE) (Part 35)
+39. **Chunk 39**: Variable & Parameter Declarations (UPDATE/INSERT) (Part 35)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 631-646
-   - Context: Performs insert, update operations. Uses end, begin, if logic. Follows variable declaration
+   - Context: Performs update, insert operations. Uses if, end, begin logic. Follows variable declaration
    - Subdivision: Part 35/106 of variable_declaration
 
 40. **Chunk 40**: General Business Logic (Part 36)
@@ -308,14 +308,14 @@ Analyze chunks in this exact order for complete understanding:
    - Type: variable_declaration
    - Complexity: 9
    - Lines: 653-674
-   - Context: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses while, begin logic. Follows general logic
+   - Context: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses begin, while logic. Follows general logic
    - Subdivision: Part 37/106 of variable_declaration
 
-42. **Chunk 42**: Conditional Logic & Branching (Math:PI/INSERT) (Part 38)
+42. **Chunk 42**: Conditional Logic & Branching (UPDATE/Math:PI) (Part 38)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 675-693
-   - Context: Performs math:pi, insert, update operations. Uses end, if logic. Follows variable declaration
+   - Context: Performs update, math:pi, insert operations. Uses if, end logic. Follows variable declaration
    - Subdivision: Part 38/106 of variable_declaration
 
 43. **Chunk 43**: Data Query & Retrieval (Math:PI/UDF_CALL:DBO.FN_CALCULATEDYNAMICSHIPPING) (Part 39)
@@ -332,11 +332,11 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows data retrieval
    - Subdivision: Part 40/106 of variable_declaration
 
-45. **Chunk 45**: Conditional Logic & Branching (Conversion:CAST/Math:PI) (Part 41)
+45. **Chunk 45**: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 41)
    - Type: conditional_logic
    - Complexity: 10
    - Lines: 714-726
-   - Context: Performs conversion:cast, math:pi, string:format, system:getdate operations. Uses end, begin, if logic. Follows general logic
+   - Context: Performs math:pi, system:getdate, string:format, conversion:cast operations. Uses if, end, begin logic. Follows general logic
    - Subdivision: Part 41/106 of variable_declaration
 
 46. **Chunk 46**: General Business Logic (Math:PI) (Part 42)
@@ -346,25 +346,25 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Performs math:pi operations. Follows conditional logic
    - Subdivision: Part 42/106 of variable_declaration
 
-47. **Chunk 47**: Conditional Logic & Branching (GOTO/END) (Part 43)
+47. **Chunk 47**: Conditional Logic & Branching (IF/END) (Part 43)
    - Type: conditional_logic
    - Complexity: 4
    - Lines: 735-744
-   - Context: Uses goto, end, begin, if logic. Follows general logic
+   - Context: Uses if, end, begin, goto logic. Follows general logic
    - Subdivision: Part 43/106 of variable_declaration
 
-48. **Chunk 48**: Data Insert/Update/Delete (Math:PI/INSERT) (Part 44)
+48. **Chunk 48**: Data Insert/Update/Delete (Math:PI/SELECT) (Part 44)
    - Type: data_modification
    - Complexity: 11
    - Lines: 745-809
-   - Context: Performs math:pi, insert, system:scope_identity, system:getdate, select operations. Follows conditional logic
+   - Context: Performs math:pi, select, system:scope_identity, system:getdate, insert operations. Follows conditional logic
    - Subdivision: Part 44/106 of variable_declaration
 
-49. **Chunk 49**: Conditional Logic & Branching (INSERT/Conversion:ISNULL) (Part 45)
+49. **Chunk 49**: Conditional Logic & Branching (Conversion:ISNULL/SELECT) (Part 45)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 810-819
-   - Context: Performs insert, conversion:isnull, select operations. Uses if logic. Follows data modification
+   - Context: Performs conversion:isnull, select, insert operations. Uses if logic. Follows data modification
    - Subdivision: Part 45/106 of variable_declaration
 
 50. **Chunk 50**: General Business Logic (Part 46)
@@ -374,11 +374,11 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows conditional logic
    - Subdivision: Part 46/106 of variable_declaration
 
-51. **Chunk 51**: Conditional Logic & Branching (INSERT/UPDATE) (Part 47)
+51. **Chunk 51**: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 47)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 824-838
-   - Context: Performs insert, update, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
+   - Context: Performs update, system:getdate, select, insert operations. Uses if, end, begin logic. Follows general logic
    - Subdivision: Part 47/106 of variable_declaration
 
 52. **Chunk 52**: General Business Logic (Part 48)
@@ -388,25 +388,25 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows conditional logic
    - Subdivision: Part 48/106 of variable_declaration
 
-53. **Chunk 53**: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 49)
+53. **Chunk 53**: Conditional Logic & Branching (System:GETDATE/INSERT) (Part 49)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 843-867
-   - Context: Performs insert, system:getdate operations. Uses begin, if logic. Follows general logic
+   - Context: Performs system:getdate, insert operations. Uses if, begin logic. Follows general logic
    - Subdivision: Part 49/106 of variable_declaration
 
 54. **Chunk 54**: Conditional Logic & Branching (UPDATE) (Part 50)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 868-877
-   - Context: Performs update operations. Uses end, begin, if logic. Follows conditional logic
+   - Context: Performs update operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 50/106 of variable_declaration
 
-55. **Chunk 55**: Transaction Control (UPDATE/INSERT) (Part 51)
+55. **Chunk 55**: Transaction Control (System:GETDATE/UPDATE) (Part 51)
    - Type: transaction_control
    - Complexity: 10
    - Lines: 878-902
-   - Context: Performs update, insert, conversion:isnull, math:floor, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
+   - Context: Performs system:getdate, update, select, math:floor, conversion:isnull, insert operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 51/106 of variable_declaration
 
 56. **Chunk 56**: Variable & Parameter Declarations (SELECT) (Part 52)
@@ -420,7 +420,7 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 922-938
-   - Context: Performs math:log, update, insert, conversion:cast, system:getdate operations. Uses end, begin, if logic. Follows variable declaration
+   - Context: Performs math:log, update, conversion:cast, system:getdate, insert operations. Uses if, end, begin logic. Follows variable declaration
    - Subdivision: Part 53/106 of variable_declaration
 
 58. **Chunk 58**: General Business Logic (Part 54)
@@ -430,18 +430,18 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows conditional logic
    - Subdivision: Part 54/106 of variable_declaration
 
-59. **Chunk 59**: Conditional Logic & Branching (INSERT/Date:DATEADD) (Part 55)
+59. **Chunk 59**: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 55)
    - Type: conditional_logic
    - Complexity: 14
    - Lines: 943-968
-   - Context: Performs insert, date:dateadd, aggregate:count, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
+   - Context: Performs aggregate:count, select, date:dateadd, system:getdate, insert operations. Uses if, end, begin logic. Follows general logic
    - Subdivision: Part 55/106 of variable_declaration
 
-60. **Chunk 60**: Transaction Control (Math:LOG/INSERT) (Part 56)
+60. **Chunk 60**: Transaction Control (Math:LOG/Date:DATEDIFF) (Part 56)
    - Type: transaction_control
    - Complexity: 13
    - Lines: 969-1020
-   - Context: Performs math:log, insert, system:scope_identity, conversion:cast, system:getdate, date:datediff operations. Follows conditional logic
+   - Context: Performs math:log, date:datediff, conversion:cast, system:scope_identity, system:getdate, insert operations. Follows conditional logic
    - Subdivision: Part 56/106 of variable_declaration
 
 61. **Chunk 61**: General Business Logic (Part 57)
@@ -455,14 +455,14 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 1025-1040
-   - Context: Performs conversion:cast, insert operations. Uses begin, if logic. Follows general logic
+   - Context: Performs conversion:cast, insert operations. Uses if, begin logic. Follows general logic
    - Subdivision: Part 58/106 of variable_declaration
 
-63. **Chunk 63**: Loop Processing & Iteration (INSERT/Conversion:CAST) (Part 59)
+63. **Chunk 63**: Loop Processing & Iteration (System:GETDATE/Conversion:CAST) (Part 59)
    - Type: loop_logic
    - Complexity: 12
    - Lines: 1041-1070
-   - Context: Performs insert, conversion:cast, system:getdate operations. Uses for, end, begin, if logic. Follows conditional logic
+   - Context: Performs system:getdate, conversion:cast, insert operations. Uses if, end, begin, for logic. Follows conditional logic
    - Subdivision: Part 59/106 of variable_declaration
 
 64. **Chunk 64**: General Business Logic (Part 60)
@@ -472,46 +472,46 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows loop logic
    - Subdivision: Part 60/106 of variable_declaration
 
-65. **Chunk 65**: Conditional Logic & Branching (BEGIN/IF) (Part 61)
+65. **Chunk 65**: Conditional Logic & Branching (IF/BEGIN) (Part 61)
    - Type: conditional_logic
    - Complexity: 4
    - Lines: 1075-1078
-   - Context: Uses begin, if logic. Follows general logic
+   - Context: Uses if, begin logic. Follows general logic
    - Subdivision: Part 61/106 of variable_declaration
 
 66. **Chunk 66**: Conditional Logic & Branching (Math:PI/UPDATE) (Part 62)
    - Type: conditional_logic
    - Complexity: 13
    - Lines: 1079-1094
-   - Context: Performs math:pi, update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
+   - Context: Performs math:pi, update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 62/106 of variable_declaration
 
-67. **Chunk 67**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 63)
+67. **Chunk 67**: Variable & Parameter Declarations (Math:PI/Date:DATEPART) (Part 63)
    - Type: variable_declaration
    - Complexity: 8
    - Lines: 1095-1108
-   - Context: Performs math:pi, insert, date:datepart, conversion:cast, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
+   - Context: Performs math:pi, date:datepart, conversion:cast, system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 63/106 of variable_declaration
 
-68. **Chunk 68**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 64)
+68. **Chunk 68**: Conditional Logic & Branching (UPDATE/SELECT) (Part 64)
    - Type: conditional_logic
    - Complexity: 12
    - Lines: 1109-1118
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses else, begin, case, if, when, end logic. Follows variable declaration
+   - Context: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses case, end, if, else, begin, when logic. Follows variable declaration
    - Subdivision: Part 64/106 of variable_declaration
 
-69. **Chunk 69**: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 65)
+69. **Chunk 69**: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 65)
    - Type: conditional_logic
    - Complexity: 9
    - Lines: 1119-1141
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, begin, case, when, end logic. Follows conditional logic
+   - Context: Performs update, system:getdate, conversion:cast, insert operations. Uses case, end, else, begin, when logic. Follows conditional logic
    - Subdivision: Part 65/106 of variable_declaration
 
-70. **Chunk 70**: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 66)
+70. **Chunk 70**: Conditional Logic & Branching (System:GETDATE/System:@@ROWCOUNT) (Part 66)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1142-1153
-   - Context: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
+   - Context: Performs system:getdate, system:@@rowcount, insert operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 66/106 of variable_declaration
 
 71. **Chunk 71**: Variable & Parameter Declarations (Part 67)
@@ -525,56 +525,56 @@ Analyze chunks in this exact order for complete understanding:
    - Type: loop_logic
    - Complexity: 9
    - Lines: 1162-1170
-   - Context: Performs select operations. Uses while, for, begin logic. Follows variable declaration
+   - Context: Performs select operations. Uses begin, while, for logic. Follows variable declaration
    - Subdivision: Part 68/106 of variable_declaration
 
-73. **Chunk 73**: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 69)
+73. **Chunk 73**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 69)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1171-1179
-   - Context: Performs conversion:cast, logical:exists, update, select operations. Uses begin, if logic. Follows loop logic
+   - Context: Performs update, logical:exists, select, conversion:cast operations. Uses if, begin logic. Follows loop logic
    - Subdivision: Part 69/106 of variable_declaration
 
-74. **Chunk 74**: Conditional Logic & Branching (Conversion:CAST/System:GETDATE) (Part 70)
+74. **Chunk 74**: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 70)
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 1180-1187
-   - Context: Performs conversion:cast, system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows conditional logic
+   - Context: Performs system:getdate, date:datediff, conversion:cast operations. Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 70/106 of variable_declaration
 
-75. **Chunk 75**: Variable & Parameter Declarations (Conversion:CAST/INSERT) (Part 71)
+75. **Chunk 75**: Variable & Parameter Declarations (SELECT/System:GETDATE) (Part 71)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 1188-1203
-   - Context: Performs conversion:cast, insert, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
+   - Context: Performs select, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 71/106 of variable_declaration
 
-76. **Chunk 76**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 72)
+76. **Chunk 76**: Conditional Logic & Branching (Aggregate:SUM/UPDATE) (Part 72)
    - Type: conditional_logic
    - Complexity: 13
    - Lines: 1204-1215
-   - Context: Performs update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
+   - Context: Performs aggregate:sum, update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows variable declaration
    - Subdivision: Part 72/106 of variable_declaration
 
-77. **Chunk 77**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 73)
+77. **Chunk 77**: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 73)
    - Type: data_modification
    - Complexity: 6
    - Lines: 1216-1231
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
+   - Context: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 73/106 of variable_declaration
 
 78. **Chunk 78**: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 74)
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 1232-1240
-   - Context: Performs system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows data modification
+   - Context: Performs system:getdate, date:datediff operations. Uses case, else, end, when logic. Follows data modification
    - Subdivision: Part 74/106 of variable_declaration
 
-79. **Chunk 79**: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 75)
+79. **Chunk 79**: Conditional Logic & Branching (System:GETDATE/System:@@ROWCOUNT) (Part 75)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1241-1254
-   - Context: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
+   - Context: Performs system:getdate, system:@@rowcount, insert operations. Uses if, end, begin logic. Follows conditional logic
    - Subdivision: Part 75/106 of variable_declaration
 
 80. **Chunk 80**: Variable & Parameter Declarations (Part 76)
@@ -588,77 +588,77 @@ Analyze chunks in this exact order for complete understanding:
    - Type: conditional_logic
    - Complexity: 6
    - Lines: 1266-1274
-   - Context: Performs date:datediff operations. Uses else, when, case, end logic. Follows variable declaration
+   - Context: Performs date:datediff operations. Uses case, else, end, when logic. Follows variable declaration
    - Subdivision: Part 77/106 of variable_declaration
 
-82. **Chunk 82**: Conditional Logic & Branching (ELSE/WHEN) (Part 78)
+82. **Chunk 82**: Conditional Logic & Branching (CASE/ELSE) (Part 78)
    - Type: conditional_logic
    - Complexity: 2
    - Lines: 1275-1283
-   - Context: Uses else, when, case, end logic. Follows conditional logic
+   - Context: Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 78/106 of variable_declaration
 
-83. **Chunk 83**: Conditional Logic & Branching (ELSE/WHEN) (Part 79)
+83. **Chunk 83**: Conditional Logic & Branching (CASE/ELSE) (Part 79)
    - Type: conditional_logic
    - Complexity: 2
    - Lines: 1284-1294
-   - Context: Uses else, when, case, end logic. Follows conditional logic
+   - Context: Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 79/106 of variable_declaration
 
-84. **Chunk 84**: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 80)
+84. **Chunk 84**: Conditional Logic & Branching (UPDATE/SELECT) (Part 80)
    - Type: conditional_logic
    - Complexity: 7
    - Lines: 1295-1302
-   - Context: Performs logical:exists, update, select operations. Uses begin, if logic. Follows conditional logic
+   - Context: Performs update, select, logical:exists operations. Uses if, begin logic. Follows conditional logic
    - Subdivision: Part 80/106 of variable_declaration
 
 85. **Chunk 85**: Conditional Logic & Branching (Math:PI) (Part 81)
    - Type: conditional_logic
    - Complexity: 3
    - Lines: 1303-1312
-   - Context: Performs math:pi operations. Uses when, case logic. Follows conditional logic
+   - Context: Performs math:pi operations. Uses case, when logic. Follows conditional logic
    - Subdivision: Part 81/106 of variable_declaration
 
-86. **Chunk 86**: Data Insert/Update/Delete (Date:DATEADD/INSERT) (Part 82)
+86. **Chunk 86**: Data Insert/Update/Delete (System:GETDATE/Date:DATEADD) (Part 82)
    - Type: data_modification
    - Complexity: 5
    - Lines: 1313-1327
-   - Context: Performs date:dateadd, insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
+   - Context: Performs system:getdate, date:dateadd, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 82/106 of variable_declaration
 
 87. **Chunk 87**: Conditional Logic & Branching (Math:PI) (Part 83)
    - Type: conditional_logic
    - Complexity: 3
    - Lines: 1328-1337
-   - Context: Performs math:pi operations. Uses when, case logic. Follows data modification
+   - Context: Performs math:pi operations. Uses case, when logic. Follows data modification
    - Subdivision: Part 83/106 of variable_declaration
 
-88. **Chunk 88**: Variable & Parameter Declarations (Date:DATEADD/Math:PI) (Part 84)
+88. **Chunk 88**: Variable & Parameter Declarations (Math:PI/System:GETDATE) (Part 84)
    - Type: variable_declaration
    - Complexity: 3
    - Lines: 1338-1348
-   - Context: Performs date:dateadd, math:pi, system:getdate operations. Uses else, end logic. Follows conditional logic
+   - Context: Performs math:pi, system:getdate, date:dateadd operations. Uses else, end logic. Follows conditional logic
    - Subdivision: Part 84/106 of variable_declaration
 
 89. **Chunk 89**: Conditional Logic & Branching (Math:PI) (Part 85)
    - Type: conditional_logic
    - Complexity: 3
    - Lines: 1349-1355
-   - Context: Performs math:pi operations. Uses else, when, case, end logic. Follows variable declaration
+   - Context: Performs math:pi operations. Uses case, else, end, when logic. Follows variable declaration
    - Subdivision: Part 85/106 of variable_declaration
 
 90. **Chunk 90**: Conditional Logic & Branching (Date:MONTH) (Part 86)
    - Type: conditional_logic
    - Complexity: 5
    - Lines: 1356-1362
-   - Context: Performs date:month operations. Uses else, when, case, end logic. Follows conditional logic
+   - Context: Performs date:month operations. Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 86/106 of variable_declaration
 
-91. **Chunk 91**: Conditional Logic & Branching (Math:PI/INSERT) (Part 87)
+91. **Chunk 91**: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 87)
    - Type: conditional_logic
    - Complexity: 11
    - Lines: 1363-1382
-   - Context: Performs math:pi, insert, system:getdate, select operations. Uses else, when, case, end logic. Follows conditional logic
+   - Context: Performs math:pi, system:getdate, select, insert operations. Uses case, else, end, when logic. Follows conditional logic
    - Subdivision: Part 87/106 of variable_declaration
 
 92. **Chunk 92**: Variable & Parameter Declarations (Part 88)
@@ -672,28 +672,28 @@ Analyze chunks in this exact order for complete understanding:
    - Type: loop_logic
    - Complexity: 10
    - Lines: 1391-1401
-   - Context: Performs aggregate:sum, select operations. Uses while, for, begin logic. Follows variable declaration
+   - Context: Performs aggregate:sum, select operations. Uses begin, while, for logic. Follows variable declaration
    - Subdivision: Part 89/106 of variable_declaration
 
-94. **Chunk 94**: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 90)
+94. **Chunk 94**: Conditional Logic & Branching (UPDATE/SELECT) (Part 90)
    - Type: conditional_logic
    - Complexity: 10
    - Lines: 1402-1412
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows loop logic
+   - Context: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows loop logic
    - Subdivision: Part 90/106 of variable_declaration
 
-95. **Chunk 95**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 91)
+95. **Chunk 95**: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 91)
    - Type: data_modification
    - Complexity: 6
    - Lines: 1413-1431
-   - Context: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
+   - Context: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 91/106 of variable_declaration
 
-96. **Chunk 96**: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 92)
+96. **Chunk 96**: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 92)
    - Type: conditional_logic
    - Complexity: 8
    - Lines: 1432-1464
-   - Context: Performs insert, system:getdate, date:datediff, select operations. Uses else, when, case, end logic. Follows data modification
+   - Context: Performs system:getdate, date:datediff, select, insert operations. Uses case, else, end, when logic. Follows data modification
    - Subdivision: Part 92/106 of variable_declaration
 
 97. **Chunk 97**: General Business Logic (Part 93)
@@ -703,39 +703,39 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows conditional logic
    - Subdivision: Part 93/106 of variable_declaration
 
-98. **Chunk 98**: Variable & Parameter Declarations (Logical:EXISTS/SELECT) (Part 94)
+98. **Chunk 98**: Variable & Parameter Declarations (SELECT/Logical:EXISTS) (Part 94)
    - Type: variable_declaration
    - Complexity: 10
    - Lines: 1470-1480
-   - Context: Performs logical:exists, select operations. Uses for, begin, if logic. Follows general logic
+   - Context: Performs select, logical:exists operations. Uses if, begin, for logic. Follows general logic
    - Subdivision: Part 94/106 of variable_declaration
 
-99. **Chunk 99**: Loop Processing & Iteration (UPDATE/Logical:EXISTS) (Part 95)
+99. **Chunk 99**: Loop Processing & Iteration (UPDATE/SELECT) (Part 95)
    - Type: loop_logic
    - Complexity: 15
    - Lines: 1481-1497
-   - Context: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses while, end, begin, if logic. Follows variable declaration
+   - Context: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin, while logic. Follows variable declaration
    - Subdivision: Part 95/106 of variable_declaration
 
-100. **Chunk 100**: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 96)
+100. **Chunk 100**: Data Insert/Update/Delete (System:GETDATE/Conversion:CAST) (Part 96)
    - Type: data_modification
    - Complexity: 5
    - Lines: 1498-1513
-   - Context: Performs conversion:cast, insert, system:getdate operations. Uses else, end, begin logic. Follows loop logic
+   - Context: Performs system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows loop logic
    - Subdivision: Part 96/106 of variable_declaration
 
-101. **Chunk 101**: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 97)
+101. **Chunk 101**: Conditional Logic & Branching (UPDATE/SELECT) (Part 97)
    - Type: conditional_logic
    - Complexity: 9
    - Lines: 1514-1523
-   - Context: Performs logical:exists, update, select operations. Uses when, case, begin, if logic. Follows data modification
+   - Context: Performs update, select, logical:exists operations. Uses case, if, begin, when logic. Follows data modification
    - Subdivision: Part 97/106 of variable_declaration
 
-102. **Chunk 102**: Cursor Operations & Row Processing (INSERT/System:GETDATE) (Part 98)
+102. **Chunk 102**: Cursor Operations & Row Processing (System:GETDATE/INSERT) (Part 98)
    - Type: cursor_operation
    - Complexity: 5
    - Lines: 1524-1547
-   - Context: Performs insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
+   - Context: Performs system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 98/106 of variable_declaration
 
 103. **Chunk 103**: Variable & Parameter Declarations (Part 99)
@@ -745,53 +745,53 @@ Analyze chunks in this exact order for complete understanding:
    - Context: Follows cursor operation
    - Subdivision: Part 99/106 of variable_declaration
 
-104. **Chunk 104**: Conditional Logic & Branching (Math:PI/UPDATE) (Part 100)
+104. **Chunk 104**: Conditional Logic & Branching (Math:PI/Aggregate:SUM) (Part 100)
    - Type: conditional_logic
    - Complexity: 21
    - Lines: 1558-1582
-   - Context: Performs math:pi, update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
+   - Context: Performs math:pi, aggregate:sum, update, conversion:cast, select, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows variable declaration
    - Subdivision: Part 100/106 of variable_declaration
 
-105. **Chunk 105**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 101)
+105. **Chunk 105**: Variable & Parameter Declarations (Math:PI/Aggregate:SUM) (Part 101)
    - Type: variable_declaration
    - Complexity: 9
    - Lines: 1583-1603
-   - Context: Performs math:pi, insert, aggregate:sum, conversion:cast, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
+   - Context: Performs math:pi, aggregate:sum, select, conversion:cast, system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
    - Subdivision: Part 101/106 of variable_declaration
 
 106. **Chunk 106**: Variable & Parameter Declarations (Math:PI/INSERT) (Part 102)
    - Type: variable_declaration
    - Complexity: 6
    - Lines: 1604-1614
-   - Context: Performs math:pi, insert operations. Uses else, when, case, end logic. Follows variable declaration
+   - Context: Performs math:pi, insert operations. Uses case, else, end, when logic. Follows variable declaration
    - Subdivision: Part 102/106 of variable_declaration
 
 107. **Chunk 107**: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 103)
    - Type: conditional_logic
    - Complexity: 4
    - Lines: 1615-1622
-   - Context: Performs math:pi, system:getdate operations. Uses else, when, case, end logic. Follows variable declaration
+   - Context: Performs math:pi, system:getdate operations. Uses case, else, end, when logic. Follows variable declaration
    - Subdivision: Part 103/106 of variable_declaration
 
-108. **Chunk 108**: Transaction Control (Conversion:CAST/String:LEN) (Part 104)
+108. **Chunk 108**: Transaction Control (String:LEN/Conversion:CAST) (Part 104)
    - Type: transaction_control
    - Complexity: 6
    - Lines: 1623-1638
-   - Context: Performs conversion:cast, string:len operations. Uses end, return, begin, if logic. Follows conditional logic
+   - Context: Performs string:len, conversion:cast operations. Uses if, end, begin, return logic. Follows conditional logic
    - Subdivision: Part 104/106 of variable_declaration
 
-109. **Chunk 109**: Error Handling & Exception Management (TRY/BEGIN) (Part 105)
+109. **Chunk 109**: Error Handling & Exception Management (END/BEGIN) (Part 105)
    - Type: error_handling
    - Complexity: 4
    - Lines: 1639-1642
-   - Context: Uses try, begin, catch, end logic. Follows transaction control
+   - Context: Uses end, begin, catch, try logic. Follows transaction control
    - Subdivision: Part 105/106 of variable_declaration
 
-110. **Chunk 110**: Transaction Control (System:@@TRANCOUNT/Math:LOG) (Part 106)
+110. **Chunk 110**: Transaction Control (Math:LOG/System:@@TRANCOUNT) (Part 106)
    - Type: transaction_control
    - Complexity: 9
    - Lines: 1643-1683
-   - Context: Performs system:@@trancount, math:log, insert, conversion:cast, system:getdate operations. Uses goto, catch, end, if logic. Follows error handling
+   - Context: Performs math:log, system:@@trancount, conversion:cast, system:getdate, insert operations. Uses if, end, catch, goto logic. Follows error handling
    - Subdivision: Part 106/106 of variable_declaration
 
 111. **Chunk 111**: General Business Logic
@@ -804,13 +804,13 @@ Analyze chunks in this exact order for complete understanding:
    - Type: transaction_control
    - Complexity: 38
    - Lines: 1690-1731
-   - Context: Performs math:pi, system:@@trancount operations. Uses else, begin, if, end, return logic. Follows general logic
+   - Context: Performs math:pi, system:@@trancount operations. Uses end, if, else, return, begin logic. Follows general logic
 
-113. **Chunk 113**: General Business Logic (RETURN/END)
+113. **Chunk 113**: General Business Logic (END/RETURN)
    - Type: general_logic
    - Complexity: 0
    - Lines: 1732-1735
-   - Context: Uses return, end logic. Follows transaction control
+   - Context: Uses end, return logic. Follows transaction control
 
 ## Detailed Sequential Analysis
 
@@ -897,7 +897,7 @@ BEGIN
 **Lines**: 36-174
 **Context**: Performs math:pi, system:getdate operations. Follows general logic
 **SQL Operations**: Math:PI, System:GETDATE
-**Variables Declared**: @UNITPRICE, @SHIPPINGCOST, @CUSTOMERLIFETIMEVALUE, @INVENTORYSHORTFALL, @STATETAXRATE, @NOTIFICATIONID, @ISPROMOSTACKABLE, @SHIPPINGDISTANCE, @WAREHOUSEID, @SUBTOTALAMOUNT
+**Variables Declared**: @ISVALID, @CUSTOMERPROMOUSAGE, @CUSTOMERRISKSCORE, @RECOMMENDATIONSETID, @INVENTORYSHORTFALL, @DISCOUNTPERCENTAGE, @CUSTOMERTIERID, @PROMOID, @ORDERSTATUSID, @CUSTOMERTYPEID
    (and 67 more...)
 **Subdivision Info**: Part 1 of 2
 **Parent Block**: variable_declaration (lines 36-178)
@@ -1081,12 +1081,12 @@ BEGIN
 
 ---
 
-### Chunk 5: Error Handling & Exception Management (TRY/BEGIN) (Part 1)
+### Chunk 5: Error Handling & Exception Management (BEGIN/TRY) (Part 1)
 **Type**: error_handling
 **Complexity Score**: 6
 **Lines**: 179-185
-**Context**: Uses try, begin logic. Follows general logic
-**Control Structures**: TRY, BEGIN
+**Context**: Uses begin, try logic. Follows general logic
+**Control Structures**: BEGIN, TRY
 **Subdivision Info**: Part 1 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1115,9 +1115,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 9
 **Lines**: 186-201
-**Context**: Performs system:getdate operations. Uses goto, end, begin, if logic. Follows error handling
+**Context**: Performs system:getdate operations. Uses if, end, begin, goto logic. Follows error handling
 **SQL Operations**: System:GETDATE
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Subdivision Info**: Part 2 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1155,9 +1155,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 202-217
-**Context**: Performs math:pi operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs math:pi operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: Math:PI
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Subdivision Info**: Part 3 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1195,9 +1195,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 218-227
-**Context**: Performs string:len operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs string:len operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: String:LEN
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Subdivision Info**: Part 4 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1229,9 +1229,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 228-251
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: CUSTOMERS
 **Subdivision Info**: Part 5 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1278,9 +1278,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 252-267
-**Context**: Performs conversion:isnull, aggregate:sum, aggregate:count, select operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Conversion:ISNULL, Aggregate:SUM, Aggregate:COUNT, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Performs conversion:isnull, aggregate:sum, select, aggregate:count operations. Uses case, else, end, when logic. Follows conditional logic
+**SQL Operations**: Conversion:ISNULL, Aggregate:SUM, SELECT, Aggregate:COUNT
+**Control Structures**: CASE, ELSE, END, WHEN
 **Tables/Views**: ORDERS
 **Subdivision Info**: Part 6 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1315,12 +1315,12 @@ BEGIN
 
 ---
 
-### Chunk 11: Conditional Logic & Branching (END/BEGIN) (Part 7)
+### Chunk 11: Conditional Logic & Branching (IF/END) (Part 7)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 268-280
-**Context**: Uses end, begin, if logic. Follows conditional logic
-**Control Structures**: END, BEGIN, IF
+**Context**: Uses if, end, begin logic. Follows conditional logic
+**Control Structures**: IF, END, BEGIN
 **Subdivision Info**: Part 7 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1382,9 +1382,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 14
 **Lines**: 286-307
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows general logic
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: ADDRESSES
 **Subdivision Info**: Part 9 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1429,9 +1429,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 9
 **Lines**: 308-320
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: SHIPPINGMETHODS
 **Subdivision Info**: Part 10 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1467,10 +1467,10 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 321-334
-**Context**: Performs math:pi, logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs math:pi, logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: Math:PI, Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
-**Tables/Views**: SHIPPINGMETHODS, SHIPPINGMETHODZONES
+**Control Structures**: IF, END, BEGIN, GOTO
+**Tables/Views**: SHIPPINGMETHODZONES, SHIPPINGMETHODS
 **Subdivision Info**: Part 11 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1533,9 +1533,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 340-360
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows general logic
+**Context**: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows general logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: PAYMENTMETHODS
 **Subdivision Info**: Part 13 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1575,13 +1575,13 @@ BEGIN
 
 ---
 
-### Chunk 18: Loop Processing & Iteration (Math:PI/Logical:NOT EXISTS) (Part 14)
+### Chunk 18: Loop Processing & Iteration (Math:PI/System:GETDATE) (Part 14)
 **Type**: loop_logic
 **Complexity Score**: 9
 **Lines**: 361-374
-**Context**: Performs math:pi, logical:not exists, system:getdate, select operations. Uses begin, if, end, for, goto logic. Follows conditional logic
-**SQL Operations**: Math:PI, Logical:NOT EXISTS, System:GETDATE, SELECT
-**Control Structures**: BEGIN, IF, END, FOR, GOTO
+**Context**: Performs math:pi, system:getdate, logical:not exists, select operations. Uses end, for, if, begin, goto logic. Follows conditional logic
+**SQL Operations**: Math:PI, System:GETDATE, Logical:NOT EXISTS, SELECT
+**Control Structures**: END, FOR, IF, BEGIN, GOTO
 **Tables/Views**: CUSTOMERPAYMENTMETHODS
 **Subdivision Info**: Part 14 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1614,12 +1614,12 @@ BEGIN
 
 ---
 
-### Chunk 19: Data Insert/Update/Delete (INSERT/Aggregate:COUNT) (Part 15)
+### Chunk 19: Data Insert/Update/Delete (SELECT/Aggregate:COUNT) (Part 15)
 **Type**: data_modification
 **Complexity Score**: 4
 **Lines**: 375-387
-**Context**: Performs insert, aggregate:count, select operations. Follows loop logic
-**SQL Operations**: INSERT, Aggregate:COUNT, SELECT
+**Context**: Performs select, aggregate:count, insert operations. Follows loop logic
+**SQL Operations**: SELECT, Aggregate:COUNT, INSERT
 **Tables/Views**: OPENJSON
 **Subdivision Info**: Part 15 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1651,12 +1651,12 @@ BEGIN
 
 ---
 
-### Chunk 20: Loop Processing & Iteration (BEGIN/WHILE) (Part 16)
+### Chunk 20: Loop Processing & Iteration (END/WHILE) (Part 16)
 **Type**: loop_logic
 **Complexity Score**: 8
 **Lines**: 388-398
-**Context**: Uses begin, while, if, end, goto logic. Follows data modification
-**Control Structures**: BEGIN, WHILE, IF, END, GOTO
+**Context**: Uses end, while, if, begin, goto logic. Follows data modification
+**Control Structures**: END, WHILE, IF, BEGIN, GOTO
 **Subdivision Info**: Part 16 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1689,9 +1689,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 399-413
-**Context**: Performs logical:not exists, select operations. Uses begin, if logic. Follows loop logic
+**Context**: Performs logical:not exists, select operations. Uses if, begin logic. Follows loop logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: BEGIN, IF
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PRODUCTS
 **Subdivision Info**: Part 17 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1725,12 +1725,12 @@ BEGIN
 
 ---
 
-### Chunk 22: Data Query & Retrieval (Conversion:CAST/SELECT) (Part 18)
+### Chunk 22: Data Query & Retrieval (SELECT/Conversion:CAST) (Part 18)
 **Type**: data_retrieval
 **Complexity Score**: 2
 **Lines**: 414-428
-**Context**: Performs conversion:cast, select operations. Uses end, goto logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, SELECT
+**Context**: Performs select, conversion:cast operations. Uses end, goto logic. Follows conditional logic
+**SQL Operations**: SELECT, Conversion:CAST
 **Control Structures**: END, GOTO
 **Tables/Views**: PRODUCTS
 **Subdivision Info**: Part 18 of 106
@@ -1769,9 +1769,9 @@ BEGIN
 **Type**: loop_logic
 **Complexity Score**: 5
 **Lines**: 429-437
-**Context**: Performs conversion:cast operations. Uses begin, if, end, for, goto logic. Follows data retrieval
+**Context**: Performs conversion:cast operations. Uses end, for, if, begin, goto logic. Follows data retrieval
 **SQL Operations**: Conversion:CAST
-**Control Structures**: BEGIN, IF, END, FOR, GOTO
+**Control Structures**: END, FOR, IF, BEGIN, GOTO
 **Subdivision Info**: Part 19 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1798,13 +1798,13 @@ BEGIN
 
 ---
 
-### Chunk 24: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 20)
+### Chunk 24: Conditional Logic & Branching (Conversion:CAST/SELECT) (Part 20)
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 438-446
-**Context**: Performs conversion:cast, logical:exists, select operations. Uses end, begin, if logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, Logical:EXISTS, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs conversion:cast, select, logical:exists operations. Uses if, end, begin logic. Follows loop logic
+**SQL Operations**: Conversion:CAST, SELECT, Logical:EXISTS
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: PRODUCTS
 **Subdivision Info**: Part 20 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1832,13 +1832,13 @@ BEGIN
 
 ---
 
-### Chunk 25: Loop Processing & Iteration (Conversion:CAST/UPDATE) (Part 21)
+### Chunk 25: Loop Processing & Iteration (UPDATE/Conversion:CAST) (Part 21)
 **Type**: loop_logic
 **Complexity Score**: 5
 **Lines**: 447-471
-**Context**: Performs conversion:cast, update operations. Uses else, begin, end, for, goto logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, UPDATE
-**Control Structures**: ELSE, BEGIN, END, FOR, GOTO
+**Context**: Performs update, conversion:cast operations. Uses end, for, else, begin, goto logic. Follows conditional logic
+**SQL Operations**: UPDATE, Conversion:CAST
+**Control Structures**: END, FOR, ELSE, BEGIN, GOTO
 **Subdivision Info**: Part 21 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -1907,13 +1907,13 @@ BEGIN
 
 ---
 
-### Chunk 27: Variable & Parameter Declarations (Math:PI/INSERT) (Part 23)
+### Chunk 27: Variable & Parameter Declarations (Math:PI/Aggregate:SUM) (Part 23)
 **Type**: variable_declaration
 **Complexity Score**: 18
 **Lines**: 476-501
-**Context**: Performs math:pi, insert, sp_call:dbo.fn_allocateinventoryacrosswarehouses, aggregate:sum, exec, select operations. Uses while, begin, if logic. Follows general logic
-**SQL Operations**: Math:PI, INSERT, SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES, Aggregate:SUM, EXEC, SELECT
-**Control Structures**: WHILE, BEGIN, IF
+**Context**: Performs math:pi, aggregate:sum, sp_call:dbo.fn_allocateinventoryacrosswarehouses, select, exec, insert operations. Uses if, begin, while logic. Follows general logic
+**SQL Operations**: Math:PI, Aggregate:SUM, SP_CALL:DBO.FN_ALLOCATEINVENTORYACROSSWAREHOUSES, SELECT, EXEC, INSERT
+**Control Structures**: IF, BEGIN, WHILE
 **Variables Declared**: @ALLOCATEDTOTAL
 **Subdivision Info**: Part 23 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -1962,9 +1962,9 @@ BEGIN
 **Type**: loop_logic
 **Complexity Score**: 5
 **Lines**: 502-511
-**Context**: Performs conversion:cast operations. Uses for, end, begin, if logic. Follows variable declaration
+**Context**: Performs conversion:cast operations. Uses if, end, begin, for logic. Follows variable declaration
 **SQL Operations**: Conversion:CAST
-**Control Structures**: FOR, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, FOR
 **Subdivision Info**: Part 24 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2027,9 +2027,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 520-534
-**Context**: Performs select operations. Uses begin, if logic. Follows data retrieval
+**Context**: Performs select operations. Uses if, begin logic. Follows data retrieval
 **SQL Operations**: SELECT
-**Control Structures**: BEGIN, IF
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PROMOTIONS
 **Subdivision Info**: Part 26 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2063,12 +2063,12 @@ BEGIN
 
 ---
 
-### Chunk 31: Conditional Logic & Branching (GOTO/END) (Part 27)
+### Chunk 31: Conditional Logic & Branching (IF/END) (Part 27)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 535-546
-**Context**: Uses goto, end, begin, if logic. Follows conditional logic
-**Control Structures**: GOTO, END, BEGIN, IF
+**Context**: Uses if, end, begin, goto logic. Follows conditional logic
+**Control Structures**: IF, END, BEGIN, GOTO
 **Subdivision Info**: Part 27 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2098,13 +2098,13 @@ BEGIN
 
 ---
 
-### Chunk 32: Loop Processing & Iteration (Aggregate:COUNT/SELECT) (Part 28)
+### Chunk 32: Loop Processing & Iteration (SELECT/Aggregate:COUNT) (Part 28)
 **Type**: loop_logic
 **Complexity Score**: 2
 **Lines**: 547-557
-**Context**: Performs aggregate:count, select operations. Uses for, end, goto logic. Follows conditional logic
-**SQL Operations**: Aggregate:COUNT, SELECT
-**Control Structures**: FOR, END, GOTO
+**Context**: Performs select, aggregate:count operations. Uses end, goto, for logic. Follows conditional logic
+**SQL Operations**: SELECT, Aggregate:COUNT
+**Control Structures**: END, GOTO, FOR
 **Tables/Views**: ORDERPROMOTIONS, ORDERS
 **Subdivision Info**: Part 28 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2134,13 +2134,13 @@ BEGIN
 
 ---
 
-### Chunk 33: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 29)
+### Chunk 33: Conditional Logic & Branching (SELECT/Aggregate:COUNT) (Part 29)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 558-573
-**Context**: Performs aggregate:count, select operations. Uses goto, end, begin, if logic. Follows loop logic
-**SQL Operations**: Aggregate:COUNT, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Context**: Performs select, aggregate:count operations. Uses if, end, begin, goto logic. Follows loop logic
+**SQL Operations**: SELECT, Aggregate:COUNT
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: ORDERPROMOTIONS, ORDERS
 **Subdivision Info**: Part 29 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2179,9 +2179,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 574-587
-**Context**: Performs logical:not exists, select operations. Uses goto, end, begin, if logic. Follows conditional logic
+**Context**: Performs logical:not exists, select operations. Uses if, end, begin, goto logic. Follows conditional logic
 **SQL Operations**: Logical:NOT EXISTS, SELECT
-**Control Structures**: GOTO, END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN, GOTO
 **Tables/Views**: PROMOTIONS
 **Subdivision Info**: Part 30 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2218,9 +2218,9 @@ BEGIN
 **Type**: variable_declaration
 **Complexity Score**: 7
 **Lines**: 588-599
-**Context**: Performs insert operations. Uses begin, end, if logic. Follows conditional logic
+**Context**: Performs insert operations. Uses if, end, begin logic. Follows conditional logic
 **SQL Operations**: INSERT
-**Control Structures**: BEGIN, END, IF
+**Control Structures**: IF, END, BEGIN
 **Variables Declared**: @TIERDISCOUNTPERCENTAGE
 **Subdivision Info**: Part 31 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2251,13 +2251,13 @@ BEGIN
 
 ---
 
-### Chunk 36: Variable & Parameter Declarations (INSERT/SELECT) (Part 32)
+### Chunk 36: Variable & Parameter Declarations (SELECT/INSERT) (Part 32)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 600-614
-**Context**: Performs insert, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: INSERT, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs select, insert operations. Uses if, end, begin logic. Follows variable declaration
+**SQL Operations**: SELECT, INSERT
+**Control Structures**: IF, END, BEGIN
 **Variables Declared**: @TIERDISCOUNT
 **Tables/Views**: CUSTOMERTIERS
 **Subdivision Info**: Part 32 of 106
@@ -2292,13 +2292,13 @@ BEGIN
 
 ---
 
-### Chunk 37: Variable & Parameter Declarations (Conversion:ISNULL/Math:FLOOR) (Part 33)
+### Chunk 37: Variable & Parameter Declarations (Conversion:ISNULL/SELECT) (Part 33)
 **Type**: variable_declaration
 **Complexity Score**: 11
 **Lines**: 615-624
-**Context**: Performs conversion:isnull, math:floor, select operations. Uses begin, if logic. Follows variable declaration
-**SQL Operations**: Conversion:ISNULL, Math:FLOOR, SELECT
-**Control Structures**: BEGIN, IF
+**Context**: Performs conversion:isnull, select, math:floor operations. Uses if, begin logic. Follows variable declaration
+**SQL Operations**: Conversion:ISNULL, SELECT, Math:FLOOR
+**Control Structures**: IF, BEGIN
 **Variables Declared**: @MAXPOINTSREDEMPTION
 **Tables/Views**: CUSTOMERS
 **Subdivision Info**: Part 33 of 106
@@ -2328,12 +2328,12 @@ BEGIN
 
 ---
 
-### Chunk 38: Variable & Parameter Declarations (ELSE/WHEN) (Part 34)
+### Chunk 38: Variable & Parameter Declarations (CASE/ELSE) (Part 34)
 **Type**: variable_declaration
 **Complexity Score**: 2
 **Lines**: 625-630
-**Context**: Uses else, when, case, end logic. Follows variable declaration
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Uses case, else, end, when logic. Follows variable declaration
+**Control Structures**: CASE, ELSE, END, WHEN
 **Variables Declared**: @POINTSTOREDEEM
 **Subdivision Info**: Part 34 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2358,13 +2358,13 @@ BEGIN
 
 ---
 
-### Chunk 39: Variable & Parameter Declarations (INSERT/UPDATE) (Part 35)
+### Chunk 39: Variable & Parameter Declarations (UPDATE/INSERT) (Part 35)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 631-646
-**Context**: Performs insert, update operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: INSERT, UPDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, insert operations. Uses if, end, begin logic. Follows variable declaration
+**SQL Operations**: UPDATE, INSERT
+**Control Structures**: IF, END, BEGIN
 **Variables Declared**: @POINTSDISCOUNT
 **Tables/Views**: CUSTOMERS
 **Subdivision Info**: Part 35 of 106
@@ -2432,10 +2432,10 @@ BEGIN
 **Type**: variable_declaration
 **Complexity Score**: 9
 **Lines**: 653-674
-**Context**: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses while, begin logic. Follows general logic
+**Context**: Performs math:pi, udf_call:dbo.fn_calculatecomplextax, select operations. Uses begin, while logic. Follows general logic
 **SQL Operations**: Math:PI, UDF_CALL:DBO.FN_CALCULATECOMPLEXTAX, SELECT
-**Control Structures**: WHILE, BEGIN
-**Variables Declared**: @PRODUCTTAXRATE, @LINETAXAMOUNT
+**Control Structures**: BEGIN, WHILE
+**Variables Declared**: @LINETAXAMOUNT, @PRODUCTTAXRATE
 **Subdivision Info**: Part 37 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2475,13 +2475,13 @@ BEGIN
 
 ---
 
-### Chunk 42: Conditional Logic & Branching (Math:PI/INSERT) (Part 38)
+### Chunk 42: Conditional Logic & Branching (UPDATE/Math:PI) (Part 38)
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 675-693
-**Context**: Performs math:pi, insert, update operations. Uses end, if logic. Follows variable declaration
-**SQL Operations**: Math:PI, INSERT, UPDATE
-**Control Structures**: END, IF
+**Context**: Performs update, math:pi, insert operations. Uses if, end logic. Follows variable declaration
+**SQL Operations**: UPDATE, Math:PI, INSERT
+**Control Structures**: IF, END
 **Subdivision Info**: Part 38 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2583,13 +2583,13 @@ BEGIN
 
 ---
 
-### Chunk 45: Conditional Logic & Branching (Conversion:CAST/Math:PI) (Part 41)
+### Chunk 45: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 41)
 **Type**: conditional_logic
 **Complexity Score**: 10
 **Lines**: 714-726
-**Context**: Performs conversion:cast, math:pi, string:format, system:getdate operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: Conversion:CAST, Math:PI, String:FORMAT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs math:pi, system:getdate, string:format, conversion:cast operations. Uses if, end, begin logic. Follows general logic
+**SQL Operations**: Math:PI, System:GETDATE, String:FORMAT, Conversion:CAST
+**Control Structures**: IF, END, BEGIN
 **Subdivision Info**: Part 41 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2651,12 +2651,12 @@ BEGIN
 
 ---
 
-### Chunk 47: Conditional Logic & Branching (GOTO/END) (Part 43)
+### Chunk 47: Conditional Logic & Branching (IF/END) (Part 43)
 **Type**: conditional_logic
 **Complexity Score**: 4
 **Lines**: 735-744
-**Context**: Uses goto, end, begin, if logic. Follows general logic
-**Control Structures**: GOTO, END, BEGIN, IF
+**Context**: Uses if, end, begin, goto logic. Follows general logic
+**Control Structures**: IF, END, BEGIN, GOTO
 **Subdivision Info**: Part 43 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2684,13 +2684,13 @@ BEGIN
 
 ---
 
-### Chunk 48: Data Insert/Update/Delete (Math:PI/INSERT) (Part 44)
+### Chunk 48: Data Insert/Update/Delete (Math:PI/SELECT) (Part 44)
 **Type**: data_modification
 **Complexity Score**: 11
 **Lines**: 745-809
-**Context**: Performs math:pi, insert, system:scope_identity, system:getdate, select operations. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, System:SCOPE_IDENTITY, System:GETDATE, SELECT
-**Tables/Views**: ORDERS, ORDERITEMS
+**Context**: Performs math:pi, select, system:scope_identity, system:getdate, insert operations. Follows conditional logic
+**SQL Operations**: Math:PI, SELECT, System:SCOPE_IDENTITY, System:GETDATE, INSERT
+**Tables/Views**: ORDERITEMS, ORDERS
 **Subdivision Info**: Part 44 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2773,12 +2773,12 @@ BEGIN
 
 ---
 
-### Chunk 49: Conditional Logic & Branching (INSERT/Conversion:ISNULL) (Part 45)
+### Chunk 49: Conditional Logic & Branching (Conversion:ISNULL/SELECT) (Part 45)
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 810-819
-**Context**: Performs insert, conversion:isnull, select operations. Uses if logic. Follows data modification
-**SQL Operations**: INSERT, Conversion:ISNULL, SELECT
+**Context**: Performs conversion:isnull, select, insert operations. Uses if logic. Follows data modification
+**SQL Operations**: Conversion:ISNULL, SELECT, INSERT
 **Control Structures**: IF
 **Tables/Views**: ORDERPROMOTIONS
 **Subdivision Info**: Part 45 of 106
@@ -2834,14 +2834,14 @@ BEGIN
 
 ---
 
-### Chunk 51: Conditional Logic & Branching (INSERT/UPDATE) (Part 47)
+### Chunk 51: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 47)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 824-838
-**Context**: Performs insert, update, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: INSERT, UPDATE, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: INVENTORYRESERVATIONS, P, PRODUCTS
+**Context**: Performs update, system:getdate, select, insert operations. Uses if, end, begin logic. Follows general logic
+**SQL Operations**: UPDATE, System:GETDATE, SELECT, INSERT
+**Control Structures**: IF, END, BEGIN
+**Tables/Views**: PRODUCTS, P, INVENTORYRESERVATIONS
 **Subdivision Info**: Part 47 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -2900,13 +2900,13 @@ BEGIN
 
 ---
 
-### Chunk 53: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 49)
+### Chunk 53: Conditional Logic & Branching (System:GETDATE/INSERT) (Part 49)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 843-867
-**Context**: Performs insert, system:getdate operations. Uses begin, if logic. Follows general logic
-**SQL Operations**: INSERT, System:GETDATE
-**Control Structures**: BEGIN, IF
+**Context**: Performs system:getdate, insert operations. Uses if, begin logic. Follows general logic
+**SQL Operations**: System:GETDATE, INSERT
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PAYMENTS
 **Subdivision Info**: Part 49 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2954,9 +2954,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 868-877
-**Context**: Performs update operations. Uses end, begin, if logic. Follows conditional logic
+**Context**: Performs update operations. Uses if, end, begin logic. Follows conditional logic
 **SQL Operations**: UPDATE
-**Control Structures**: END, BEGIN, IF
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: CUSTOMERS
 **Subdivision Info**: Part 50 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -2985,14 +2985,14 @@ BEGIN
 
 ---
 
-### Chunk 55: Transaction Control (UPDATE/INSERT) (Part 51)
+### Chunk 55: Transaction Control (System:GETDATE/UPDATE) (Part 51)
 **Type**: transaction_control
 **Complexity Score**: 10
 **Lines**: 878-902
-**Context**: Performs update, insert, conversion:isnull, math:floor, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: UPDATE, INSERT, Conversion:ISNULL, Math:FLOOR, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: CUSTOMERS, CUSTOMERTIERS, LOYALTYTRANSACTIONS
+**Context**: Performs system:getdate, update, select, math:floor, conversion:isnull, insert operations. Uses if, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, UPDATE, SELECT, Math:FLOOR, Conversion:ISNULL, INSERT
+**Control Structures**: IF, END, BEGIN
+**Tables/Views**: CUSTOMERTIERS, CUSTOMERS, LOYALTYTRANSACTIONS
 **Subdivision Info**: Part 51 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3083,10 +3083,10 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 922-938
-**Context**: Performs math:log, update, insert, conversion:cast, system:getdate operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: Math:LOG, UPDATE, INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: CUSTOMERS, CUSTOMERLOG, TIER
+**Context**: Performs math:log, update, conversion:cast, system:getdate, insert operations. Uses if, end, begin logic. Follows variable declaration
+**SQL Operations**: Math:LOG, UPDATE, Conversion:CAST, System:GETDATE, INSERT
+**Control Structures**: IF, END, BEGIN
+**Tables/Views**: CUSTOMERS, TIER, CUSTOMERLOG
 **Subdivision Info**: Part 53 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3147,14 +3147,14 @@ BEGIN
 
 ---
 
-### Chunk 59: Conditional Logic & Branching (INSERT/Date:DATEADD) (Part 55)
+### Chunk 59: Conditional Logic & Branching (Aggregate:COUNT/SELECT) (Part 55)
 **Type**: conditional_logic
 **Complexity Score**: 14
 **Lines**: 943-968
-**Context**: Performs insert, date:dateadd, aggregate:count, system:getdate, select operations. Uses end, begin, if logic. Follows general logic
-**SQL Operations**: INSERT, Date:DATEADD, Aggregate:COUNT, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
-**Tables/Views**: CUSTOMERRECOMMENDATIONS, ORDERS, ORDERITEMS, PRODUCTS
+**Context**: Performs aggregate:count, select, date:dateadd, system:getdate, insert operations. Uses if, end, begin logic. Follows general logic
+**SQL Operations**: Aggregate:COUNT, SELECT, Date:DATEADD, System:GETDATE, INSERT
+**Control Structures**: IF, END, BEGIN
+**Tables/Views**: ORDERITEMS, PRODUCTS, CUSTOMERRECOMMENDATIONS, ORDERS
 **Subdivision Info**: Part 55 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3198,13 +3198,13 @@ BEGIN
 
 ---
 
-### Chunk 60: Transaction Control (Math:LOG/INSERT) (Part 56)
+### Chunk 60: Transaction Control (Math:LOG/Date:DATEDIFF) (Part 56)
 **Type**: transaction_control
 **Complexity Score**: 13
 **Lines**: 969-1020
-**Context**: Performs math:log, insert, system:scope_identity, conversion:cast, system:getdate, date:datediff operations. Follows conditional logic
-**SQL Operations**: Math:LOG, INSERT, System:SCOPE_IDENTITY, Conversion:CAST, System:GETDATE, Date:DATEDIFF
-**Tables/Views**: TRANSACTIONLOG, AUDITLOG
+**Context**: Performs math:log, date:datediff, conversion:cast, system:scope_identity, system:getdate, insert operations. Follows conditional logic
+**SQL Operations**: Math:LOG, Date:DATEDIFF, Conversion:CAST, System:SCOPE_IDENTITY, System:GETDATE, INSERT
+**Tables/Views**: AUDITLOG, TRANSACTIONLOG
 **Subdivision Info**: Part 56 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3304,9 +3304,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 1025-1040
-**Context**: Performs conversion:cast, insert operations. Uses begin, if logic. Follows general logic
+**Context**: Performs conversion:cast, insert operations. Uses if, begin logic. Follows general logic
 **SQL Operations**: Conversion:CAST, INSERT
-**Control Structures**: BEGIN, IF
+**Control Structures**: IF, BEGIN
 **Tables/Views**: NOTIFICATIONQUEUE
 **Subdivision Info**: Part 58 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3341,13 +3341,13 @@ BEGIN
 
 ---
 
-### Chunk 63: Loop Processing & Iteration (INSERT/Conversion:CAST) (Part 59)
+### Chunk 63: Loop Processing & Iteration (System:GETDATE/Conversion:CAST) (Part 59)
 **Type**: loop_logic
 **Complexity Score**: 12
 **Lines**: 1041-1070
-**Context**: Performs insert, conversion:cast, system:getdate operations. Uses for, end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: FOR, END, BEGIN, IF
+**Context**: Performs system:getdate, conversion:cast, insert operations. Uses if, end, begin, for logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Conversion:CAST, INSERT
+**Control Structures**: IF, END, BEGIN, FOR
 **Tables/Views**: NOTIFICATIONQUEUE
 **Subdivision Info**: Part 59 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3422,12 +3422,12 @@ BEGIN
 
 ---
 
-### Chunk 65: Conditional Logic & Branching (BEGIN/IF) (Part 61)
+### Chunk 65: Conditional Logic & Branching (IF/BEGIN) (Part 61)
 **Type**: conditional_logic
 **Complexity Score**: 4
 **Lines**: 1075-1078
-**Context**: Uses begin, if logic. Follows general logic
-**Control Structures**: BEGIN, IF
+**Context**: Uses if, begin logic. Follows general logic
+**Control Structures**: IF, BEGIN
 **Subdivision Info**: Part 61 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3453,9 +3453,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 13
 **Lines**: 1079-1094
-**Context**: Performs math:pi, update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: Math:PI, UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs math:pi, update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows conditional logic
+**SQL Operations**: Math:PI, UPDATE, SELECT, Conversion:CAST, Logical:EXISTS, System:GETDATE
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: DAILYSALESSUMMARY
 **Subdivision Info**: Part 62 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3490,12 +3490,12 @@ BEGIN
 
 ---
 
-### Chunk 67: Variable & Parameter Declarations (Math:PI/INSERT) (Part 63)
+### Chunk 67: Variable & Parameter Declarations (Math:PI/Date:DATEPART) (Part 63)
 **Type**: variable_declaration
 **Complexity Score**: 8
 **Lines**: 1095-1108
-**Context**: Performs math:pi, insert, date:datepart, conversion:cast, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, Date:DATEPART, Conversion:CAST, System:GETDATE
+**Context**: Performs math:pi, date:datepart, conversion:cast, system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: Math:PI, Date:DATEPART, Conversion:CAST, System:GETDATE, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Variables Declared**: @CURRENTHOUR
 **Tables/Views**: DAILYSALESSUMMARY
@@ -3530,13 +3530,13 @@ BEGIN
 
 ---
 
-### Chunk 68: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 64)
+### Chunk 68: Conditional Logic & Branching (UPDATE/SELECT) (Part 64)
 **Type**: conditional_logic
 **Complexity Score**: 12
 **Lines**: 1109-1118
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses else, begin, case, if, when, end logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: ELSE, BEGIN, CASE, IF, WHEN, END
+**Context**: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses case, end, if, else, begin, when logic. Follows variable declaration
+**SQL Operations**: UPDATE, SELECT, Conversion:CAST, Logical:EXISTS, System:GETDATE
+**Control Structures**: CASE, END, IF, ELSE, BEGIN, WHEN
 **Tables/Views**: HOURLYSALESSUMMARY
 **Subdivision Info**: Part 64 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3565,14 +3565,14 @@ BEGIN
 
 ---
 
-### Chunk 69: Conditional Logic & Branching (Conversion:CAST/INSERT) (Part 65)
+### Chunk 69: Conditional Logic & Branching (UPDATE/System:GETDATE) (Part 65)
 **Type**: conditional_logic
 **Complexity Score**: 9
 **Lines**: 1119-1141
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, begin, case, when, end logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
-**Control Structures**: ELSE, BEGIN, CASE, WHEN, END
-**Tables/Views**: HOURLYSALESSUMMARY, CUSTOMERANALYTICS
+**Context**: Performs update, system:getdate, conversion:cast, insert operations. Uses case, end, else, begin, when logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, Conversion:CAST, INSERT
+**Control Structures**: CASE, END, ELSE, BEGIN, WHEN
+**Tables/Views**: CUSTOMERANALYTICS, HOURLYSALESSUMMARY
 **Subdivision Info**: Part 65 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3613,13 +3613,13 @@ BEGIN
 
 ---
 
-### Chunk 70: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 66)
+### Chunk 70: Conditional Logic & Branching (System:GETDATE/System:@@ROWCOUNT) (Part 66)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1142-1153
-**Context**: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, System:@@ROWCOUNT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs system:getdate, system:@@rowcount, insert operations. Uses if, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, System:@@ROWCOUNT, INSERT
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: CUSTOMERANALYTICS
 **Subdivision Info**: Part 66 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3655,7 +3655,7 @@ BEGIN
 **Complexity Score**: 0
 **Lines**: 1154-1161
 **Context**: Follows conditional logic
-**Variables Declared**: @PRODUCTANALYTICSCURSOR, @CURRPRODUCTID
+**Variables Declared**: @CURRPRODUCTID, @PRODUCTANALYTICSCURSOR
 **Subdivision Info**: Part 67 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3685,9 +3685,9 @@ BEGIN
 **Type**: loop_logic
 **Complexity Score**: 9
 **Lines**: 1162-1170
-**Context**: Performs select operations. Uses while, for, begin logic. Follows variable declaration
+**Context**: Performs select operations. Uses begin, while, for logic. Follows variable declaration
 **SQL Operations**: SELECT
-**Control Structures**: WHILE, FOR, BEGIN
+**Control Structures**: BEGIN, WHILE, FOR
 **Subdivision Info**: Part 68 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3714,13 +3714,13 @@ BEGIN
 
 ---
 
-### Chunk 73: Conditional Logic & Branching (Conversion:CAST/Logical:EXISTS) (Part 69)
+### Chunk 73: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 69)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1171-1179
-**Context**: Performs conversion:cast, logical:exists, update, select operations. Uses begin, if logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: BEGIN, IF
+**Context**: Performs update, logical:exists, select, conversion:cast operations. Uses if, begin logic. Follows loop logic
+**SQL Operations**: UPDATE, Logical:EXISTS, SELECT, Conversion:CAST
+**Control Structures**: IF, BEGIN
 **Tables/Views**: PRODUCTSALESSTATS
 **Subdivision Info**: Part 69 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3748,13 +3748,13 @@ BEGIN
 
 ---
 
-### Chunk 74: Conditional Logic & Branching (Conversion:CAST/System:GETDATE) (Part 70)
+### Chunk 74: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 70)
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 1180-1187
-**Context**: Performs conversion:cast, system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, System:GETDATE, Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Performs system:getdate, date:datediff, conversion:cast operations. Uses case, else, end, when logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Date:DATEDIFF, Conversion:CAST
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 70 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3780,12 +3780,12 @@ BEGIN
 
 ---
 
-### Chunk 75: Variable & Parameter Declarations (Conversion:CAST/INSERT) (Part 71)
+### Chunk 75: Variable & Parameter Declarations (SELECT/System:GETDATE) (Part 71)
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 1188-1203
-**Context**: Performs conversion:cast, insert, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, System:GETDATE, SELECT
+**Context**: Performs select, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: SELECT, System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Variables Declared**: @CATEGORYID
 **Tables/Views**: PRODUCTSALESSTATS, PRODUCTS
@@ -3822,13 +3822,13 @@ BEGIN
 
 ---
 
-### Chunk 76: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 72)
+### Chunk 76: Conditional Logic & Branching (Aggregate:SUM/UPDATE) (Part 72)
 **Type**: conditional_logic
 **Complexity Score**: 13
 **Lines**: 1204-1215
-**Context**: Performs update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs aggregate:sum, update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows variable declaration
+**SQL Operations**: Aggregate:SUM, UPDATE, SELECT, Conversion:CAST, Logical:EXISTS, System:GETDATE
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: CATEGORYSALESSTATS
 **Subdivision Info**: Part 72 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3859,12 +3859,12 @@ BEGIN
 
 ---
 
-### Chunk 77: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 73)
+### Chunk 77: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 73)
 **Type**: data_modification
 **Complexity Score**: 6
 **Lines**: 1216-1231
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
+**Context**: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: CATEGORYSALESSTATS, PRODUCTRECOMMENDATIONSCORES
 **Subdivision Info**: Part 73 of 106
@@ -3904,9 +3904,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 1232-1240
-**Context**: Performs system:getdate, date:datediff operations. Uses else, when, case, end logic. Follows data modification
+**Context**: Performs system:getdate, date:datediff operations. Uses case, else, end, when logic. Follows data modification
 **SQL Operations**: System:GETDATE, Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 74 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -3933,13 +3933,13 @@ BEGIN
 
 ---
 
-### Chunk 79: Conditional Logic & Branching (INSERT/System:@@ROWCOUNT) (Part 75)
+### Chunk 79: Conditional Logic & Branching (System:GETDATE/System:@@ROWCOUNT) (Part 75)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1241-1254
-**Context**: Performs insert, system:@@rowcount, system:getdate operations. Uses end, begin, if logic. Follows conditional logic
-**SQL Operations**: INSERT, System:@@ROWCOUNT, System:GETDATE
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs system:getdate, system:@@rowcount, insert operations. Uses if, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, System:@@ROWCOUNT, INSERT
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: PRODUCTRECOMMENDATIONSCORES
 **Subdivision Info**: Part 75 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -3977,7 +3977,7 @@ BEGIN
 **Complexity Score**: 0
 **Lines**: 1255-1265
 **Context**: Follows conditional logic
-**Variables Declared**: @MONETARYSCORE, @SEGMENTSCORE, @FREQUENCYSCORE, @RECENCYSCORE
+**Variables Declared**: @FREQUENCYSCORE, @MONETARYSCORE, @RECENCYSCORE, @SEGMENTSCORE
 **Subdivision Info**: Part 76 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4010,9 +4010,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 6
 **Lines**: 1266-1274
-**Context**: Performs date:datediff operations. Uses else, when, case, end logic. Follows variable declaration
+**Context**: Performs date:datediff operations. Uses case, else, end, when logic. Follows variable declaration
 **SQL Operations**: Date:DATEDIFF
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 77 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4039,12 +4039,12 @@ BEGIN
 
 ---
 
-### Chunk 82: Conditional Logic & Branching (ELSE/WHEN) (Part 78)
+### Chunk 82: Conditional Logic & Branching (CASE/ELSE) (Part 78)
 **Type**: conditional_logic
 **Complexity Score**: 2
 **Lines**: 1275-1283
-**Context**: Uses else, when, case, end logic. Follows conditional logic
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Uses case, else, end, when logic. Follows conditional logic
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 78 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4071,12 +4071,12 @@ BEGIN
 
 ---
 
-### Chunk 83: Conditional Logic & Branching (ELSE/WHEN) (Part 79)
+### Chunk 83: Conditional Logic & Branching (CASE/ELSE) (Part 79)
 **Type**: conditional_logic
 **Complexity Score**: 2
 **Lines**: 1284-1294
-**Context**: Uses else, when, case, end logic. Follows conditional logic
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Uses case, else, end, when logic. Follows conditional logic
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 79 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4105,13 +4105,13 @@ BEGIN
 
 ---
 
-### Chunk 84: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 80)
+### Chunk 84: Conditional Logic & Branching (UPDATE/SELECT) (Part 80)
 **Type**: conditional_logic
 **Complexity Score**: 7
 **Lines**: 1295-1302
-**Context**: Performs logical:exists, update, select operations. Uses begin, if logic. Follows conditional logic
-**SQL Operations**: Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: BEGIN, IF
+**Context**: Performs update, select, logical:exists operations. Uses if, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, SELECT, Logical:EXISTS
+**Control Structures**: IF, BEGIN
 **Tables/Views**: CUSTOMERRFMANALYSIS
 **Subdivision Info**: Part 80 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4142,9 +4142,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 3
 **Lines**: 1303-1312
-**Context**: Performs math:pi operations. Uses when, case logic. Follows conditional logic
+**Context**: Performs math:pi operations. Uses case, when logic. Follows conditional logic
 **SQL Operations**: Math:PI
-**Control Structures**: WHEN, CASE
+**Control Structures**: CASE, WHEN
 **Subdivision Info**: Part 81 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4172,13 +4172,13 @@ BEGIN
 
 ---
 
-### Chunk 86: Data Insert/Update/Delete (Date:DATEADD/INSERT) (Part 82)
+### Chunk 86: Data Insert/Update/Delete (System:GETDATE/Date:DATEADD) (Part 82)
 **Type**: data_modification
 **Complexity Score**: 5
 **Lines**: 1313-1327
-**Context**: Performs date:dateadd, insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-**SQL Operations**: Date:DATEADD, INSERT, System:GETDATE
-**Control Structures**: ELSE, BEGIN, END
+**Context**: Performs system:getdate, date:dateadd, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, Date:DATEADD, INSERT
+**Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: CUSTOMERRFMANALYSIS
 **Subdivision Info**: Part 82 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4216,9 +4216,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 3
 **Lines**: 1328-1337
-**Context**: Performs math:pi operations. Uses when, case logic. Follows data modification
+**Context**: Performs math:pi operations. Uses case, when logic. Follows data modification
 **SQL Operations**: Math:PI
-**Control Structures**: WHEN, CASE
+**Control Structures**: CASE, WHEN
 **Subdivision Info**: Part 83 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4246,12 +4246,12 @@ BEGIN
 
 ---
 
-### Chunk 88: Variable & Parameter Declarations (Date:DATEADD/Math:PI) (Part 84)
+### Chunk 88: Variable & Parameter Declarations (Math:PI/System:GETDATE) (Part 84)
 **Type**: variable_declaration
 **Complexity Score**: 3
 **Lines**: 1338-1348
-**Context**: Performs date:dateadd, math:pi, system:getdate operations. Uses else, end logic. Follows conditional logic
-**SQL Operations**: Date:DATEADD, Math:PI, System:GETDATE
+**Context**: Performs math:pi, system:getdate, date:dateadd operations. Uses else, end logic. Follows conditional logic
+**SQL Operations**: Math:PI, System:GETDATE, Date:DATEADD
 **Control Structures**: ELSE, END
 **Variables Declared**: @SHOPPINGTIMEPREFERENCE, @PURCHASEPATTERN, @SEASONALTREND
 **Subdivision Info**: Part 84 of 106
@@ -4286,9 +4286,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 3
 **Lines**: 1349-1355
-**Context**: Performs math:pi operations. Uses else, when, case, end logic. Follows variable declaration
+**Context**: Performs math:pi operations. Uses case, else, end, when logic. Follows variable declaration
 **SQL Operations**: Math:PI
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 85 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4317,9 +4317,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 5
 **Lines**: 1356-1362
-**Context**: Performs date:month operations. Uses else, when, case, end logic. Follows conditional logic
+**Context**: Performs date:month operations. Uses case, else, end, when logic. Follows conditional logic
 **SQL Operations**: Date:MONTH
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 86 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4344,13 +4344,13 @@ BEGIN
 
 ---
 
-### Chunk 91: Conditional Logic & Branching (Math:PI/INSERT) (Part 87)
+### Chunk 91: Conditional Logic & Branching (Math:PI/System:GETDATE) (Part 87)
 **Type**: conditional_logic
 **Complexity Score**: 11
 **Lines**: 1363-1382
-**Context**: Performs math:pi, insert, system:getdate, select operations. Uses else, when, case, end logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, System:GETDATE, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Performs math:pi, system:getdate, select, insert operations. Uses case, else, end, when logic. Follows conditional logic
+**SQL Operations**: Math:PI, System:GETDATE, SELECT, INSERT
+**Control Structures**: CASE, ELSE, END, WHEN
 **Tables/Views**: PAYMENTTYPES, SHIPPINGMETHODS, CUSTOMERBEHAVIORTRACKING
 **Subdivision Info**: Part 87 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4424,9 +4424,9 @@ BEGIN
 **Type**: loop_logic
 **Complexity Score**: 10
 **Lines**: 1391-1401
-**Context**: Performs aggregate:sum, select operations. Uses while, for, begin logic. Follows variable declaration
+**Context**: Performs aggregate:sum, select operations. Uses begin, while, for logic. Follows variable declaration
 **SQL Operations**: Aggregate:SUM, SELECT
-**Control Structures**: WHILE, FOR, BEGIN
+**Control Structures**: BEGIN, WHILE, FOR
 **Subdivision Info**: Part 89 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4455,13 +4455,13 @@ BEGIN
 
 ---
 
-### Chunk 94: Conditional Logic & Branching (UPDATE/Logical:EXISTS) (Part 90)
+### Chunk 94: Conditional Logic & Branching (UPDATE/SELECT) (Part 90)
 **Type**: conditional_logic
 **Complexity Score**: 10
 **Lines**: 1402-1412
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows loop logic
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows loop logic
+**SQL Operations**: UPDATE, SELECT, Conversion:CAST, Logical:EXISTS, System:GETDATE
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: WAREHOUSEPERFORMANCEMETRICS
 **Subdivision Info**: Part 90 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4491,12 +4491,12 @@ BEGIN
 
 ---
 
-### Chunk 95: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 91)
+### Chunk 95: Data Insert/Update/Delete (UPDATE/System:GETDATE) (Part 91)
 **Type**: data_modification
 **Complexity Score**: 6
 **Lines**: 1413-1431
-**Context**: Performs conversion:cast, insert, update, system:getdate operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, INSERT, UPDATE, System:GETDATE
+**Context**: Performs update, system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: UPDATE, System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: WAREHOUSEPERFORMANCEMETRICS, INVENTORYVELOCITYMETRICS
 **Subdivision Info**: Part 91 of 106
@@ -4535,13 +4535,13 @@ BEGIN
 
 ---
 
-### Chunk 96: Conditional Logic & Branching (INSERT/System:GETDATE) (Part 92)
+### Chunk 96: Conditional Logic & Branching (System:GETDATE/Date:DATEDIFF) (Part 92)
 **Type**: conditional_logic
 **Complexity Score**: 8
 **Lines**: 1432-1464
-**Context**: Performs insert, system:getdate, date:datediff, select operations. Uses else, when, case, end logic. Follows data modification
-**SQL Operations**: INSERT, System:GETDATE, Date:DATEDIFF, SELECT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Context**: Performs system:getdate, date:datediff, select, insert operations. Uses case, else, end, when logic. Follows data modification
+**SQL Operations**: System:GETDATE, Date:DATEDIFF, SELECT, INSERT
+**Control Structures**: CASE, ELSE, END, WHEN
 **Tables/Views**: SUPPLYCHAINEVENTS
 **Subdivision Info**: Part 92 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4620,14 +4620,14 @@ BEGIN
 
 ---
 
-### Chunk 98: Variable & Parameter Declarations (Logical:EXISTS/SELECT) (Part 94)
+### Chunk 98: Variable & Parameter Declarations (SELECT/Logical:EXISTS) (Part 94)
 **Type**: variable_declaration
 **Complexity Score**: 10
 **Lines**: 1470-1480
-**Context**: Performs logical:exists, select operations. Uses for, begin, if logic. Follows general logic
-**SQL Operations**: Logical:EXISTS, SELECT
-**Control Structures**: FOR, BEGIN, IF
-**Variables Declared**: @CURRPROMOID, @PROMOEFFECTIVENESSCURSOR
+**Context**: Performs select, logical:exists operations. Uses if, begin, for logic. Follows general logic
+**SQL Operations**: SELECT, Logical:EXISTS
+**Control Structures**: IF, BEGIN, FOR
+**Variables Declared**: @PROMOEFFECTIVENESSCURSOR, @CURRPROMOID
 **Subdivision Info**: Part 94 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4656,13 +4656,13 @@ BEGIN
 
 ---
 
-### Chunk 99: Loop Processing & Iteration (UPDATE/Logical:EXISTS) (Part 95)
+### Chunk 99: Loop Processing & Iteration (UPDATE/SELECT) (Part 95)
 **Type**: loop_logic
 **Complexity Score**: 15
 **Lines**: 1481-1497
-**Context**: Performs update, logical:exists, conversion:cast, system:getdate, select operations. Uses while, end, begin, if logic. Follows variable declaration
-**SQL Operations**: UPDATE, Logical:EXISTS, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: WHILE, END, BEGIN, IF
+**Context**: Performs update, select, conversion:cast, logical:exists, system:getdate operations. Uses if, end, begin, while logic. Follows variable declaration
+**SQL Operations**: UPDATE, SELECT, Conversion:CAST, Logical:EXISTS, System:GETDATE
+**Control Structures**: IF, END, BEGIN, WHILE
 **Tables/Views**: PROMOTIONEFFECTIVENESSMETRICS
 **Subdivision Info**: Part 95 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4698,12 +4698,12 @@ BEGIN
 
 ---
 
-### Chunk 100: Data Insert/Update/Delete (Conversion:CAST/INSERT) (Part 96)
+### Chunk 100: Data Insert/Update/Delete (System:GETDATE/Conversion:CAST) (Part 96)
 **Type**: data_modification
 **Complexity Score**: 5
 **Lines**: 1498-1513
-**Context**: Performs conversion:cast, insert, system:getdate operations. Uses else, end, begin logic. Follows loop logic
-**SQL Operations**: Conversion:CAST, INSERT, System:GETDATE
+**Context**: Performs system:getdate, conversion:cast, insert operations. Uses else, end, begin logic. Follows loop logic
+**SQL Operations**: System:GETDATE, Conversion:CAST, INSERT
 **Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: PROMOTIONEFFECTIVENESSMETRICS
 **Subdivision Info**: Part 96 of 106
@@ -4739,13 +4739,13 @@ BEGIN
 
 ---
 
-### Chunk 101: Conditional Logic & Branching (Logical:EXISTS/UPDATE) (Part 97)
+### Chunk 101: Conditional Logic & Branching (UPDATE/SELECT) (Part 97)
 **Type**: conditional_logic
 **Complexity Score**: 9
 **Lines**: 1514-1523
-**Context**: Performs logical:exists, update, select operations. Uses when, case, begin, if logic. Follows data modification
-**SQL Operations**: Logical:EXISTS, UPDATE, SELECT
-**Control Structures**: WHEN, CASE, BEGIN, IF
+**Context**: Performs update, select, logical:exists operations. Uses case, if, begin, when logic. Follows data modification
+**SQL Operations**: UPDATE, SELECT, Logical:EXISTS
+**Control Structures**: CASE, IF, BEGIN, WHEN
 **Tables/Views**: CUSTOMERPROMOTIONAFFINITY
 **Subdivision Info**: Part 97 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4774,13 +4774,13 @@ BEGIN
 
 ---
 
-### Chunk 102: Cursor Operations & Row Processing (INSERT/System:GETDATE) (Part 98)
+### Chunk 102: Cursor Operations & Row Processing (System:GETDATE/INSERT) (Part 98)
 **Type**: cursor_operation
 **Complexity Score**: 5
 **Lines**: 1524-1547
-**Context**: Performs insert, system:getdate operations. Uses else, begin, end logic. Follows conditional logic
-**SQL Operations**: INSERT, System:GETDATE
-**Control Structures**: ELSE, BEGIN, END
+**Context**: Performs system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: System:GETDATE, INSERT
+**Control Structures**: ELSE, END, BEGIN
 **Tables/Views**: CUSTOMERPROMOTIONAFFINITY
 **Subdivision Info**: Part 98 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4828,7 +4828,7 @@ BEGIN
 **Complexity Score**: 0
 **Lines**: 1548-1557
 **Context**: Follows cursor operation
-**Variables Declared**: @REVENUERECOGNITIONDATE, @RECOGNIZEDREVENUE, @DEFERREDREVENUE
+**Variables Declared**: @RECOGNIZEDREVENUE, @DEFERREDREVENUE, @REVENUERECOGNITIONDATE
 **Subdivision Info**: Part 99 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4856,13 +4856,13 @@ BEGIN
 
 ---
 
-### Chunk 104: Conditional Logic & Branching (Math:PI/UPDATE) (Part 100)
+### Chunk 104: Conditional Logic & Branching (Math:PI/Aggregate:SUM) (Part 100)
 **Type**: conditional_logic
 **Complexity Score**: 21
 **Lines**: 1558-1582
-**Context**: Performs math:pi, update, logical:exists, aggregate:sum, conversion:cast, system:getdate, select operations. Uses end, begin, if logic. Follows variable declaration
-**SQL Operations**: Math:PI, UPDATE, Logical:EXISTS, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
-**Control Structures**: END, BEGIN, IF
+**Context**: Performs math:pi, aggregate:sum, update, conversion:cast, select, logical:exists, system:getdate operations. Uses if, end, begin logic. Follows variable declaration
+**SQL Operations**: Math:PI, Aggregate:SUM, UPDATE, Conversion:CAST, SELECT, Logical:EXISTS, System:GETDATE
+**Control Structures**: IF, END, BEGIN
 **Tables/Views**: FINANCIALSUMMARY
 **Subdivision Info**: Part 100 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -4906,15 +4906,15 @@ BEGIN
 
 ---
 
-### Chunk 105: Variable & Parameter Declarations (Math:PI/INSERT) (Part 101)
+### Chunk 105: Variable & Parameter Declarations (Math:PI/Aggregate:SUM) (Part 101)
 **Type**: variable_declaration
 **Complexity Score**: 9
 **Lines**: 1583-1603
-**Context**: Performs math:pi, insert, aggregate:sum, conversion:cast, system:getdate, select operations. Uses else, end, begin logic. Follows conditional logic
-**SQL Operations**: Math:PI, INSERT, Aggregate:SUM, Conversion:CAST, System:GETDATE, SELECT
+**Context**: Performs math:pi, aggregate:sum, select, conversion:cast, system:getdate, insert operations. Uses else, end, begin logic. Follows conditional logic
+**SQL Operations**: Math:PI, Aggregate:SUM, SELECT, Conversion:CAST, System:GETDATE, INSERT
 **Control Structures**: ELSE, END, BEGIN
-**Variables Declared**: @GROSSPROFIT, @TOTALCOGS
-**Tables/Views**: FINANCIALSUMMARY, PRODUCTS
+**Variables Declared**: @TOTALCOGS, @GROSSPROFIT
+**Tables/Views**: PRODUCTS, FINANCIALSUMMARY
 **Subdivision Info**: Part 101 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -4957,9 +4957,9 @@ BEGIN
 **Type**: variable_declaration
 **Complexity Score**: 6
 **Lines**: 1604-1614
-**Context**: Performs math:pi, insert operations. Uses else, when, case, end logic. Follows variable declaration
+**Context**: Performs math:pi, insert operations. Uses case, else, end, when logic. Follows variable declaration
 **SQL Operations**: Math:PI, INSERT
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Variables Declared**: @GROSSPROFITMARGIN
 **Tables/Views**: PROFITMARGINANALYSIS
 **Subdivision Info**: Part 102 of 106
@@ -4994,9 +4994,9 @@ BEGIN
 **Type**: conditional_logic
 **Complexity Score**: 4
 **Lines**: 1615-1622
-**Context**: Performs math:pi, system:getdate operations. Uses else, when, case, end logic. Follows variable declaration
+**Context**: Performs math:pi, system:getdate operations. Uses case, else, end, when logic. Follows variable declaration
 **SQL Operations**: Math:PI, System:GETDATE
-**Control Structures**: ELSE, WHEN, CASE, END
+**Control Structures**: CASE, ELSE, END, WHEN
 **Subdivision Info**: Part 103 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -5022,13 +5022,13 @@ BEGIN
 
 ---
 
-### Chunk 108: Transaction Control (Conversion:CAST/String:LEN) (Part 104)
+### Chunk 108: Transaction Control (String:LEN/Conversion:CAST) (Part 104)
 **Type**: transaction_control
 **Complexity Score**: 6
 **Lines**: 1623-1638
-**Context**: Performs conversion:cast, string:len operations. Uses end, return, begin, if logic. Follows conditional logic
-**SQL Operations**: Conversion:CAST, String:LEN
-**Control Structures**: END, RETURN, BEGIN, IF
+**Context**: Performs string:len, conversion:cast operations. Uses if, end, begin, return logic. Follows conditional logic
+**SQL Operations**: String:LEN, Conversion:CAST
+**Control Structures**: IF, END, BEGIN, RETURN
 **Subdivision Info**: Part 104 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -5062,12 +5062,12 @@ BEGIN
 
 ---
 
-### Chunk 109: Error Handling & Exception Management (TRY/BEGIN) (Part 105)
+### Chunk 109: Error Handling & Exception Management (END/BEGIN) (Part 105)
 **Type**: error_handling
 **Complexity Score**: 4
 **Lines**: 1639-1642
-**Context**: Uses try, begin, catch, end logic. Follows transaction control
-**Control Structures**: TRY, BEGIN, CATCH, END
+**Context**: Uses end, begin, catch, try logic. Follows transaction control
+**Control Structures**: END, BEGIN, CATCH, TRY
 **Subdivision Info**: Part 105 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
 
@@ -5089,13 +5089,13 @@ BEGIN
 
 ---
 
-### Chunk 110: Transaction Control (System:@@TRANCOUNT/Math:LOG) (Part 106)
+### Chunk 110: Transaction Control (Math:LOG/System:@@TRANCOUNT) (Part 106)
 **Type**: transaction_control
 **Complexity Score**: 9
 **Lines**: 1643-1683
-**Context**: Performs system:@@trancount, math:log, insert, conversion:cast, system:getdate operations. Uses goto, catch, end, if logic. Follows error handling
-**SQL Operations**: System:@@TRANCOUNT, Math:LOG, INSERT, Conversion:CAST, System:GETDATE
-**Control Structures**: GOTO, CATCH, END, IF
+**Context**: Performs math:log, system:@@trancount, conversion:cast, system:getdate, insert operations. Uses if, end, catch, goto logic. Follows error handling
+**SQL Operations**: Math:LOG, System:@@TRANCOUNT, Conversion:CAST, System:GETDATE, INSERT
+**Control Structures**: IF, END, CATCH, GOTO
 **Tables/Views**: ERRORLOG
 **Subdivision Info**: Part 106 of 106
 **Parent Block**: variable_declaration (lines 179-1683)
@@ -5185,9 +5185,9 @@ BEGIN
 **Type**: transaction_control
 **Complexity Score**: 38
 **Lines**: 1690-1731
-**Context**: Performs math:pi, system:@@trancount operations. Uses else, begin, if, end, return logic. Follows general logic
+**Context**: Performs math:pi, system:@@trancount operations. Uses end, if, else, return, begin logic. Follows general logic
 **SQL Operations**: Math:PI, System:@@TRANCOUNT
-**Control Structures**: ELSE, BEGIN, IF, END, RETURN
+**Control Structures**: END, IF, ELSE, RETURN, BEGIN
 
 **Code:**
 ```sql
@@ -5245,12 +5245,12 @@ BEGIN
 
 ---
 
-### Chunk 113: General Business Logic (RETURN/END)
+### Chunk 113: General Business Logic (END/RETURN)
 **Type**: general_logic
 **Complexity Score**: 0
 **Lines**: 1732-1735
-**Context**: Uses return, end logic. Follows transaction control
-**Control Structures**: RETURN, END
+**Context**: Uses end, return logic. Follows transaction control
+**Control Structures**: END, RETURN
 
 **Code:**
 ```sql
