@@ -894,138 +894,810 @@ class AdaptiveSQLAnalyzer:
         return points
 
     def _find_loop_internal_subdivisions(self, chunk_lines: List[Dict]) -> List[int]:
-        """Find subdivision points within large WHILE loops"""
+        """Find subdivision points within large WHILE loops respecting logical boundaries"""
         points = []
-        in_while_loop = False
-        loop_start = 0
-        current_complexity = 0
-        last_subdivision = 0
         
-        for i, line_data in enumerate(chunk_lines):
-            line = line_data.get('clean', '').upper()
-            control_structures = line_data.get('control_structures', [])
-            complexity = line_data.get('complexity', 0)
+        # First, identify all complete logical blocks within the chunk
+        logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
+        
+        # Group blocks by complexity and create subdivision points
+        current_complexity = 0
+        current_group_start = 0
+        subdivision_complexity_threshold = self.max_complexity_per_chunk * 0.8
+        
+        for block in logical_blocks:
+            block_complexity = self._calculate_block_complexity(chunk_lines, block['start'], block['end'])
             
-            # Track WHILE loop boundaries
-            if 'WHILE' in control_structures:
-                in_while_loop = True
-                loop_start = i
-                current_complexity = 0
-                last_subdivision = i
-            elif any(ctrl in ['END', 'END WHILE'] for ctrl in control_structures):
-                in_while_loop = False
-            
-            if in_while_loop:
-                current_complexity += complexity
+            # If adding this block would exceed complexity threshold, create a subdivision point
+            if (current_complexity + block_complexity > subdivision_complexity_threshold and 
+                current_complexity > 0 and block['start'] - current_group_start >= self.min_chunk_size):
                 
-                # Create subdivision points within large loops based on:
-                # 1. Complexity accumulation (based on max_complexity_per_chunk)
-                # 2. Major control structure changes (IF/ELSE blocks)
-                # 3. Distance from last subdivision (every 40-60 lines)
-                subdivision_complexity_threshold = self.max_complexity_per_chunk * 0.5
-                if (current_complexity >= subdivision_complexity_threshold and i - last_subdivision >= 15) or \
-                   (i - last_subdivision >= 40 and complexity > 0):
-                    
-                    # Look for a good break point (end of IF block, after SQL statement)
-                    break_point = self._find_good_break_point(chunk_lines, i, min(i + 10, len(chunk_lines)))
-                    if break_point and break_point not in points:
-                        points.append(break_point)
-                        current_complexity = 0
-                        last_subdivision = break_point
+                # Validate that this subdivision point doesn't break SQL statements
+                valid_point = self._validate_subdivision_point(chunk_lines, block['start'])
+                if valid_point:
+                    points.append(valid_point)
+                    current_complexity = block_complexity
+                    current_group_start = valid_point
+                else:
+                    # If we can't subdivide here, continue accumulating complexity
+                    current_complexity += block_complexity
+            else:
+                current_complexity += block_complexity
         
         return points
 
-    def _find_if_else_subdivisions(self, chunk_lines: List[Dict]) -> List[int]:
-        """Find subdivision points at IF-ELSE block boundaries"""
-        points = []
-        in_if_block = False
-        if_nesting = 0
+    def _validate_subdivision_point(self, chunk_lines: List[Dict], proposed_point: int) -> Optional[int]:
+        """Validate that a subdivision point doesn't break complete SQL statements or control flow structures"""
+        if proposed_point <= 0 or proposed_point >= len(chunk_lines):
+            return proposed_point
+        
+        # First, check if we're breaking a control flow structure
+        control_flow_violation = self._check_control_flow_violation(chunk_lines, proposed_point)
+        if control_flow_violation:
+            # Try to find a safe point that doesn't break control flow
+            safe_point = self._find_safe_control_flow_point(chunk_lines, proposed_point)
+            if safe_point:
+                proposed_point = safe_point
+            else:
+                # Can't find a safe point, subdivision not possible here
+                return None
+        
+        # Check if we're in the middle of a SQL statement
+        # Look backwards to find if we're inside a SQL statement
+        for i in range(proposed_point - 1, max(0, proposed_point - 20), -1):
+            if self._is_sql_statement_start(chunk_lines[i]):
+                # Found a SQL statement start, check if it ends before our proposed point
+                stmt_end = self._find_complete_sql_statement_end(chunk_lines, i)
+                if stmt_end is not None and stmt_end >= proposed_point:
+                    # We're inside a SQL statement, move subdivision point to after the statement
+                    if stmt_end + 1 < len(chunk_lines):
+                        # Validate that this new point doesn't break control flow
+                        new_point = stmt_end + 1
+                        if not self._check_control_flow_violation(chunk_lines, new_point):
+                            return new_point
+                        else:
+                            # Try to find next safe point
+                            return self._find_safe_control_flow_point(chunk_lines, new_point)
+                    else:
+                        # Can't subdivide here, return None
+                        return None
+                else:
+                    # SQL statement ends before our point, we're good
+                    break
+        
+        # Check if the proposed point itself starts a SQL statement or control structure
+        # If so, it's a good subdivision point
+        if (self._is_sql_statement_start(chunk_lines[proposed_point]) or 
+            self._is_control_flow_start(chunk_lines[proposed_point])):
+            return proposed_point
+        
+        # Look forward a few lines to find a good subdivision point
+        for i in range(proposed_point, min(proposed_point + 10, len(chunk_lines))):
+            if (self._is_sql_statement_start(chunk_lines[i]) or 
+                self._is_control_flow_start(chunk_lines[i])):
+                # Make sure this doesn't break control flow
+                if not self._check_control_flow_violation(chunk_lines, i):
+                    return i
+        
+        # If no good point found nearby, return None to indicate subdivision not possible
+        return None
+
+    def _check_control_flow_violation(self, chunk_lines: List[Dict], point: int) -> bool:
+        """Check if a subdivision point would break a control flow condition"""
+        if point <= 0 or point >= len(chunk_lines):
+            return False
+        
+        # Check if we're breaking in the middle of a control condition (not the entire structure)
+        # Look backwards to see if we're in the middle of a multi-line condition
+        
+        # Check if the current line is a control flow continuation that should not be separated
+        point_controls = chunk_lines[point].get('control_structures', [])
+        if any(ctrl in ['ELSE', 'ELSEIF', 'ELSIF', 'CATCH', 'WHEN'] for ctrl in point_controls):
+            # These keywords should stay with their parent structure
+            return True
+        
+        # Check if previous line ends with ELSE (hanging ELSE that should be with next chunk)
+        if point > 0:
+            prev_line = chunk_lines[point - 1].get('original', '').strip()
+            prev_controls = chunk_lines[point - 1].get('control_structures', [])
+            if ('ELSE' in prev_controls and 
+                (prev_line.endswith('ELSE') or prev_line == 'ELSE')):
+                # ELSE should be with the following block, not hanging at end of previous chunk
+                return True
+        
+        # Check if we're separating END from ELSE (common pattern: END \n ELSE)
+        if point > 0 and point < len(chunk_lines):
+            prev_line = chunk_lines[point - 1].get('original', '').strip()
+            prev_controls = chunk_lines[point - 1].get('control_structures', [])
+            current_line = chunk_lines[point].get('original', '').strip()
+            current_controls = chunk_lines[point].get('control_structures', [])
+            
+            # If previous line is END and current line is ELSE, they should stay together
+            if ('END' in prev_controls and 'ELSE' in current_controls):
+                return True
+        
+        # Check for ELSE that would be hanging at the end of a chunk
+        # Look ahead to see if there's an ELSE coming soon that would be separated
+        for i in range(point, min(point + 3, len(chunk_lines))):
+            line_controls = chunk_lines[i].get('control_structures', [])
+            if 'ELSE' in line_controls:
+                # Found an ELSE that would be separated, this is a violation
+                return True
+        
+        # Check if we're breaking an IF statement from its immediate BEGIN or ELSE
+        if self._is_breaking_if_structure(chunk_lines, point):
+            return True
+        
+        # Check if we're breaking a multi-line condition
+        if self._is_breaking_multiline_condition(chunk_lines, point):
+            return True
+        
+        return False
+
+    def _is_breaking_if_structure(self, chunk_lines: List[Dict], point: int) -> bool:
+        """Check if we're breaking an IF statement from its complete structure"""
+        # Look backwards to find IF statements that might be incomplete
+        for i in range(point - 1, max(0, point - 5), -1):
+            line = chunk_lines[i].get('original', '').strip()
+            control_structures = chunk_lines[i].get('control_structures', [])
+            
+            if 'IF' in control_structures:
+                # Found an IF statement, check if it's complete or incomplete
+                # Look forward from the IF to see if we can find its complete structure
+                structure_complete = False
+                found_begin = False
+                found_else = False
+                
+                for j in range(i, point):
+                    j_line = chunk_lines[j].get('original', '').strip()
+                    j_controls = chunk_lines[j].get('control_structures', [])
+                    
+                    if 'BEGIN' in j_controls:
+                        found_begin = True
+                    if 'ELSE' in j_controls:
+                        found_else = True
+                
+                # If we have an IF but haven't found its complete structure before the subdivision point,
+                # then this subdivision would break the IF structure
+                if not found_begin:
+                    # Look ahead to see if the BEGIN comes right after the subdivision point
+                    if point < len(chunk_lines):
+                        next_controls = chunk_lines[point].get('control_structures', [])
+                        if 'BEGIN' in next_controls:
+                            return True  # IF separated from its BEGIN
+                
+                # Also check if ELSE comes after subdivision point (incomplete IF...ELSE structure)
+                if found_begin and not found_else:
+                    # Look ahead to see if ELSE is coming
+                    for k in range(point, min(point + 10, len(chunk_lines))):
+                        k_controls = chunk_lines[k].get('control_structures', [])
+                        if 'ELSE' in k_controls:
+                            return True  # IF...BEGIN separated from ELSE
+                        if 'END' in k_controls:
+                            break  # Found the end of the IF block, no ELSE expected
+        
+        return False
+
+    def _is_breaking_multiline_condition(self, chunk_lines: List[Dict], point: int) -> bool:
+        """Check if we're breaking in the middle of a multi-line condition"""
+        # Look backwards to find if we're inside a multi-line condition
+        condition_start = None
+        
+        for i in range(point - 1, max(0, point - 10), -1):
+            line = chunk_lines[i].get('original', '').strip()
+            control_structures = chunk_lines[i].get('control_structures', [])
+            
+            # If we find a control structure start, check if condition is complete
+            if any(ctrl in ['IF', 'WHILE', 'CASE'] for ctrl in control_structures):
+                condition_start = i
+                break
+        
+        if condition_start is not None:
+            # Check if the condition is complete by finding its corresponding BEGIN
+            found_begin = False
+            total_paren_depth = 0
+            
+            for i in range(condition_start, point):
+                line = chunk_lines[i].get('original', '').strip()
+                control_structures = chunk_lines[i].get('control_structures', [])
+                
+                # Track parentheses balance for complex conditions
+                total_paren_depth += line.count('(') - line.count(')')
+                
+                # If we find BEGIN that matches this condition, the condition is complete
+                if 'BEGIN' in control_structures and total_paren_depth == 0:
+                    found_begin = True
+                    break
+                # If line ends with BEGIN and parentheses are balanced
+                elif line.endswith('BEGIN') and total_paren_depth == 0:
+                    found_begin = True
+                    break
+                # Single-line IF/WHILE with immediate statement (no BEGIN)
+                elif (line.endswith(';') and 
+                      any(ctrl in control_structures for ctrl in ['IF', 'WHILE']) and
+                      total_paren_depth == 0):
+                    found_begin = True
+                    break
+            
+            # If we haven't found the corresponding BEGIN or complete statement, we're breaking the condition
+            if not found_begin:
+                return True
+        
+        # Also check for IF statements that should be kept with their immediate BEGIN
+        if point > 0:
+            # Check if previous line is an IF that should be with the current BEGIN
+            prev_line = chunk_lines[point - 1].get('original', '').strip()  
+            prev_controls = chunk_lines[point - 1].get('control_structures', [])
+            current_controls = chunk_lines[point].get('control_structures', [])
+            
+            # If previous line has IF and current line has BEGIN, they should stay together
+            if ('IF' in prev_controls and 'BEGIN' in current_controls):
+                return True
+                
+        return False
+
+    def _get_opening_keyword(self, end_keyword: str) -> str:
+        """Get the opening keyword for an END keyword"""
+        mapping = {
+            'END': 'BEGIN',
+            'END IF': 'IF',
+            'END WHILE': 'WHILE', 
+            'END TRY': 'TRY',
+            'END CASE': 'CASE'
+        }
+        return mapping.get(end_keyword, 'BEGIN')
+
+    def _find_safe_control_flow_point(self, chunk_lines: List[Dict], start_point: int) -> Optional[int]:
+        """Find a safe subdivision point that doesn't break control flow conditions"""
+        # Look forward for a safe point where conditions are not broken
+        for i in range(start_point, min(start_point + 20, len(chunk_lines))):
+            if not self._check_control_flow_violation(chunk_lines, i):
+                # Additional check: make sure this is a good boundary
+                if (self._is_sql_statement_start(chunk_lines[i]) or 
+                    self._is_control_flow_start(chunk_lines[i]) or
+                    self._is_safe_subdivision_line(chunk_lines[i]) or
+                    self._is_after_complete_condition(chunk_lines, i)):
+                    return i
+        
+        return None
+
+    def _is_after_complete_condition(self, chunk_lines: List[Dict], point: int) -> bool:
+        """Check if this point is after a complete control condition (good for subdivision)"""
+        if point <= 0:
+            return False
+        
+        # Check if the previous line completed a condition
+        prev_line = chunk_lines[point - 1].get('original', '').strip()
+        prev_controls = chunk_lines[point - 1].get('control_structures', [])
+        
+        # Good subdivision points after complete conditions
+        if 'BEGIN' in prev_controls:
+            return True
+        if prev_line.endswith('BEGIN'):
+            return True
+        if prev_line.endswith(';') and any(ctrl in ['IF', 'WHILE'] for ctrl in prev_controls):
+            return True
+        
+        return False
+
+    def _is_control_flow_start(self, line_data: Dict) -> bool:
+        """Check if a line starts a control flow structure"""
+        control_structures = line_data.get('control_structures', [])
+        return any(ctrl in ['IF', 'WHILE', 'TRY', 'BEGIN', 'CASE', 'FOR'] for ctrl in control_structures)
+
+    def _is_safe_subdivision_line(self, line_data: Dict) -> bool:
+        """Check if a line is safe for subdivision (comments, declarations, etc.)"""
+        line = line_data.get('clean', '').strip()
+        
+        # Safe lines to subdivide at
+        if line_data.get('is_comment', False):
+            return True
+        if line.startswith('DECLARE '):
+            return True
+        if line.startswith('SET ') and '=' in line:  # Variable assignments
+            return True
+        if line == '' or line.isspace():
+            return True
+        
+        return False
+
+    def _identify_logical_blocks_within_chunk(self, chunk_lines: List[Dict]) -> List[Dict]:
+        """Identify complete logical blocks (IF-END, WHILE-END, etc.) within a chunk"""
+        blocks = []
+        stack = []  # Stack to track nested blocks
         
         for i, line_data in enumerate(chunk_lines):
             control_structures = line_data.get('control_structures', [])
             
-            # Track IF-ELSE structure
-            if 'IF' in control_structures:
-                if not in_if_block:
-                    in_if_block = True
-                    if_nesting = 1
+            # Check for block start keywords
+            for ctrl in control_structures:
+                if ctrl in ['IF', 'WHILE', 'FOR', 'TRY', 'BEGIN', 'CASE']:
+                    stack.append({
+                        'type': ctrl,
+                        'start': i,
+                        'level': len(stack)
+                    })
+                elif ctrl in ['ELSE', 'ELSEIF', 'ELSIF']:
+                    # ELSE creates a subdivision point within an IF block
+                    if stack and stack[-1]['type'] == 'IF':
+                        # Close the current IF part and start ELSE part
+                        if_block = stack[-1]
+                        blocks.append({
+                            'type': 'IF_PART',
+                            'start': if_block['start'],
+                            'end': i - 1,
+                            'level': if_block['level']
+                        })
+                        # Update the stack entry for the ELSE part
+                        stack[-1] = {
+                            'type': 'ELSE',
+                            'start': i,
+                            'level': if_block['level']
+                        }
+                elif ctrl in ['END', 'END IF', 'END WHILE', 'END FOR', 'END TRY', 'END CASE']:
+                    # Close the most recent block
+                    if stack:
+                        block = stack.pop()
+                        blocks.append({
+                            'type': block['type'],
+                            'start': block['start'],
+                            'end': i,
+                            'level': block['level']
+                        })
+        
+        # Handle any unclosed blocks (shouldn't happen in well-formed SQL)
+        while stack:
+            block = stack.pop()
+            blocks.append({
+                'type': block['type'],
+                'start': block['start'],
+                'end': len(chunk_lines) - 1,
+                'level': block['level']
+            })
+        
+        # Sort blocks by start position
+        blocks.sort(key=lambda x: x['start'])
+        
+        # Add non-control statement blocks (groups of SQL statements)
+        self._add_statement_blocks(chunk_lines, blocks)
+        
+        return blocks
+
+    def _add_statement_blocks(self, chunk_lines: List[Dict], existing_blocks: List[Dict]):
+        """Add blocks for complete SQL statements between control structures"""
+        covered_lines = set()
+        
+        # Mark lines covered by existing control blocks
+        for block in existing_blocks:
+            for line_num in range(block['start'], block['end'] + 1):
+                covered_lines.add(line_num)
+        
+        # Find complete SQL statements not covered by control blocks
+        i = 0
+        while i < len(chunk_lines):
+            if i in covered_lines:
+                i += 1
+                continue
+            
+            # Check if this line starts a SQL statement
+            if self._is_sql_statement_start(chunk_lines[i]):
+                statement_start = i
+                statement_end = self._find_complete_sql_statement_end(chunk_lines, i)
+                
+                if statement_end is not None and statement_end > statement_start:
+                    # Ensure we don't overlap with control blocks
+                    overlaps = any(line_num in covered_lines 
+                                 for line_num in range(statement_start, statement_end + 1))
+                    
+                    if not overlaps:
+                        existing_blocks.append({
+                            'type': 'SQL_STATEMENT',
+                            'start': statement_start,
+                            'end': statement_end,
+                            'level': 0
+                        })
+                        # Mark these lines as covered
+                        for line_num in range(statement_start, statement_end + 1):
+                            covered_lines.add(line_num)
+                        i = statement_end + 1
+                    else:
+                        i += 1
                 else:
-                    if_nesting += 1
-            elif 'ELSE' in control_structures and if_nesting == 1:
-                # Good subdivision point at ELSE
-                points.append(i)
-            elif 'END' in control_structures or 'END IF' in control_structures:
-                if if_nesting > 0:
-                    if_nesting -= 1
-                    if if_nesting == 0:
-                        in_if_block = False
-                        # Good subdivision point after END IF
-                        if i + 1 < len(chunk_lines):
-                            points.append(i + 1)
+                    i += 1
+            else:
+                i += 1
+        
+        # Group remaining uncovered lines with complexity into statement blocks
+        self._group_remaining_lines(chunk_lines, covered_lines, existing_blocks)
+        
+        # Re-sort all blocks by start position
+        existing_blocks.sort(key=lambda x: x['start'])
+
+    def _is_sql_statement_start(self, line_data: Dict) -> bool:
+        """Check if a line starts a major SQL statement"""
+        sql_operations = line_data.get('sql_operations', [])
+        line = line_data.get('clean', '').upper().strip()
+        
+        # Comprehensive list of SQL statement keywords that start complete statements
+        statement_starters = [
+            # Core DML operations
+            'SELECT', 'INSERT', 'UPDATE', 'DELETE', 'MERGE', 'UPSERT',
+            # DDL operations
+            'CREATE', 'ALTER', 'DROP', 'TRUNCATE',
+            # Transaction control
+            'BEGIN', 'COMMIT', 'ROLLBACK', 'SAVEPOINT',
+            # Execution statements
+            'EXEC', 'EXECUTE', 'CALL',
+            # CTE and subqueries
+            'WITH',
+            # Bulk operations
+            'BULK', 'COPY',
+            # Database operations
+            'USE', 'GRANT', 'REVOKE', 'DENY',
+            # Utility operations
+            'BACKUP', 'RESTORE', 'CHECKPOINT'
+        ]
+        
+        # Check if line starts with any of these keywords
+        for starter in statement_starters:
+            if line.startswith(starter + ' ') or line == starter:
+                return True
+        
+        # Also check sql_operations for these patterns (handle case variations)
+        return any(op.upper() in statement_starters for op in sql_operations)
+
+    def _find_complete_sql_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a complete SQL statement starting at start_idx"""
+        statement_type = self._get_statement_type(chunk_lines[start_idx])
+        
+        if statement_type == 'INSERT':
+            return self._find_insert_statement_end(chunk_lines, start_idx)
+        elif statement_type == 'UPDATE':
+            return self._find_update_statement_end(chunk_lines, start_idx)
+        elif statement_type == 'SELECT':
+            return self._find_select_statement_end(chunk_lines, start_idx)
+        elif statement_type == 'DELETE':
+            return self._find_delete_statement_end(chunk_lines, start_idx)
+        elif statement_type == 'MERGE':
+            return self._find_merge_statement_end(chunk_lines, start_idx)
+        elif statement_type in ['CREATE', 'ALTER', 'DROP']:
+            return self._find_ddl_statement_end(chunk_lines, start_idx)
+        elif statement_type == 'WITH':
+            return self._find_cte_statement_end(chunk_lines, start_idx)
+        elif statement_type in ['EXEC', 'TRANSACTION', 'BULK', 'SECURITY', 'UTILITY']:
+            return self._find_simple_statement_end(chunk_lines, start_idx)
+        else:
+            return self._find_simple_statement_end(chunk_lines, start_idx)
+
+    def _get_statement_type(self, line_data: Dict) -> str:
+        """Get the type of SQL statement"""
+        line = line_data.get('clean', '').upper().strip()
+        sql_operations = line_data.get('sql_operations', [])
+        
+        # Check for statement types in order of complexity (most complex first)
+        if line.startswith('WITH') or 'WITH' in sql_operations:
+            return 'WITH'
+        elif line.startswith('INSERT') or any('INSERT' in op.upper() for op in sql_operations):
+            return 'INSERT'
+        elif line.startswith('UPDATE') or any('UPDATE' in op.upper() for op in sql_operations):
+            return 'UPDATE'
+        elif line.startswith('DELETE') or any('DELETE' in op.upper() for op in sql_operations):
+            return 'DELETE'
+        elif line.startswith('SELECT') or any('SELECT' in op.upper() for op in sql_operations):
+            return 'SELECT'
+        elif line.startswith('MERGE') or any('MERGE' in op.upper() for op in sql_operations):
+            return 'MERGE'
+        elif line.startswith('CREATE') or any('CREATE' in op.upper() for op in sql_operations):
+            return 'CREATE'
+        elif line.startswith('ALTER') or any('ALTER' in op.upper() for op in sql_operations):
+            return 'ALTER'
+        elif line.startswith('DROP') or any('DROP' in op.upper() for op in sql_operations):
+            return 'DROP'
+        elif line.startswith('TRUNCATE') or any('TRUNCATE' in op.upper() for op in sql_operations):
+            return 'TRUNCATE'
+        elif line.startswith(('EXEC', 'EXECUTE', 'CALL')) or any(op.upper().startswith(('EXEC', 'EXECUTE', 'CALL')) for op in sql_operations):
+            return 'EXEC'
+        elif line.startswith(('BEGIN', 'COMMIT', 'ROLLBACK', 'SAVEPOINT')):
+            return 'TRANSACTION'
+        elif line.startswith(('BULK', 'COPY')):
+            return 'BULK'
+        elif line.startswith(('GRANT', 'REVOKE', 'DENY')):
+            return 'SECURITY'
+        elif line.startswith(('BACKUP', 'RESTORE', 'CHECKPOINT')):
+            return 'UTILITY'
+        else:
+            return 'OTHER'
+
+    def _find_insert_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of an INSERT statement including VALUES clause"""
+        paren_depth = 0
+        in_values = False
+        
+        for i in range(start_idx, len(chunk_lines)):
+            line = chunk_lines[i].get('original', '').strip()
+            clean_line = chunk_lines[i].get('clean', '').upper()
+            
+            # Track parentheses depth
+            paren_depth += line.count('(') - line.count(')')
+            
+            # Check if we've entered VALUES clause
+            if 'VALUES' in clean_line:
+                in_values = True
+            
+            # End conditions:
+            # 1. Semicolon at depth 0
+            if line.endswith(';') and paren_depth == 0:
+                return i
+            # 2. VALUES clause completed (closing paren at depth 0)
+            elif in_values and paren_depth == 0 and ')' in line:
+                return i
+            # 3. Next statement starts
+            elif i > start_idx and self._is_sql_statement_start(chunk_lines[i]):
+                return i - 1
+        
+        return len(chunk_lines) - 1
+
+    def _find_update_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of an UPDATE statement"""
+        # UPDATE statements can have complex WHERE clauses and JOINs
+        return self._find_complex_statement_end(chunk_lines, start_idx)
+
+    def _find_delete_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a DELETE statement"""
+        # DELETE statements can have complex WHERE clauses and JOINs
+        return self._find_complex_statement_end(chunk_lines, start_idx)
+
+    def _find_merge_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a MERGE statement"""
+        # MERGE statements are complex with WHEN clauses
+        for i in range(start_idx, len(chunk_lines)):
+            line = chunk_lines[i].get('original', '').strip()
+            clean_line = chunk_lines[i].get('clean', '').upper()
+            
+            # End at semicolon
+            if line.endswith(';'):
+                return i
+            # End before next major statement
+            elif i > start_idx and self._is_sql_statement_start(chunk_lines[i]):
+                return i - 1
+        
+        return len(chunk_lines) - 1
+
+    def _find_ddl_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of DDL statements (CREATE, ALTER, DROP)"""
+        # DDL statements can be complex, especially CREATE statements
+        paren_depth = 0
+        
+        for i in range(start_idx, len(chunk_lines)):
+            line = chunk_lines[i].get('original', '').strip()
+            clean_line = chunk_lines[i].get('clean', '').upper()
+            
+            # Track parentheses for complex DDL
+            paren_depth += line.count('(') - line.count(')')
+            
+            # End conditions
+            if line.endswith(';') and paren_depth == 0:
+                return i
+            elif line.upper().endswith(' GO') and paren_depth == 0:
+                return i
+            elif i > start_idx and paren_depth == 0 and self._is_sql_statement_start(chunk_lines[i]):
+                return i - 1
+        
+        return len(chunk_lines) - 1
+
+    def _find_complex_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of complex statements with potential subqueries and JOINs"""
+        paren_depth = 0
+        
+        for i in range(start_idx, len(chunk_lines)):
+            line = chunk_lines[i].get('original', '').strip()
+            
+            # Track parentheses for subqueries
+            paren_depth += line.count('(') - line.count(')')
+            
+            # End at semicolon at depth 0
+            if line.endswith(';') and paren_depth == 0:
+                return i
+            # End before next major statement at depth 0
+            elif i > start_idx and paren_depth == 0 and self._is_sql_statement_start(chunk_lines[i]):
+                return i - 1
+        
+        return len(chunk_lines) - 1
+
+    def _find_select_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a SELECT statement"""
+        # SELECT statements can be complex with subqueries, CTEs, etc.
+        return self._find_complex_statement_end(chunk_lines, start_idx)
+
+    def _find_simple_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a simple SQL statement"""
+        for i in range(start_idx, len(chunk_lines)):
+            line = chunk_lines[i].get('original', '').strip()
+            
+            # End at semicolon
+            if line.endswith(';'):
+                return i
+            # End before next statement
+            elif i > start_idx and self._is_sql_statement_start(chunk_lines[i]):
+                return i - 1
+        
+        return len(chunk_lines) - 1
+
+    def _find_cte_statement_end(self, chunk_lines: List[Dict], start_idx: int) -> Optional[int]:
+        """Find the end of a WITH (CTE) statement"""
+        # CTE ends when the main SELECT/INSERT/UPDATE starts after the WITH clause
+        for i in range(start_idx + 1, len(chunk_lines)):
+            line = chunk_lines[i].get('clean', '').upper().strip()
+            
+            # Look for main statement after CTE definition
+            if (line.startswith('SELECT ') or line.startswith('INSERT ') or 
+                line.startswith('UPDATE ') or line.startswith('DELETE ')):
+                # Continue to find the end of this main statement
+                return self._find_simple_statement_end(chunk_lines, i)
+        
+        return len(chunk_lines) - 1
+
+    def _group_remaining_lines(self, chunk_lines: List[Dict], covered_lines: set, existing_blocks: List[Dict]):
+        """Group remaining uncovered lines into statement blocks"""
+        current_start = None
+        current_complexity = 0
+        
+        for i, line_data in enumerate(chunk_lines):
+            if i in covered_lines:
+                # End current group if we hit a covered line
+                if current_start is not None and current_complexity > 2:
+                    existing_blocks.append({
+                        'type': 'STATEMENTS',
+                        'start': current_start,
+                        'end': i - 1,
+                        'level': 0
+                    })
+                current_start = None
+                current_complexity = 0
+            else:
+                # Check if this line has SQL operations or complexity
+                if line_data.get('sql_operations') or line_data.get('complexity', 0) > 0:
+                    if current_start is None:
+                        current_start = i
+                    current_complexity += line_data.get('complexity', 0)
+        
+        # Handle final group
+        if current_start is not None and current_complexity > 2:
+            existing_blocks.append({
+                'type': 'STATEMENTS',
+                'start': current_start,
+                'end': len(chunk_lines) - 1,
+                'level': 0
+            })
+
+    def _calculate_block_complexity(self, chunk_lines: List[Dict], start: int, end: int) -> int:
+        """Calculate the total complexity of a logical block"""
+        total_complexity = 0
+        for i in range(start, min(end + 1, len(chunk_lines))):
+            total_complexity += chunk_lines[i].get('complexity', 0)
+        return total_complexity
+
+    def _find_if_else_subdivisions(self, chunk_lines: List[Dict]) -> List[int]:
+        """Find subdivision points at IF-ELSE block boundaries respecting logical structure"""
+        points = []
+        logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
+        
+        # Find ELSE blocks and IF-PART blocks that can be separated
+        for block in logical_blocks:
+            if block['type'] in ['ELSE', 'IF_PART'] and block['level'] == 0:  # Top-level only
+                # Add subdivision point at the start of ELSE blocks
+                if block['type'] == 'ELSE':
+                    valid_point = self._validate_subdivision_point(chunk_lines, block['start'])
+                    if valid_point:
+                        points.append(valid_point)
+                # Add subdivision point after complete IF blocks
+                elif block['type'] == 'IF_PART':
+                    valid_point = self._validate_subdivision_point(chunk_lines, block['end'] + 1)
+                    if valid_point:
+                        points.append(valid_point)
         
         return points
 
     def _find_sql_statement_groups(self, chunk_lines: List[Dict]) -> List[int]:
-        """Find subdivision points between groups of related SQL statements"""
+        """Find subdivision points between logical groups of SQL statements"""
         points = []
-        current_statement_type = None
-        statement_count = 0
+        logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
         
-        for i, line_data in enumerate(chunk_lines):
-            sql_operations = line_data.get('sql_operations', [])
-            
-            if sql_operations:
-                # Identify major SQL statement types
-                if any(op in ['SELECT'] for op in sql_operations):
-                    stmt_type = 'SELECT'
-                elif any(op in ['INSERT', 'UPDATE', 'DELETE'] for op in sql_operations):
-                    stmt_type = 'MODIFY'
-                elif any(op in ['EXEC', 'EXECUTE'] for op in sql_operations):
-                    stmt_type = 'EXECUTE'
-                else:
-                    stmt_type = 'OTHER'
+        # Find STATEMENTS blocks that can be subdivided
+        for block in logical_blocks:
+            if block['type'] == 'STATEMENTS':
+                block_complexity = self._calculate_block_complexity(chunk_lines, block['start'], block['end'])
                 
-                if current_statement_type != stmt_type:
-                    if current_statement_type is not None and statement_count >= 3:
-                        # Group of 3+ similar statements ended, good subdivision point
-                        points.append(i)
-                    current_statement_type = stmt_type
-                    statement_count = 1
-                else:
-                    statement_count += 1
-            else:
-                # Reset on non-SQL lines
-                if statement_count >= 3:
-                    points.append(i)
-                current_statement_type = None
-                statement_count = 0
+                # If statement block is too complex, try to subdivide it
+                if block_complexity > self.max_complexity_per_chunk * 0.6:
+                    # Find natural break points within the statement block
+                    sub_points = self._find_statement_break_points(
+                        chunk_lines, block['start'], block['end']
+                    )
+                    points.extend(sub_points)
         
         return points
 
-    def _force_complexity_based_subdivision(self, chunk_lines: List[Dict]) -> List[int]:
-        """Force subdivision based on complexity accumulation when no natural points found"""
+    def _find_statement_break_points(self, chunk_lines: List[Dict], start: int, end: int) -> List[int]:
+        """Find break points within a sequence of SQL statements"""
         points = []
         current_complexity = 0
-        last_point = 0
-        target_complexity = self.max_complexity_per_chunk * 0.8  # Target complexity per sub-chunk
+        last_break = start
+        target_complexity = self.max_complexity_per_chunk * 0.5
         
-        for i, line_data in enumerate(chunk_lines):
+        for i in range(start, end + 1):
+            line_data = chunk_lines[i]
             complexity = line_data.get('complexity', 0)
             current_complexity += complexity
             
-            # Force subdivision when complexity target is reached
-            if current_complexity >= target_complexity and i - last_point >= self.min_chunk_size:
-                # Try to find a reasonable break point within next few lines
-                break_point = self._find_good_break_point(chunk_lines, i, min(i + 5, len(chunk_lines)))
-                if break_point:
-                    points.append(break_point)
+            # Look for natural break points: after semicolons, between statement types
+            if (current_complexity >= target_complexity and 
+                i - last_break >= self.min_chunk_size):
+                
+                # Find the best break point nearby
+                break_point = self._find_statement_boundary(chunk_lines, i, min(i + 5, end))
+                if break_point and break_point > last_break:
+                    valid_point = self._validate_subdivision_point(chunk_lines, break_point)
+                    if valid_point:
+                        points.append(valid_point)
+                        current_complexity = 0
+                        last_break = valid_point
+        
+        return points
+
+    def _find_statement_boundary(self, chunk_lines: List[Dict], start_idx: int, end_idx: int) -> Optional[int]:
+        """Find a good statement boundary for subdivision"""
+        for i in range(start_idx, min(end_idx + 1, len(chunk_lines))):
+            line = chunk_lines[i].get('original', '').strip()
+            
+            # Prefer breaking after semicolons
+            if line.endswith(';'):
+                return i + 1
+            
+            # Break before new SQL statement types
+            if any(op in chunk_lines[i].get('sql_operations', []) 
+                   for op in ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'EXEC']):
+                return i
+        
+        return start_idx
+
+    def _force_complexity_based_subdivision(self, chunk_lines: List[Dict]) -> List[int]:
+        """Force subdivision based on logical blocks when no natural points found"""
+        points = []
+        logical_blocks = self._identify_logical_blocks_within_chunk(chunk_lines)
+        
+        # Group logical blocks by complexity, forcing subdivision when needed
+        current_complexity = 0
+        current_group_start = 0
+        target_complexity = self.max_complexity_per_chunk * 0.7
+        
+        for i, block in enumerate(logical_blocks):
+            block_complexity = self._calculate_block_complexity(chunk_lines, block['start'], block['end'])
+            
+            # If this single block is too complex, it needs to be subdivided internally
+            if block_complexity > self.max_complexity_per_chunk:
+                # Add subdivision point before this block
+                if current_complexity > 0:
+                    points.append(block['start'])
                     current_complexity = 0
-                    last_point = break_point
-                else:
-                    # Force break here if no good point found
-                    points.append(i)
-                    current_complexity = 0
-                    last_point = i
+                
+                # Try to subdivide the block internally if it's a STATEMENTS block
+                if block['type'] == 'STATEMENTS':
+                    internal_points = self._find_statement_break_points(
+                        chunk_lines, block['start'], block['end']
+                    )
+                    points.extend(internal_points)
+                
+                # Reset for next group
+                current_group_start = block['end'] + 1
+                current_complexity = 0
+            elif current_complexity + block_complexity > target_complexity and current_complexity > 0:
+                # Start a new group
+                points.append(block['start'])
+                current_complexity = block_complexity
+                current_group_start = block['start']
+            else:
+                current_complexity += block_complexity
         
         return points
 
