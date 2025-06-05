@@ -202,16 +202,21 @@ class UniversalSQLAnalyzer:
                     i = end_line + 1
                     continue
             
-            # Look for TRY-CATCH blocks
+            # Look for TRY-CATCH blocks (but not if we're in the middle of declarations)
             elif re.search(r'\bBEGIN\s+TRY\b', line_upper):
-                end_line = self._find_try_catch_block_end(analyzed_lines, i)
-                if end_line is not None and end_line - i >= self.min_chunk_size:
-                    if i > 0 and boundaries[-1] != i:
-                        boundaries.append(i)
-                    if end_line + 1 < len(analyzed_lines) and boundaries[-1] != end_line + 1:
-                        boundaries.append(end_line + 1)
-                    i = end_line + 1
-                    continue
+                # Make sure we're not splitting declarations
+                prev_boundary = boundaries[-1] if boundaries else 0
+                declaration_section = self._is_in_declaration_section(analyzed_lines, prev_boundary, i)
+                
+                if not declaration_section:
+                    end_line = self._find_try_catch_block_end(analyzed_lines, i)
+                    if end_line is not None and end_line - i >= self.min_chunk_size:
+                        if i > 0 and boundaries[-1] != i:
+                            boundaries.append(i)
+                        if end_line + 1 < len(analyzed_lines) and boundaries[-1] != end_line + 1:
+                            boundaries.append(end_line + 1)
+                        i = end_line + 1
+                        continue
             
             # Look for major SQL statement blocks
             elif (line_analysis['sql_operations'] and 
@@ -341,19 +346,115 @@ class UniversalSQLAnalyzer:
         return start_line + 10  # Default reasonable size
     
     def _find_declaration_block_end(self, analyzed_lines: List[Dict], start_line: int) -> Optional[int]:
-        """Find the end of a variable declaration block"""
-        for i in range(start_line, min(start_line + 50, len(analyzed_lines))):
+        """Find the end of a variable declaration block, including complete table declarations"""
+        in_table_declaration = False
+        paren_depth = 0
+        
+        for i in range(start_line, min(start_line + 100, len(analyzed_lines))):
+            line_analysis = analyzed_lines[i]
+            line_clean = line_analysis['clean']
+            line_upper = line_analysis['upper']
+            
+            # Skip empty lines and comments within declaration blocks
+            if line_analysis['is_empty'] or line_analysis['is_comment']:
+                continue
+            
+            # Check if we're starting a table declaration
+            if re.search(r'DECLARE\s+@\w+\s+TABLE\s*\(', line_upper):
+                in_table_declaration = True
+                paren_depth = line_clean.count('(') - line_clean.count(')')
+                continue
+            
+            # If we're in a table declaration, track parentheses
+            if in_table_declaration:
+                paren_depth += line_clean.count('(') - line_clean.count(')')
+                
+                # Table declaration ends when parentheses are balanced
+                if paren_depth <= 0:
+                    in_table_declaration = False
+                    # Check if there's a semicolon on this line or next few lines
+                    end_line = i
+                    for j in range(i, min(i + 3, len(analyzed_lines))):
+                        if ';' in analyzed_lines[j]['clean']:
+                            end_line = j
+                            break
+                    
+                    # Continue to see if there are more declarations immediately following
+                    next_non_empty = self._find_next_non_empty_line(analyzed_lines, end_line + 1)
+                    if (next_non_empty is not None and 
+                        analyzed_lines[next_non_empty]['declarations']):
+                        continue  # More declarations follow
+                    else:
+                        return end_line
+                continue
+            
+            # Check for regular declarations
+            if line_analysis['declarations']:
+                continue
+            
+            # Check for continuation patterns
+            if re.search(r'^\s*[,;)]', line_clean):
+                continue
+            
+            # Check for assignment to declared variables
+            if re.search(r'^\s*SET\s+@\w+', line_upper):
+                continue
+            
+            # If we hit non-declaration code and we're not in a table declaration
+            if not in_table_declaration:
+                return max(i - 1, start_line)
+        
+        return start_line + 30  # Default reasonable size
+    
+    def _find_next_non_empty_line(self, analyzed_lines: List[Dict], start: int) -> Optional[int]:
+        """Find the next non-empty, non-comment line"""
+        for i in range(start, len(analyzed_lines)):
+            if not analyzed_lines[i]['is_empty'] and not analyzed_lines[i]['is_comment']:
+                return i
+        return None
+    
+    def _is_in_declaration_section(self, analyzed_lines: List[Dict], start: int, end: int) -> bool:
+        """Check if the range from start to end is primarily declarations"""
+        if end <= start:
+            return False
+        
+        declaration_lines = 0
+        total_non_empty_lines = 0
+        in_table_declaration = False
+        
+        for i in range(start, min(end, len(analyzed_lines))):
             line_analysis = analyzed_lines[i]
             
-            # Stop when we hit non-declaration code
-            if (not line_analysis['is_empty'] and 
-                not line_analysis['is_comment'] and
-                not line_analysis['declarations'] and
-                not re.search(r'^\s*\)', line_analysis['clean']) and  # Table definition closing
-                not re.search(r'^\s*[,;]', line_analysis['clean'])):  # Continuation
-                return i - 1
+            if line_analysis['is_empty'] or line_analysis['is_comment']:
+                continue
+            
+            total_non_empty_lines += 1
+            
+            # Check for table declarations
+            if re.search(r'DECLARE\s+@\w+\s+TABLE\s*\(', line_analysis['upper']):
+                in_table_declaration = True
+                declaration_lines += 1
+                continue
+            
+            # If in table declaration, count until we see the closing
+            if in_table_declaration:
+                declaration_lines += 1
+                if ')' in line_analysis['clean'] and line_analysis['clean'].count(')') >= line_analysis['clean'].count('('):
+                    in_table_declaration = False
+                continue
+            
+            # Regular declarations
+            if line_analysis['declarations']:
+                declaration_lines += 1
+                continue
+            
+            # SET statements for variable initialization
+            if re.search(r'^\s*SET\s+@\w+', line_analysis['upper']):
+                declaration_lines += 1
+                continue
         
-        return start_line + 20  # Default reasonable size
+        # Consider it a declaration section if > 70% of lines are declarations
+        return total_non_empty_lines > 0 and (declaration_lines / total_non_empty_lines) > 0.7
     
     def _clean_boundaries(self, boundaries: List[int], analyzed_lines: List[Dict]) -> List[int]:
         """Clean up boundaries to ensure reasonable chunk sizes"""
